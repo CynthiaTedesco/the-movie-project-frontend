@@ -1,0 +1,43 @@
+// Icon styles
+@font-face {
+  font-family: "core-icons";
+  src: url("~assets/fonts/core-icons.eot");
+  src: url("~assets/fonts/core-icons.eot#iefix") format("embedded-opentype"),
+    url("~assets/fonts/core-icons.svg#core-icons") format("svg"),
+    url("~assets/fonts/core-icons.woff") format("woff"),
+    url("~assets/fonts/core-icons.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "core-icons" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-facebook:before {
+  content: "\e900";
+}
+.icon-instagram:before {
+  content: "\ea92";
+}
+.icon-youtube:before {
+  content: "\ea9d";
+}
+.icon-twitter:before {
+  content: "\ea96";
+}
+.icon-close:before {
+  content: "\e901";
+}

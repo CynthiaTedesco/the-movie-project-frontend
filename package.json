@@ -1,0 +1,32 @@
+{
+  "name": "the-movie-project-frontend",
+  "version": "1.0.0",
+  "description": "The Movie Project made with love by Ferdio",
+  "author": "Cynthia Tedesco",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt-ts",
+    "build": "nuxt-ts build",
+    "start": "nuxt-ts start",
+    "generate": "nuxt-ts generate",
+    "lint": "eslint --ext .ts,.js,.vue .",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "@nuxt/typescript-runtime": "^0.2.4",
+    "bootstrap-vue": "^2.1.0",
+    "nuxt": "^2.0.0",
+    "nuxt-i18n": "^6.4.0"
+  },
+  "devDependencies": {
+    "@nuxt/typescript-build": "^0.3.4",
+    "@nuxtjs/eslint-config-typescript": "^0.1.3",
+    "babel-loader": "^8.0.6",
+    "eslint": "latest",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-vue": "^6.0.1",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0"
+  }
+}

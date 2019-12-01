@@ -21,6 +21,11 @@ module.exports = {
       }
     ],
     "vue/singleline-html-element-content-newline": 'off',
-    'semi': 'off'
+    'semi': 'off',
+    'no-console': 'off',
+    'no-trailing-spaces': 'off',
+    'vue/html-indent': 'off',
+    'space-before-function-paren': 'off',
+    'comma-dangle': 'off'
   }
 }

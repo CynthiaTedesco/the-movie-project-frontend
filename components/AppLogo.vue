@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="@/assets/images/logo.png" alt="tap-logo" />
+    <img src="@/assets/images/byFerdio.png" alt="tap-logo" />
   </div>
 </template>
 

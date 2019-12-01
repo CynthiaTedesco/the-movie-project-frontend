@@ -1,22 +1,22 @@
 <template>
   <div>
-    <TheHeader @sidenavToggle="displaySidenav =!displaySidenav" />
-    <TheSidenav :show="displaySidenav" @close="displaySidenav=false" />
+    <TheHeader @menuToggle="displayMenu =!displayMenu" />
+    <TheMenu :show="displayMenu" @close="displayMenu=false" />
     <nuxt />
-    <TheFooter />
+    <!-- <TheFooter /> -->
   </div>
 </template>
 
 <script>
 import TheHeader from '@/components/Navigation/TheHeader';
-import TheFooter from '@/components/Navigation/TheFooter';
-import TheSidenav from '@/components/Navigation/TheSidenav';
+// import TheFooter from '@/components/Navigation/TheFooter';
+import TheMenu from '@/components/Navigation/TheMenu';
 
 export default {
-  components: { TheHeader, TheSidenav, TheFooter },
+  components: { TheHeader, TheMenu },
   data () {
     return {
-      displaySidenav: false
+      displayMenu: false
     };
   }
 };

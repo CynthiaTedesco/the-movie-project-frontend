@@ -1,19 +1,11 @@
 <template>
-  <div>
-    <TheHeader @menuToggle="displayMenu =!displayMenu" />
-    <TheMenu :show="displayMenu" @close="displayMenu=false" />
-    <nuxt />
-    <!-- <TheFooter /> -->
-  </div>
+  <nuxt />
 </template>
 
 <script>
-import TheHeader from '@/components/Navigation/TheHeader';
-// import TheFooter from '@/components/Navigation/TheFooter';
-import TheMenu from '@/components/Navigation/TheMenu';
 
 export default {
-  components: { TheHeader, TheMenu },
+  middleware: 'device',
   data () {
     return {
       displayMenu: false

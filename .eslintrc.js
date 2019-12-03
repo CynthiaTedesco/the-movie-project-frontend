@@ -26,6 +26,8 @@ module.exports = {
     'no-trailing-spaces': 'off',
     'vue/html-indent': 'off',
     'space-before-function-paren': 'off',
-    'comma-dangle': 'off'
+    'comma-dangle': 'off',
+    'standard/computed-property-even-spacing': 'off',
+    'arrow-parens': 'off'
   }
 }

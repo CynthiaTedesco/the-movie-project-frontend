@@ -35,5 +35,8 @@ export default {
       restrictions: 'Age restriction',
       poster: 'Poster'
     },
-  }
+  },
+  howToMake: 'How to make',
+  aBlockbuster: 'a blockbuster',
+  stepByStep: 'A step-by-step guide'
 }

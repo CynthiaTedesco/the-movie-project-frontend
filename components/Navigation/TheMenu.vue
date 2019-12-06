@@ -28,43 +28,43 @@ export default {
           route: '',
           title: 'Story',
           subItems: [
-            { route: 'story/genre', title: 'menu.story.genre' },
-            { route: 'story/leadAge', title: 'menu.story.leadAge' },
-            { route: 'story/leadGender', title: 'menu.story.leadGender' },
-            { route: 'story/mainCharacter', title: 'menu.story.mainCharacter' },
-            { route: 'story/origin', title: 'menu.story.origin' },
-            { route: 'story/settingTime', title: 'menu.story.time' },
-            { route: 'story/settingPlace', title: 'menu.story.place' },
-            { route: 'story/plot', title: 'menu.story.plot' }
+            { route: '/story/genre', title: 'menu.story.genre' },
+            { route: '/story/leadAge', title: 'menu.story.leadAge' },
+            { route: '/story/leadGender', title: 'menu.story.leadGender' },
+            { route: '/story/mainCharacter', title: 'menu.story.mainCharacter' },
+            { route: '/story/origin', title: 'menu.story.origin' },
+            { route: '/story/settingTime', title: 'menu.story.time' },
+            { route: '/story/settingPlace', title: 'menu.story.place' },
+            { route: '/story/plot', title: 'menu.story.plot' }
           ]
         },
         {
           route: '',
           title: 'Script',
           subItems: [
-            { route: 'script/language', title: 'menu.script.language' },
-            { route: 'script/length', title: 'menu.script.length' },
-            { route: 'script/wordCount', title: 'menu.script.wordCount' },
+            { route: '/script/language', title: 'menu.script.language' },
+            { route: '/script/length', title: 'menu.script.length' },
+            { route: '/script/wordCount', title: 'menu.script.wordCount' },
           ]
         },
         {
           route: '',
           title: 'Production',
           subItems: [
-            { route: 'production/budget', title: 'menu.production.budget' },
-            { route: 'production/directorAge', title: 'menu.production.directorAge' },
-            { route: 'production/directorGender', title: 'menu.production.directorGender' },
-            { route: 'production/country', title: 'menu.production.country' },
+            { route: '/production/budget', title: 'menu.production.budget' },
+            { route: '/production/directorAge', title: 'menu.production.directorAge' },
+            { route: '/production/directorGender', title: 'menu.production.directorGender' },
+            { route: '/production/country', title: 'menu.production.country' },
           ]
         },
         {
           route: '',
           title: 'Release',
           subItems: [
-            { route: 'release/month', title: 'menu.release.month' },
-            { route: 'release/distributionCompany', title: 'menu.release.distribution' },
-            { route: 'release/restrictions', title: 'menu.release.restrictions' },
-            { route: 'release/poster', title: 'menu.release.poster' },
+            { route: '/release/month', title: 'menu.release.month' },
+            { route: '/release/distributionCompany', title: 'menu.release.distribution' },
+            { route: '/release/restrictions', title: 'menu.release.restrictions' },
+            { route: '/release/poster', title: 'menu.release.poster' },
           ]
         },
       ]

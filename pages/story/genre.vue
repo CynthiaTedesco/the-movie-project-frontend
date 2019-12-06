@@ -1,40 +1,22 @@
 <template>
   <section class="container">
-    <div>GENRE</div>
-      <!-- <app-logo />
-      <h1 class="title">{{ $t('title') }}</h1>
-      <h2 class="subtitle">{{ $t('subtitle') }}</h2>
-      <button class="btn btn-primary test-button">Test</button>
-      <div style="margin-top: 50px;">
-        <b-button v-b-toggle.collapse-1 variant="primary">{{ btnText }}</b-button>
-        <b-collapse id="collapse-1" class="mt-2">
-          <b-card>
-            <p class="card-text">Collapse contents Here</p>
-            <b-button v-b-toggle.collapse-1-inner size="sm">Toggle Inner Collapse</b-button>
-            <b-collapse id="collapse-1-inner" class="mt-2">
-              <b-card>Hello!</b-card>
-            </b-collapse>
-          </b-card>
-        </b-collapse>
-      </div>-->
+      <bubble-cloud class="genre" />
   </section>
 </template>
 
 <script lang="ts">
+import BubbleCloud from '@/components/BubbleCloud.vue';
 
 export default {
   layout: 'innerPage',
-  data() {
-    const btnText: string = 'Toggle Collapse from variable'
-    return {
-      btnText
-    }
-  }
+  components: {
+    BubbleCloud
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~assets/styles/common.scss";
+@import '~assets/styles/common.scss';
 
 .container {
   min-height: 100vh;

@@ -1,6 +1,7 @@
 const { locales } = require('./i18n/_config');
 
 module.exports = {
+  mode:'spa',
   /*
    ** Headers of the page
    */
@@ -27,7 +28,9 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~plugins/bootstrap-components.js'],
+  plugins: [
+    '~plugins/bootstrap-components.js'
+  ],
   /*
    ** Build configuration
    */
@@ -38,7 +41,7 @@ module.exports = {
     extend(config, { isDev, isClient }) {
       config.node = {
         fs: 'empty'
-      }
+      };
 
       if (isDev && isClient) {
         config.module.rules.push({
@@ -64,12 +67,12 @@ module.exports = {
         langDir: 'i18n/',
         defaultLocale: 'en'
       }
-    ]
+    ],
   ],
   bootstrapVue: {
     bootstrapCSS: false, // Or `css: false`
     bootstrapVueCSS: false // Or `bvCSS: false`
-  },
+  }
   /*
    ** Router configuration
    */

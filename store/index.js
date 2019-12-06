@@ -25,7 +25,7 @@ const createStore = () => {
         
         vuexContext.commit(
           'setMovies',
-          allTheMovies.slice(0, context.store.state.isMobile ? 20 : 50)
+          allTheMovies.slice(0, context.store.getters.onMobile ? 20 : 50)
         );
       },
       setMovies(vuexContext, movies) {

@@ -81,6 +81,7 @@ module.exports = {
     'space-before-blocks': 'off',
     'no-multi-spaces': 'off',
     'import/order': 'off',
-    'arrow-spacing': 'off'
+    'arrow-spacing': 'off',
+    'space-in-parens': 'off'
   }
 }

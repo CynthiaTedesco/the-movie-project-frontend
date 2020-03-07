@@ -31,12 +31,21 @@ export default {
     ...mapGetters(['randomMovies'])
   },
   created() {
-    if (!this.randomMovies){
-      this.$store.dispatch('checkMovies').then(()=>{
-        this.randomMovie = this.randomMovies[0];
-      });
+    const fn = (i) => {
+      if (i > 2) {
+        i = 0
+      }
+      console.log('fn!', i, new Date())
+      this.randomMovie = this.randomMovies[i++]
+      setTimeout(function() { fn(i) }, 2000)
+    }
+
+    if (!this.randomMovies) {
+      this.$store.dispatch('checkMovies').then(() => {
+        fn(0)
+      })
     } else {
-      this.randomMovie = this.randomMovies[0];
+      fn(0)
     }
   }
 }

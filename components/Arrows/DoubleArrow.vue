@@ -1,8 +1,5 @@
 <template>
-  <div class="arrow arrow_box">
-    <!-- <div class="arrow left"></div>
-    <div class="arrow right"></div>-->
-  </div>
+  <div class="arrow arrow_box"></div>
 </template>
 
 <script>

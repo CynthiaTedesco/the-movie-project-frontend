@@ -2,7 +2,7 @@
   <div class="presentation">
     <div class="presentation-content">
       <div class="images">
-        <RandomMovieBubble />
+        <RandomMovieBubble :movie="randomMovie" />
       </div>
       <div class="text">
         <div class="how-to">
@@ -17,10 +17,28 @@
 </template>
 
 <script lang="ts">
-import RandomMovieBubble from '@/components/RandomMovieBubble.vue';
+import { mapGetters } from 'vuex'
+import RandomMovieBubble from '@/components/RandomMovieBubble.vue'
 
 export default {
   components: { RandomMovieBubble },
+  data() {
+    return {
+      randomMovie: null,
+    }
+  },
+  computed: {
+    ...mapGetters(['randomMovies'])
+  },
+  created() {
+    if (!this.randomMovies){
+      this.$store.dispatch('checkMovies').then(()=>{
+        this.randomMovie = this.randomMovies[0];
+      });
+    } else {
+      this.randomMovie = this.randomMovies[0];
+    }
+  }
 }
 </script>
 

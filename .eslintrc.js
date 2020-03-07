@@ -75,6 +75,12 @@ module.exports = {
     'arrow-parens': 'off',
     'no-unused-vars': 'off',
     'spaced-comment': 'off',
-    'no-tabs': 'off'
+    'no-tabs': 'off',
+    'vue/no-unused-components': 'off',
+    'indent': 'off',
+    'space-before-blocks': 'off',
+    'no-multi-spaces': 'off',
+    'import/order': 'off',
+    'arrow-spacing': 'off'
   }
 }

@@ -13,7 +13,7 @@
       </div>
       <div class="center-right">
         <div class="image">
-          <img :src="movie.poster.url" alt="movie-poster" />
+          <img :src="movie.poster.url" alt="movie-poster" :title="movie.title" />
         </div>
       </div>
       <div class="bottom-left"></div>
@@ -42,10 +42,10 @@ export default {
     RightArrow,
     ArrowToBottom
   },
+  props: {
+    movie: Object
+  },
   computed: {
-    movie () {
-      return this.$store.getters.randomMovie
-    },
     revenue () {
       //TODO normalize everyting to dollars
       return this.beautifyRevenue(this.movie.revenue) + '$';
@@ -75,17 +75,17 @@ export default {
         case 'imdb_rating':
           return 'IMDB rating: ' + value;
         case 'budget':
-          return 'Budget: ' + this.beautifyRevenue(value);
+          return 'Budget: ' + this.beautifyRevenue(value) + '$';
         case 'plot_line':
           return '"' + value + '"';
         case 'length':
-          return value + 'min';
+          return value + ' min';
         default:
           return value;
       }
     },
     randomProperty (obj) {
-      const k = ['budget', 'imdb_rating', 'length', 'plot_line', 'release_date'];
+      const k = ['budget', 'imdb_rating', 'length', 'release_date'];//'plot_line', 
       // const keys = Object.keys(obj);
       let key = k[k.length * Math.random() << 0];
       while (!obj[key]) {
@@ -124,7 +124,7 @@ div.grid {
   > div {
     &.center-right,
     &.bottom-right {
-      max-width: 100px;
+      max-width: 103px;
     }
 
     &.center-right,

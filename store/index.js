@@ -1,16 +1,19 @@
 import Vuex from 'vuex'
-import axios from 'axios'
-const fs = require('fs')
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
       movies: [],
+      randomMovies: null,
       isMobile: false
     },
     mutations: {
       setMovies(state, movies) {
         state.movies = movies
+      },
+      setRandomMovies(state, movies) {
+        state.randomMovies = movies
+        console.log('random movies', movies.length)
       },
       setIsMobile(state, isMobile) {
         state.isMobile = isMobile
@@ -34,11 +37,37 @@ const createStore = () => {
       // },
       checkMovies(vuexContext) {
         console.log('checking movies!!')
-        this.$axios.$get('/movies').then(allTheMovies => {
-          vuexContext.commit(
+        return this.$axios.$get('/movies').then(allTheMovies => {
+          const promise1 = vuexContext.commit(
             'setMovies',
             allTheMovies.slice(0, vuexContext.getters.onMobile ? 20 : 50)
           )
+
+          // choose random movies
+          // TODO remove when data is sanitized
+          const moviesWithPoster = allTheMovies.filter(m => m.poster)
+
+          const indexesArray = Array.from(Array(moviesWithPoster.length).keys())
+          const index1 = Math.floor(
+            Math.random() * Math.floor(indexesArray.length)
+          )
+          delete indexesArray[index1]
+          const index2 = Math.floor(
+            Math.random() * Math.floor(indexesArray.length)
+          )
+          delete indexesArray[index2]
+          const index3 = Math.floor(
+            Math.random() * Math.floor(indexesArray.length)
+          )
+
+          const randomMovies = [
+            moviesWithPoster[index1],
+            moviesWithPoster[index2],
+            moviesWithPoster[index3]
+          ]
+          // console.log('about to set randomMovies', randomMovies.length);
+          const promise2 = vuexContext.commit('setRandomMovies', randomMovies)
+          return Promise.all([promise1, promise2])
         })
         // FS does not work in client side
         // const moviesFileContent = fs.readFileSync('./assets/movies.json')
@@ -71,6 +100,9 @@ const createStore = () => {
         )
 
         return moviesWithPoster[randomIndex]
+      },
+      randomMovies(state) {
+        return state.randomMovies
       },
       onMobile(state) {
         return state.isMobile

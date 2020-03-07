@@ -14,6 +14,7 @@ module.exports = {
   plugins: ["vue"],
   // add your custom rules here
   rules: {
+    'no-debugger': 'off',
     // "indent": 'off',
     // 'padded-blocks': 'off',
     // 'no-unused-expressions': 'off',
@@ -49,7 +50,6 @@ module.exports = {
     // 'no-unexpected-multiline':'off',
     // 'func-call-spacing':'off',
     // 'standard/no-callback-literal':'off',
-    // 'unicorn/number-literal-case':'off',
     // 'no-undef':'off',
     // 'unicorn/prefer-includes':'off',
     // 'new-cap': 'off',
@@ -73,5 +73,8 @@ module.exports = {
     'comma-dangle': 'off',
     'standard/computed-property-even-spacing': 'off',
     'arrow-parens': 'off',
+    'no-unused-vars': 'off',
+    'spaced-comment': 'off',
+    'no-tabs': 'off'
   }
 }

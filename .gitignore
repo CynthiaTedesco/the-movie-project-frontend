@@ -9,3 +9,9 @@ npm-debug.log
 
 # Nuxt generate
 dist
+.nuxt/index.js
+.nuxt/client.js
+.nuxt/App.js
+.nuxt/middleware.js
+.nuxt/server.js
+.nuxt/utils.js

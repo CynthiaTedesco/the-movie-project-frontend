@@ -1,7 +1,7 @@
-const { locales } = require('./i18n/_config');
+const { locales } = require('./i18n/_config')
 
 module.exports = {
-  mode:'spa',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
@@ -28,9 +28,7 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    '~plugins/bootstrap-components.js'
-  ],
+  plugins: ['~plugins/bootstrap-components.js'],
   /*
    ** Build configuration
    */
@@ -41,7 +39,7 @@ module.exports = {
     extend(config, { isDev, isClient }) {
       config.node = {
         fs: 'empty'
-      };
+      }
 
       if (isDev && isClient) {
         config.module.rules.push({
@@ -49,7 +47,7 @@ module.exports = {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
-        });
+        })
       }
     }
   },
@@ -68,7 +66,15 @@ module.exports = {
         defaultLocale: 'en'
       }
     ],
+    '@nuxtjs/axios'
   ],
+  axios: {
+    baseURL:
+      process.env.BASE_URL
+      || 'https://the-movie-project-api.herokuapp.com/api/', 
+      // || 'http://localhost:3001/api',
+    credentials: false
+  },
   bootstrapVue: {
     bootstrapCSS: false, // Or `css: false`
     bootstrapVueCSS: false // Or `bvCSS: false`
@@ -77,4 +83,4 @@ module.exports = {
    ** Router configuration
    */
   // router: { }
-};
+}

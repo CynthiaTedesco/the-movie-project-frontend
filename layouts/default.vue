@@ -5,7 +5,7 @@
 <script>
 
 export default {
-  middleware: 'device',
+  middleware: ['device', 'movies'],
   data () {
     return {
       displayMenu: false

@@ -20,28 +20,15 @@ const createStore = () => {
       }
     },
     actions: {
-      // nuxtServerInit(vuexContext, context) {
-      //   console.log('nuxtServerInit')
-      //   axios
-      //     .get('http://localhost:3001/api/movies')
-      //     .then(results => {
-      //       const allTheMovies = results
-      //       vuexContext.commit(
-      //         'setMovies',
-      //         allTheMovies.slice(0, context.store.getters.onMobile ? 20 : 50)
-      //       )
-      //     })
-      //     .catch(error => {
-      //       console.log('there was a problem!!', error)
-      //     })
-      // },
       checkMovies(vuexContext) {
         console.log('checking movies!!')
         return this.$axios.$get('/movies').then(allTheMovies => {
-          const promise1 = vuexContext.commit(
-            'setMovies',
-            allTheMovies.slice(0, vuexContext.getters.onMobile ? 20 : 50)
+          const moviesToCommit = allTheMovies.slice(
+            0,
+            vuexContext.getters.onMobile ? 20 : 50
           )
+
+          vuexContext.commit('setMovies', moviesToCommit)
 
           // choose random movies
           // TODO remove when data is sanitized
@@ -65,21 +52,9 @@ const createStore = () => {
             moviesWithPoster[index2],
             moviesWithPoster[index3]
           ]
-          // console.log('about to set randomMovies', randomMovies.length);
-          const promise2 = vuexContext.commit('setRandomMovies', randomMovies)
-          return Promise.all([promise1, promise2])
+          vuexContext.commit('setRandomMovies', randomMovies)
+          return { movies: moviesToCommit, randomMovies }
         })
-        // FS does not work in client side
-        // const moviesFileContent = fs.readFileSync('./assets/movies.json')
-
-        // const allTheMovies = JSON.parse(moviesFileContent).sort(
-        //   (a, b) => a.revenue - b.revenue
-        // )
-
-        // vuexContext.commit(
-        //   'setMovies',
-        //   allTheMovies.slice(0, context.store.getters.onMobile ? 20 : 50)
-        // )
       },
       setMovies(vuexContext, movies) {
         vuexContext.commit('setMovies', movies)

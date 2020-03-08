@@ -38,5 +38,8 @@ export default {
   },
   howToMake: 'How to make',
   aBlockbuster: 'a blockbuster',
-  stepByStep: 'A step-by-step guide'
+  stepByStep: 'A step-by-step guide',
+  'feeling-unispired': 'Feeling uninspired, but want to earn big bucks from your next movie?',
+  covered: 'We’ve got you covered.',
+  description: 'We analyzed the top 50 highest grossing movies, to create the ultimate guide for you to turn your movie idea into a blockbuster.'
 }

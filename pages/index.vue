@@ -1,6 +1,6 @@
 <template>
   <div class="presentation">
-    <div class="presentation-content">
+    <div class="presentation-content" v-if="randomMovie">
       <div class="images">
         <RandomMovieBubble :movie="randomMovie" />
       </div>
@@ -31,18 +31,18 @@ export default {
     ...mapGetters(['randomMovies'])
   },
   created() {
-    const fn = (i) => {
+    const fn = (i, randomMovies = this.randomMovies) => {
       if (i > 2) {
         i = 0
       }
       console.log('fn!', i, new Date())
-      this.randomMovie = this.randomMovies[i++]
-      setTimeout(function() { fn(i) }, 2000)
+      this.randomMovie = randomMovies[i++]
+      setTimeout(function() { fn(i, randomMovies) }, 1000)
     }
 
     if (!this.randomMovies) {
-      this.$store.dispatch('checkMovies').then(() => {
-        fn(0)
+      this.$store.dispatch('checkMovies').then(({randomMovies}) => {
+        fn(0, randomMovies)
       })
     } else {
       fn(0)

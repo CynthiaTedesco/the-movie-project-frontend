@@ -82,6 +82,8 @@ module.exports = {
     'no-multi-spaces': 'off',
     'import/order': 'off',
     'arrow-spacing': 'off',
-    'space-in-parens': 'off'
+    'space-in-parens': 'off',
+    'object-curly-spacing': 'off',
+    'vue/mustache-interpolation-spacing': 'off',
   }
 }

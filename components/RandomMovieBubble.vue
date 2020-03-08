@@ -1,5 +1,5 @@
 <template>
-  <div v-if="movie">
+  <div>
     <div class="grid">
       <div class="top">
         <span>{{randomTopText}}</span>
@@ -25,10 +25,6 @@
       </div>
     </div>
   </div>
-  <div v-else>
-    No movie
-    <!-- <img :src="movie.poster.url" alt="movie-poster" /> -->
-  </div>
 </template>
 
 <script>
@@ -43,7 +39,10 @@ export default {
     ArrowToBottom
   },
   props: {
-    movie: Object
+    movie: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
     revenue () {
@@ -65,7 +64,6 @@ export default {
       return this.randomFactText(this.randomFacts.topFact);
     },
   },
-
   methods: {
     randomFactText (key) {
       const value = this.movie[key];

@@ -31,7 +31,7 @@
 import DoubleArrow from '@/components/Arrows/DoubleArrow';
 import RightArrow from '@/components/Arrows/RightArrow';
 import ArrowToBottom from '@/components/Arrows/ArrowToBottom';
-
+import { beautifyCashValue } from '@/assets/js/helpers.js'
 export default {
   components: {
     DoubleArrow,
@@ -47,7 +47,7 @@ export default {
   computed: {
     revenue () {
       //TODO normalize everyting to dollars
-      return this.beautifyRevenue(this.movie.revenue) + '$';
+      return beautifyCashValue(this.movie.revenue) + '$';
     },
     randomFacts () {
       const topFact = this.randomProperty(this.movie);
@@ -73,7 +73,7 @@ export default {
         case 'imdb_rating':
           return 'IMDB rating: ' + value;
         case 'budget':
-          return 'Budget: ' + this.beautifyRevenue(value) + '$';
+          return 'Budget: ' + beautifyCashValue(value) + '$';
         case 'plot_line':
           return '"' + value + '"';
         case 'length':
@@ -91,21 +91,6 @@ export default {
       }
       return key;
     },
-    beautifyRevenue (labelValue) {
-      // Nine Zeroes for Billions
-      // Math.abs(Number(labelValue)) >= 1.0e+9
-
-      // Six Zeroes for Millions 
-      return Math.abs(Number(labelValue)) >= 1.0e+6
-
-        ? Math.floor(Math.abs(Number(labelValue)) / 1.0e+6) + 'M'
-        // Three Zeroes for Thousands
-        : Math.abs(Number(labelValue)) >= 1.0e+3
-
-          ? Math.floor(Math.abs(Number(labelValue)) / 1.0e+3) + 'K'
-
-          : Math.floor(Math.abs(Number(labelValue)));
-    }
   }
 }
 </script>

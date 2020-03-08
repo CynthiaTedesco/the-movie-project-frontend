@@ -23,7 +23,10 @@ const createStore = () => {
       checkMovies(vuexContext) {
         console.log('checking movies!!')
         return this.$axios.$get('/movies').then(allTheMovies => {
-          const moviesToCommit = allTheMovies.slice(
+          const movies = allTheMovies
+            .filter(m => m.valid)
+            .sort((a, b) => b.revenue - a.revenue)
+          const moviesToCommit = movies.slice(
             0,
             vuexContext.getters.onMobile ? 20 : 50
           )

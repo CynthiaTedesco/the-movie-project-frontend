@@ -5,8 +5,8 @@
       {{$t('covered')}}
       <img src="/divider.png" />
     </div>
-    <div v-html="$t('description')"></div>
-    <NextPageArrow class="white" target="/topMovies" />
+    <div v-html="description"></div>
+    <NextPageArrow class="white" target="movies/top-movies" />
   </div>
 </template>
 
@@ -14,7 +14,13 @@
 import NextPageArrow from '@/components/Arrows/NextPageArrow.vue'
 export default {
   components: { NextPageArrow },
-  transition: 'slide-top'
+  transition: 'slide-top',
+  computed: {
+    description () {
+      return `We analyzed the top ${this.$store.getters.movies.length} highest grossing movies,<br/>`+
+      'to create the ultimate guide for you <br/>to turn your movie idea into a blockbuster.';
+    }
+  }
 }
 </script>
 

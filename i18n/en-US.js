@@ -8,6 +8,7 @@ export default {
       production: 'Production',
       release: 'Release'
     },
+    'top-movies': 'Top Movies',
     story: {
       genre: 'Genre',
       leadAge: 'Lead/Age',
@@ -42,6 +43,4 @@ export default {
   'feeling-unispired':
     'Feeling uninspired, but want to earn big <br/>bucks from your next movie?',
   covered: 'We’ve got you covered.',
-  description:
-    'We analyzed the top 50 highest grossing movies,<br/> to create the ultimate guide for you <br/>to turn your movie idea into a blockbuster.'
 }

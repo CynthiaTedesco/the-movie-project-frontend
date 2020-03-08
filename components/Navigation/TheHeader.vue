@@ -2,10 +2,14 @@
   <div class="the-header header-container container">
     <div class="row px-0 py-2 py-lg-4 py-md-3">
       <div class="col-sm-9 the-header__left">
-        <div class="how-to-make">How to make a blockbuster</div>
-        <TheMenuToggle @toggle="$emit('menuToggle')" />
+        <div class="how-to-make">
+          How to make
+          <br />a blockbuster
+        </div>
+        <TheMenuToggle class="location" v-if="!hideMenuToggle" @toggle="$emit('menuToggle')" />
+        <span class="location" v-else-if="title">{{title}}</span>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-3" v-if="!hideLogo">
         <app-logo class="header-logo" />
       </div>
       <!-- <div class="col-sm-1"></div> -->
@@ -22,12 +26,26 @@ export default {
   components: {
     TheMenuToggle,
     AppLogo
+  },
+  props: {
+    hideLogo: {
+      type: Boolean,
+      default: false
+    },
+    hideMenuToggle: {
+      type: Boolean,
+      default: false
+    },
+    title: {
+      type: String,
+      default: null
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/styles/common.scss";
+@import '~/assets/styles/common.scss';
 
 .header-container > .row {
   flex-wrap: unset;
@@ -40,24 +58,33 @@ export default {
   }
 }
 .the-header {
-    padding: 1rem 0;
+  padding: 1rem 0;
 }
 .header-logo {
   margin-left: auto;
 }
 .how-to-make {
-    color: $blue-ferdio;
-    font-weight: bolder;
-    font-size: 20px;
-    white-space: nowrap;
+  color: $blue-ferdio;
+  line-height: 1.2em;
+  font-weight: bolder;
+  font-size: 20px;
+  white-space: nowrap;
 }
 .the-header__left {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    @include media-breakpoint-up(md) {
-      flex-direction: row;
-    }
+  span.location {
+    color: $dirty-white;
+  }
 
+  /deep/ .location {
+    padding-left: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  @include media-breakpoint-up(md) {
+    flex-direction: row;
+  }
 }
 </style>

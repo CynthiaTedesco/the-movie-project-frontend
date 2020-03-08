@@ -7,7 +7,6 @@ module.exports = {
   extends: [
     // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
     // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    "@nuxtjs/eslint-config-typescript",
     "plugin:vue/essential"
   ],
   // required to lint *.vue files
@@ -37,7 +36,7 @@ module.exports = {
     // 'no-mixed-operators':'off',
     // 'camelcase':'off',
     // 'brace-style':'off',
-    '@typescript-eslint/no-unused-vars':'off',
+    // '@typescript-eslint/no-unused-vars':'off',
     // 'no-multi-spaces':'off',
     // 'standard/array-bracket-even-spacing':'off',
     // 'object-curly-spacing':'off',

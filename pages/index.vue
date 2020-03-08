@@ -37,7 +37,7 @@ export default {
       }
       console.log('fn!', i, new Date())
       this.randomMovie = randomMovies[i++]
-      setTimeout(function() { fn(i, randomMovies) }, 1000)
+      setTimeout(function() { fn(i, randomMovies) }, 1500)
     }
 
     if (!this.randomMovies) {

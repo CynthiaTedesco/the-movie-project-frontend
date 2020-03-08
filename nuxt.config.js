@@ -51,7 +51,6 @@ module.exports = {
       }
     }
   },
-  buildModules: ['@nuxt/typescript-build'],
   /*
    ** Modules
    */

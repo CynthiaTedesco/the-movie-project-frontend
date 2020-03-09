@@ -12,6 +12,15 @@ export default {
   components: {
     BubbleCloud
   },
+  data(){
+    return{
+      movies: []
+    }
+  },
+  async mounted(){
+    await this.$store.dispatch('checkGenres');
+    this.movies = await this.$store.getters.movies;
+  }
 };
 </script>
 

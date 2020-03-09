@@ -12,6 +12,7 @@ import TheMenu from '@/components/Navigation/TheMenu';
 
 export default {
   components: { TheHeader, TheMenu },
+  middleware: ['device', 'movies'],
   data () {
     return {
       displayMenu: false

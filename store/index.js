@@ -21,48 +21,81 @@ const createStore = () => {
     },
     actions: {
       checkMovies(vuexContext) {
-        console.log('checking movies!!')
-        return this.$axios.$get('/movies').then(allTheMovies => {
-          const movies = allTheMovies
-            .filter(m => m.valid)
-            .sort((a, b) => b.revenue - a.revenue)
-          const moviesToCommit = movies.slice(
-            0,
-            50
-            //   vuexContext.getters.onMobile ? 20 : 50
-          )
+        if (vuexContext.getters.movies.length === 0) {
+          console.log('checking movies!!')
+          return this.$axios.$get('/movies').then(allTheMovies => {
+            const movies = allTheMovies
+              .filter(m => m.valid)
+              .sort((a, b) => b.revenue - a.revenue)
+            const moviesToCommit = movies.slice(
+              0,
+              50
+              //   vuexContext.getters.onMobile ? 20 : 50
+            )
 
-          vuexContext.commit('setMovies', moviesToCommit)
+            vuexContext.commit('setMovies', moviesToCommit)
 
-          // choose random movies
-          // TODO remove when data is sanitized
-          const moviesWithPoster = allTheMovies.filter(m => m.poster)
+            // choose random movies
+            // TODO remove when data is sanitized
+            const moviesWithPoster = allTheMovies.filter(m => m.poster)
 
-          const indexesArray = Array.from(Array(moviesWithPoster.length).keys())
-          const index1 = Math.floor(
-            Math.random() * Math.floor(indexesArray.length)
-          )
-          delete indexesArray[index1]
-          const index2 = Math.floor(
-            Math.random() * Math.floor(indexesArray.length)
-          )
-          delete indexesArray[index2]
-          const index3 = Math.floor(
-            Math.random() * Math.floor(indexesArray.length)
-          )
+            const indexesArray = Array.from(
+              Array(moviesWithPoster.length).keys()
+            )
+            const index1 = Math.floor(
+              Math.random() * Math.floor(indexesArray.length)
+            )
+            delete indexesArray[index1]
+            const index2 = Math.floor(
+              Math.random() * Math.floor(indexesArray.length)
+            )
+            delete indexesArray[index2]
+            const index3 = Math.floor(
+              Math.random() * Math.floor(indexesArray.length)
+            )
 
-          const randomMovies = [
-            moviesWithPoster[index1],
-            moviesWithPoster[index2],
-            moviesWithPoster[index3]
-          ]
-          vuexContext.commit('setRandomMovies', randomMovies)
-          return { movies: moviesToCommit, randomMovies }
+            const randomMovies = [
+              moviesWithPoster[index1],
+              moviesWithPoster[index2],
+              moviesWithPoster[index3]
+            ]
+            vuexContext.commit('setRandomMovies', randomMovies)
+            return { movies: moviesToCommit, randomMovies }
+          })
+        }
+      },
+      checkGenres(vuexContext) {
+        console.log('checking genres!')
+        const associations = this.$axios.get('/movie-genres')
+        const genres = this.$axios.get('/genres')
+
+        return Promise.all([associations, genres]).then(results => {
+          return vuexContext.dispatch('updateMoviesWithGenres', results)
         })
       },
-      setMovies(vuexContext, movies) {
-        vuexContext.commit('setMovies', movies)
+      updateMoviesWithGenres(vuexContext, params) {
+        const genres = params[1].data
+        const associations = params[0].data
+
+        const updatedMovies = vuexContext.getters.movies.map(movie => {
+          movie.genres = associations
+            .filter(a => a.movie_id == movie.id)
+            .map(a2 => {
+              return {
+                genre_id: a2.genre_id,
+                primary: a2.primary,
+                genre_name: genres
+                  .find(g => g.id == a2.genre_id).name
+              }
+            })
+          debugger
+          return movie
+        })
+        debugger
+        vuexContext.commit('setMovies', updatedMovies)
       },
+      //TODO update movies with it!!
+      // return { associations: results[0].data, genres: results[1].data }
       setIsMobile(vuexContext, isMobile) {
         vuexContext.commit('setIsMobile', isMobile)
       }

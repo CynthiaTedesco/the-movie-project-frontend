@@ -1,4 +1,4 @@
-export default function({ store }) {
+export default async function({ store }) {
   console.log('middleware!');
-  store.dispatch('checkMovies');
+  await store.dispatch('checkMovies');
 }

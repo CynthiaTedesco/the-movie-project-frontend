@@ -28,7 +28,8 @@ const createStore = () => {
             .sort((a, b) => b.revenue - a.revenue)
           const moviesToCommit = movies.slice(
             0,
-            vuexContext.getters.onMobile ? 20 : 50
+            50
+            //   vuexContext.getters.onMobile ? 20 : 50
           )
 
           vuexContext.commit('setMovies', moviesToCommit)

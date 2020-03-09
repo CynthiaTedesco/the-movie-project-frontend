@@ -66,10 +66,21 @@ export default {
 //   position: relative;
 // }
 .presentation-content {
+  flex-direction: column-reverse;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   background-color: $clear;
+
+  @include media-breakpoint-up(sm) {
+    flex-direction: row;
+  }
+
+  .images {
+    margin-top: 3rem;
+    @include media-breakpoint-up(sm) {
+      margin-top: 0;
+    }
+  }
 }
 .text {
   display: flex;
@@ -77,9 +88,13 @@ export default {
   color: white;
 
   .how-to {
-    font-size: 50px;
+    font-size: 36px;
     font-weight: 900;
     line-height: 1;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 50px;
+    }
   }
 
   .step-by-step {

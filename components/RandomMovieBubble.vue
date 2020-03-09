@@ -96,13 +96,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~assets/styles/common.scss';
+
 div.grid {
   color: white;
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
   grid-template-rows: 30px 110px 10px;
   margin-right: 2rem;
   margin-top: -2em;
+  grid-template-columns: 1fr 1fr;
+  margin-left: 2rem;
+  font-size: 0.8em;
+
+  @include media-breakpoint-up(sm) {
+    margin-left: 0;
+    grid-template-columns: 1.3fr 1fr;
+    font-size: 1em;
+  }
 
   > div {
     &.center-right,

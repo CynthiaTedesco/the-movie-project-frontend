@@ -1,5 +1,5 @@
 <template>
-  <div class="the-header header-container container">
+  <div class="the-header header-container">
     <div class="row px-0 py-2 py-lg-4 py-md-3">
       <div class="col-sm-9 the-header__left">
         <div class="how-to-make">

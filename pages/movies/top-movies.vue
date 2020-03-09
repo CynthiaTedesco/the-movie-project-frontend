@@ -8,7 +8,7 @@
     />
     <div class="presentation">
       <div v-if="movies" class="bubbles" :class="bubblesClasses">
-        <div v-for="movie in movies" :key="movie.id">
+        <div v-for="movie in slicedMovies" :key="movie.id">
           <div class="bubble">
             <img
               :src="movie.poster.url"
@@ -37,19 +37,62 @@ export default {
   components: { TheHeader, NextPageArrow },
   data () {
     return {
-      displayMenu: false
+      displayMenu: false,
+      isMobile: false,
+      slicedMovies: [],
+      mobileSize: 20
     };
+  },
+  watch: {
+    isMobile () {
+      if (this.isMobile) {
+        if (this.slicedMovies.length > this.mobileSize) {
+          console.log('watcher');
+          this.slicedMovies = this.movies.slice(0, this.mobileSize);
+        }
+      } else {
+        if (this.slicedMovies.length < this.movies.length) {
+          console.log('watcher');
+          this.slicedMovies = this.movies
+        }
+      }
+
+      if (this.slicedMovies.length === 0) {
+        console.log('watcher');
+        this.slicedMovies = this.movies
+      }
+    },
+    slicedMovies (a, b) {
+      console.log('watcher slicedMovies', a.length, b.length);
+    }
+  },
+  mounted () {
+    const isMobile = document.documentElement.clientWidth <= 768;
+    this.slicedMovies = isMobile ? this.movies.slice(0, this.mobileSize) : this.movies;
+    console.log('mounted', this.slicedMovies.length);
+
+    this.$nextTick(function () {
+      this.slicedMovies = isMobile ? this.movies.slice(0, this.mobileSize) : this.movies;
+      window.addEventListener('resize', this.getWindowWidth);
+
+      //Init
+      this.getWindowWidth()
+    })
+
   },
   computed: {
     ...mapGetters(['movies']),
     bubblesClasses () {
-      return 'top-' + this.movies.length + '-movies';
+      return 'top-' + this.slicedMovies.length + '-movies';
     },
     title () {
-      return `The top ${this.$store.getters.movies.length} highest grossing movies`;
+      return `The top ${this.slicedMovies.length} highest grossing movies`;
     },
   },
   methods: {
+    getWindowWidth (event) {
+      this.isMobile = document.documentElement.clientWidth <= 768;
+    },
     revenue (movie) {
       return beautifyCashValue(movie.revenue);
     },
@@ -74,6 +117,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~/assets/styles/common.scss';
+
 .top-movies {
   position: relative;
 
@@ -81,7 +126,8 @@ export default {
     color: white;
   }
   /deep/ .the-header {
-    padding: 0 4rem;
+    // padding: 0 4rem;
+    padding: 1rem 4rem;
     position: absolute;
     z-index: 2;
     margin-left: auto;
@@ -91,23 +137,35 @@ export default {
   }
   .presentation {
     padding: 100px 0;
+    padding-top: 150px;
     z-index: 1;
 
     .bubbles {
-      // height: calc(100vh - 10em);
+      padding: 0 2rem;
+
       width: 100%;
       margin-bottom: -2rem;
-      padding: 0 5rem;
+
       display: grid;
       font-size: 14px;
 
       &.top-50-movies {
         grid-template-columns: repeat(10, 1fr);
         grid-template-rows: repeat(5, 1fr);
+
+        @include media-breakpoint-down(l) {
+          grid-template-columns: repeat(5, 1fr);
+          grid-template-rows: repeat(4, 1fr);
+        }
       }
       &.top-20-movies {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(5, 1fr);
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+
+        @include media-breakpoint-up(sm) {
+          grid-template-columns: repeat(4, 1fr);
+          grid-template-rows: repeat(5, 1fr);
+        }
       }
 
       > div {

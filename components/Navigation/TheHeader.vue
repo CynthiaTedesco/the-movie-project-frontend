@@ -58,7 +58,7 @@ export default {
   }
 }
 .the-header {
-  padding: 1rem 0;
+  padding: 1rem 4rem;
 }
 .header-logo {
   margin-left: auto;

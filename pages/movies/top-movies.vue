@@ -63,7 +63,7 @@ export default {
     scale (revenue) {
       const domain = this.movies.map(m => m.revenue);
       const maxRevenue = this.movies[0].revenue;
-      const maxWidth = 80;
+      const maxWidth = 60;
 
       return revenue * maxWidth / maxRevenue;
 
@@ -81,7 +81,7 @@ export default {
     color: white;
   }
   /deep/ .the-header {
-    padding: 0;
+    padding: 0 4rem;
     position: absolute;
     z-index: 2;
     margin-left: auto;
@@ -90,15 +90,16 @@ export default {
     right: 0;
   }
   .presentation {
+    padding: 100px 0;
     z-index: 1;
 
     .bubbles {
-      height: calc(100vh - 10em);
+      // height: calc(100vh - 10em);
       width: 100%;
       margin-bottom: -2rem;
-      margin-left: 5rem;
-      margin-right: 5rem;
+      padding: 0 5rem;
       display: grid;
+      font-size: 14px;
 
       &.top-50-movies {
         grid-template-columns: repeat(10, 1fr);
@@ -109,17 +110,26 @@ export default {
         grid-template-rows: repeat(5, 1fr);
       }
 
-      > div > div {
-        text-align: center;
+      > div {
+        background-image: radial-gradient(#d0d0d0 0%, #2b4ab7 5%);
+        background-position: 0 0;
+        background-size: 40px 40px;
+        > div {
+          text-align: center;
+
+          &.title {
+            font-weight: bold;
+          }
+        }
       }
 
       .bubble {
         border-radius: 50%;
-        width: 100px;
-        height: 100px;
+        height: 70px;
         overflow: hidden;
         display: flex;
         justify-content: center;
+        align-items: center;
         margin: auto;
 
         img {

@@ -1,5 +1,7 @@
 <template>
-  <nuxt />
+  <div>
+    <nuxt />
+  </div>
 </template>
 
 <script>
@@ -13,3 +15,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+div {
+  width: 1118px;
+  margin: auto;
+}
+</style>

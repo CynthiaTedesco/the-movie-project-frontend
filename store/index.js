@@ -66,7 +66,7 @@ const createStore = () => {
       },
       checkGenres(vuexContext) {
         console.log('checking genres!')
-        const associations = this.$axios.get('/movie-genres')
+        const associations = this.$axios.get('/movies-genres')
         const genres = this.$axios.get('/genres')
 
         return Promise.all([associations, genres]).then(results => {
@@ -88,10 +88,8 @@ const createStore = () => {
                   .find(g => g.id == a2.genre_id).name
               }
             })
-          debugger
           return movie
         })
-        debugger
         vuexContext.commit('setMovies', updatedMovies)
       },
       //TODO update movies with it!!

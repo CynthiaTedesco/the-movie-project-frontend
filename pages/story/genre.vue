@@ -1,25 +1,36 @@
 <template>
   <section class="container">
-      <bubble-cloud class="genre" />
+    <!-- <bubble-cloud class="genre" /> -->
   </section>
 </template>
 
 <script lang="ts">
-import BubbleCloud from '@/components/BubbleCloud.vue';
+import BubbleCloud from '@/components/BubbleCloud.vue'
 
 export default {
   layout: 'innerPage',
   components: {
     BubbleCloud
   },
-  data(){
-    return{
-      movies: []
+  data() {
+    return {
+      movies: [],
+      groups: []
     }
   },
-  async mounted(){
-    await this.$store.dispatch('checkGenres');
-    this.movies = await this.$store.getters.movies;
+  async mounted() {
+    await this.$store.dispatch('checkGenres')
+    this.movies = await this.$store.getters.movies
+    this.groups = this.groupBy(this.movies, 'genres');
+  },
+  methods: {
+    groupBy(xs, key) {
+      return xs.reduce(function (rv, x) {
+        const innerKey = x[key].find(a=>a.primary).genre_name;
+        (rv[innerKey] = rv[innerKey] || []).push(x)
+        return rv
+      }, {})
+    }
   }
 };
 </script>

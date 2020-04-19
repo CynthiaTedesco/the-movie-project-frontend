@@ -11,11 +11,11 @@ module.exports = {
       { charset: 'utf-8' },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1, shrink-to-fit=no'
+        content: 'width=device-width, initial-scale=1, shrink-to-fit=no',
       },
-      { hid: 'description', name: 'description', content: 'The Movie Project' }
+      { hid: 'description', name: 'description', content: 'The Movie Project' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   /*
    ** Customize the progress bar color
@@ -38,7 +38,7 @@ module.exports = {
      */
     extend(config, { isDev, isClient }) {
       config.node = {
-        fs: 'empty'
+        fs: 'empty',
       }
 
       if (isDev && isClient) {
@@ -46,10 +46,10 @@ module.exports = {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
+          exclude: /(node_modules)/,
         })
       }
-    }
+    },
   },
   /*
    ** Modules
@@ -62,22 +62,26 @@ module.exports = {
         locales,
         lazy: true,
         langDir: 'i18n/',
-        defaultLocale: 'en'
-      }
+        defaultLocale: 'en',
+      },
     ],
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
   ],
   axios: {
     baseURL:
       process.env.BASE_URL
-      || 'https://the-movie-project-api.herokuapp.com/api/', 
-      // || 'http://localhost:3001/api',
-    credentials: false
+      || 'https://the-movie-project-api.herokuapp.com/api/',
+      // ||
+      // 'http://localhost:3001/api',
+    credentials: false,
   },
   bootstrapVue: {
     bootstrapCSS: false, // Or `css: false`
-    bootstrapVueCSS: false // Or `bvCSS: false`
-  }
+    bootstrapVueCSS: false, // Or `bvCSS: false`
+  },
+  server: {
+    port: 4000,
+  },
   /*
    ** Router configuration
    */

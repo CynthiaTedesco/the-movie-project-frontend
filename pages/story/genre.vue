@@ -1,21 +1,23 @@
 <template>
   <section class="container">
-    <!-- <bubble-cloud class="genre" /> -->
+    <BubblesInGroups v-if="Object.keys(groups).length" :data="movies" :groups="groups" />
   </section>
 </template>
 
-<script lang="ts">
-import BubbleCloud from '@/components/BubbleCloud.vue'
+<script>
+import BubbleCloud from "@/components/Charts/BubbleCloud"
+import BubblesInGroups from "@/components/Charts/BubblesInGroups"
 
 export default {
   layout: 'innerPage',
   components: {
-    BubbleCloud
+    BubbleCloud,
+    BubblesInGroups
   },
   data() {
     return {
       movies: [],
-      groups: []
+      groups: {}
     }
   },
   async mounted() {
@@ -42,7 +44,7 @@ export default {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   text-align: center;
   background-color: $white;
 }

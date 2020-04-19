@@ -39,7 +39,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~assets/styles/common.scss';
-
+  
 .container {
   min-height: 100vh;
   display: flex;

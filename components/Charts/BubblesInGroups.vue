@@ -58,13 +58,34 @@ export default {
       .attr("transform", `translate(${this.width / 2}, ${this.height / 2})`)
       .attr("class", "nodes")
 
+    const defs = this.svg.append('defs');
+
+    defs.selectAll(".poster-pattern")
+      .data(this.data)
+      .enter()
+      .append("pattern")
+        .attr("class", ".poster-pattern")
+        .attr('id', this.title)
+        .attr('height', '100%')
+        .attr('width', '100%')
+        .attr('patternContentUnits', 'objectBoundingBox')
+        .append('image')
+          .attr("height", 1)
+          .attr("width", 1)
+          .attr("preserveAspectRatio", "none")
+          .attr("xlink:href", d => d.poster.url)
+
     this.nodes = this.svg
       .selectAll("circle")
       .data(this.data)
       .enter().append("circle")
       .attr("r", d => this.scale(d.revenue))
+      .attr("fill", d=>`url(#${this.title(d)})`)
   },
   methods: {
+    title(d){
+      return d.title.split(' ').join('-')
+    },
     ticked () {
       this.nodes.attr("cx", d => d.x);
       this.nodes.attr("cy", d => d.y);

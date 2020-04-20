@@ -69,10 +69,10 @@ module.exports = {
   ],
   axios: {
     baseURL:
-      process.env.BASE_URL
-      || 'https://the-movie-project-api.herokuapp.com/api/',
-      // ||
-      // 'http://localhost:3001/api',
+      process.env.BASE_URL ||
+      'https://the-movie-project-api.herokuapp.com/api/',
+    // ||
+    // 'http://localhost:3001/api',
     credentials: false,
   },
   bootstrapVue: {
@@ -80,7 +80,7 @@ module.exports = {
     bootstrapVueCSS: false, // Or `bvCSS: false`
   },
   server: {
-    port: 4000,
+    port: process.env.PORT || '4000',
   },
   /*
    ** Router configuration

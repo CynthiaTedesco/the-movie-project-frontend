@@ -21,8 +21,24 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-div {
-  max-width: 1118px;
-  margin: auto;
+@import '~/assets/styles/common.scss';
+
+.page-container {
+  min-height: 80vh;
+  @include media-breakpoint-up(lg) {
+    max-height: 83vh;
+  }
+}
+.container {
+  div {
+    max-width: 1118px;
+    margin: auto;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: top;
+  text-align: center;
+  background-color: $white;
 }
 </style>

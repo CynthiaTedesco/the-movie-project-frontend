@@ -1,6 +1,7 @@
 <template>
-  <section class="container">
-    <BubblesInGroups v-if="Object.keys(groups).length" :data="movies" :groups="groups" />
+  <section class="page-container">
+    <div class="description"></div>
+    <BubblesInGroups v-if="Object.keys(groups).length" :movies="movies" :groups="groups" attr="genres"/>
   </section>
 </template>
 
@@ -40,15 +41,6 @@ export default {
 <style lang="scss" scoped>
 @import '~assets/styles/common.scss';
   
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: top;
-  text-align: center;
-  background-color: $white;
-}
-
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* 1 */

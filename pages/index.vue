@@ -54,17 +54,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '~assets/styles/common.scss';
-// .presentation {
-//   height: 100vh;
-//   width: 100vw;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   background-image: radial-gradient(#d0d0d0 0%, #2b4ab7 5%);
-//   background-position: 0 0;
-//   background-size: 40px 40px;
-//   position: relative;
-// }
 .presentation-content {
   flex-direction: column-reverse;
   display: flex;

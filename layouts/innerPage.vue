@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="">
     <TheHeader @menuToggle="displayMenu =!displayMenu" />
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
     <nuxt />
@@ -22,7 +22,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~/assets/styles/common.scss';
-
+div {
+  max-width: 1500px;
+  margin: auto;
+}
 .page-container {
   min-height: 80vh;
   @include media-breakpoint-up(lg) {

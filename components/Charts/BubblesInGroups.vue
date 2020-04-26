@@ -186,16 +186,4 @@ export default {
 
 <style lang="scss">
 @import '@/assets/styles/common.scss';
-
-.test {
-  height: 150px;
-  background: blue;
-  width: 599px;
-  position: absolute;
-}
-svg {
-  @include media-breakpoint-up(lg) {
-    max-height: 83vh;
-  }
-}
 </style>

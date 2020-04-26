@@ -151,7 +151,7 @@ button:focus {
   grid-template-columns: 100%;
   grid-template-rows: 1fr;
   // grid-template-rows: repeat(6, 1fr);
-  min-height: 80vh;
+  min-height: calc(100vh - 100px);
   margin-top: 2rem;
 
   @include media-breakpoint-up(sm) {
@@ -159,8 +159,5 @@ button:focus {
   }
   @include media-breakpoint-up(md) {
     grid-template-columns: 20% 80%;
-  }
-  @include media-breakpoint-up(lg) {
-    max-height: 83vh;
   }
 }

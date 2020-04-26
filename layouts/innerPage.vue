@@ -1,5 +1,5 @@
 <template>
-  <div class="bubbles-page">
+  <div>
     <TheHeader @menuToggle="displayMenu =!displayMenu" />
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
     <nuxt />
@@ -43,7 +43,7 @@ div {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 2rem 0 3rem 4rem;
+  padding: 2rem 0 100px 4rem;
 
   .counter,
   .title {

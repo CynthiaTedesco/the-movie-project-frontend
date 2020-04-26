@@ -8,6 +8,7 @@
 // And define any of your custom or additional CSS/SCSS here,
 // or via an @import
 @import 'configuration/colors';
+@import 'configuration/mixins.scss';
 @import 'configuration/icons.scss';
 
 @import 'global.scss'

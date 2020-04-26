@@ -126,7 +126,6 @@ export default {
     color: white;
   }
   /deep/ .the-header {
-    // padding: 0 4rem;
     padding: 1rem 4rem;
     position: absolute;
     z-index: 2;
@@ -134,6 +133,14 @@ export default {
     margin-right: auto;
     left: 0;
     right: 0;
+    
+
+    background-image: radial-gradient(#d0d0d0 0%, #2b4ab7 5%);
+    background-position: 0 0;
+    background-size: 40px 40px;
+    position: fixed;
+    color: #dad8d8;
+    @include max-sized;
   }
   .presentation {
     padding: 100px 0;
@@ -141,7 +148,7 @@ export default {
     z-index: 1;
 
     .bubbles {
-      padding: 0 2rem;
+      padding: 0 6rem;
 
       width: 100%;
       margin-bottom: -2rem;

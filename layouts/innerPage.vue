@@ -22,8 +22,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~/assets/styles/common.scss';
+
 div {
-  max-width: 1500px;
+  @include max-sized;
   margin: auto;
 }
 .container {

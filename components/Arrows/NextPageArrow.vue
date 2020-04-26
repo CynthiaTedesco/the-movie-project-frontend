@@ -1,5 +1,7 @@
 <template>
-  <nuxt-link class="arrow" :to="target" />
+  <div @click="$router.push(target)">
+    <nuxt-link class="arrow" :to="target" />
+  </div>
 </template>
 
 <script>
@@ -16,6 +18,24 @@ export default {
 <style lang="scss" scoped>
 @import '~/assets/styles/common.scss';
 
+div,
+.arrow {
+  position: absolute;
+  cursor: pointer;
+}
+div {
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+
+  &.white {
+    .arrow {
+      border-bottom-color: white;
+      border-right-color: white;
+    }
+  }
+}
 .arrow {
   border: none;
   border-bottom: 2px solid $blue-ferdio;
@@ -23,17 +43,6 @@ export default {
   transform: rotate(45deg);
   width: 20px;
   height: 20px;
-  position: absolute;
-  bottom: 30px;
-
-  &.white {
-    border-bottom-color: white;
-    border-right-color: white;
-  }
-
-  .arrow {
-    width: 100%;
-    height: 100%;
-  }
+  bottom: 20px;
 }
 </style>

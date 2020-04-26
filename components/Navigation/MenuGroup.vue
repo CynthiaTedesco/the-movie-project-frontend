@@ -3,7 +3,7 @@
     <div class="title">{{ item.title }}</div>
     <ul class="list">
       <li v-for="subItem in item.subItems" :key="subItem.title">
-        <a :href="subItem.route">{{ $t(subItem.title) }}</a>
+        <nuxt-link :to="subItem.route">{{ $t(subItem.title) }}</nuxt-link>
       </li>
     </ul>
   </div>

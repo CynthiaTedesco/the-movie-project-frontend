@@ -135,8 +135,8 @@ button:focus {
 }
 
 .presentation {
-  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-image: radial-gradient(#d0d0d0 0%, #2b4ab7 5%);

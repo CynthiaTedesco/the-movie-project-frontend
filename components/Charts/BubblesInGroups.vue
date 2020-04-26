@@ -45,7 +45,7 @@ export default {
   },
   beforeDestroy () {
     console.log('about to destroy');
-    window.addEventListener('resize');
+    window.removeEventListener('resize');
   },
   methods: {
     setDimensions () {
@@ -87,22 +87,17 @@ export default {
       switch (this.display) {
         case 'small': {
           this.drawSmallLayout(); break;
-        } case 'medium': {
-          this.drawMediumLayout(); break;
         } default: this.drawLargeLayout();
       }
     },
     drawSmallLayout () {
       console.log('drawSmallLayout');
     },
-    drawMediumLayout () {
-      console.log('drawMediumLayout');
-    },
     drawLargeLayout () {
-      console.log('drawLargeLayout');
+      console.log('drawMediumLayout');
       const xScale = d3.scaleOrdinal()
         .domain([1, 2, 3, 4, 5, 6])
-        .range([0, 50, 75, 0, 50, 75])//percentages
+        .range([0, 55, 85, 0, 55, 85])//percentages
       const yScale = d3.scaleOrdinal()
         .domain([1, 2, 3, 4, 5, 6])
         .range([0, 0, 0, 50, 50, 50])//percentages
@@ -113,40 +108,24 @@ export default {
 
         const xPerPercentage = percentage * container.width / 100;
         if (percentage < 20) {
-          console.log('percentage is < 20', Math.max(150, xPerPercentage));
-          return Math.max(200, xPerPercentage)
+          console.log('percentage is < 20', Math.max(170, xPerPercentage));
+          return Math.max(170, xPerPercentage)
         }
         if (percentage > 50) {
           console.log('percentage is > 50', Math.min(container.width - 200, xPerPercentage));
-          return Math.min(container.width - 200, xPerPercentage)
+          return Math.min(container.width - 100, xPerPercentage)
         }
-        // return container.width/2;
-
-        // console.log('X--------', d.title, d.primary.genre_name, percentage, percentage * container.width / 100);
-        // return percentage === 0 ? 
-        //   Math.min(300, percentage * container.width / 100) : 
         return percentage * container.width / 100;
       }
       const forceY = (d) => {
         const percentage = yScale(d.primaryPos <= 6 ? d.primaryPos : 6);
         const container = this.$refs.chartContainer.getBoundingClientRect();
-        debugger
-        // if(this.width<1000){
-        //   if(Math.random(0,1)*100>50){
-        //     return 270;
-        //   } else {
-        //     return 800
-        //   }
-        // }
         if (percentage === 0) {
-          return 170;
+          return 180;
         } else {
           console.log('CONTAINER HEIGHT', 70 * container.height / 100, Math.min(600, container.height - 300));
-          // return 70 * container.height / 100;
-          return Math.min(600, 70 * container.height / 100)//container.height - 300);
+          return Math.min(700, 75 * container.height / 100)//container.height - 300);
         }
-        // console.log('Y --------', d.title, d.primary.genre_name, percentage, percentage*container.height/100);
-        // return percentage*container.height/100;
       }
       // the simulation is a collection of forces 
       // about where we want our circles to go
@@ -160,15 +139,11 @@ export default {
         .force("collide", d3.forceCollide(d => this.scale(d.revenue) + 2))
         .on('tick', this.ticked);
 
-
-
       this.svg = d3.select('.chart-container').append("svg")
         .attr("width", '100%')
         .attr("height", '100%')
-        // .attr('viewBox', '0 0 ' + Math.min(this.width, this.height) + ' ' + Math.min(this.width, this.height))
-        // .attr('preserveAspectRatio', 'xMidYMid meet')
-        // .append("g")
-        // .attr("transform", `translate(${this.width / 2}, ${this.height / 2})`)
+        .attr('viewBox', '0 0 ' + this.width + ' ' + this.height)
+        .attr('preserveAspectRatio', 'xMinYMid meet')
         .attr("class", "nodes")
 
       const defs = this.svg.append('defs');
@@ -194,7 +169,7 @@ export default {
         .enter().append("circle")
         .attr("r", d => this.scale(d.revenue))
         .attr("fill", d => `url(#${this.title(d)})`)
-    }
+    },
   }
 }
 </script>
@@ -219,14 +194,8 @@ export default {
   }
 }
 svg {
-  // background: lightcoral;
   @include media-breakpoint-up(lg) {
     max-height: 83vh;
   }
-  // background: chartreuse;
-  // }
-  // g {
-  //   max-height: 83vh;
-  //   background: palevioletred;
 }
 </style>

@@ -40,7 +40,9 @@ export default {
 
 <style lang="scss" scoped>
 @import '~assets/styles/common.scss';
-  
+.description {
+  background: transparent;
+}
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* 1 */

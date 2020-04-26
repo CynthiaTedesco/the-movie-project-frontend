@@ -1,8 +1,6 @@
 <template>
-  <div ref="chartContainer" class="chart-container">
-    <!-- <div class="test"></div> -->
-    <!-- <svg ref="chart" :height="height" :width="width" /> -->
-  </div>
+  <div v-if="this.display==='small'" ref="chartContainer">hoa</div>
+  <div v-else ref="chartContainer" class="chart-container"></div>
 </template>
 
 <script>
@@ -18,7 +16,8 @@ export default {
     return {
       height: null,
       width: null,
-      display: 'large' //[small (<1024), medium (<1500), large]
+      display: 'large', //[small (<1024), large]
+      doit: null
     }
   },
   beforeMount () {
@@ -36,23 +35,34 @@ export default {
       .range([10, 50]);
   },
   mounted () {
-    let doit;
-    window.addEventListener('resize', () => {
-      clearTimeout(doit);
-      doit = setTimeout(this.resized, 300);
-    });
+    window.addEventListener('resize', this.eventListenerFn);
     this.draw();
   },
   beforeDestroy () {
     console.log('about to destroy');
-    window.removeEventListener('resize');
+    // window.removeEventListener('resize');
   },
   methods: {
+    eventListenerFn () {
+      clearTimeout(this.doit);
+      this.doit = setTimeout(this.resized, 300);
+    },
     setDimensions () {
-      const container = this.$refs.chartContainer.getBoundingClientRect();
-      this.width = container.width;
-      this.height = container.height
-      console.log('DIMENSIONS', this.width, this.height);
+      const fn = () => {
+        const container = this.$refs.chartContainer.getBoundingClientRect();
+        this.width = container.width;
+        this.height = container.height
+        console.log('DIMENSIONS', this.width, this.height);
+      }
+
+      if (!this.$refs.chartContainer) {
+        this.$nextTick(() => {
+          fn();
+        });
+      }
+
+      fn();
+
     },
     resized () {
       this.setDimensions();
@@ -60,15 +70,15 @@ export default {
       console.log('resided function!!', newDisplay, this.display);
       if (newDisplay !== this.display) {
         this.display = newDisplay;
-        this.draw();
+        this.$nextTick(() => {
+          this.draw();
+        });
       }
     },
     calculateDisplay () {
       const width = document.documentElement.clientWidth;
       if (width < 1024) {
         return 'small'
-      } else if (width < 1500) {
-        return 'medium'
       }
 
       return 'large';
@@ -84,17 +94,17 @@ export default {
       console.log('DRAWING', this.display);
       this.setDimensions();
       d3.select("svg").remove();
-      switch (this.display) {
-        case 'small': {
-          this.drawSmallLayout(); break;
-        } default: this.drawLargeLayout();
+      if (this.display === 'small') {
+        this.drawSmallLayout();
+      } else {
+        this.drawLargeLayout();
       }
     },
     drawSmallLayout () {
       console.log('drawSmallLayout');
     },
     drawLargeLayout () {
-      console.log('drawMediumLayout');
+      console.log('drawLargeLayout');
       const xScale = d3.scaleOrdinal()
         .domain([1, 2, 3, 4, 5, 6])
         .range([0, 55, 85, 0, 55, 85])//percentages
@@ -182,16 +192,6 @@ export default {
   background: blue;
   width: 599px;
   position: absolute;
-}
-.page-container {
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 1fr;
-  // grid-template-rows: repeat(6, 1fr);
-
-  @include media-breakpoint-up(md) {
-    grid-template-columns: 16% 84%;
-  }
 }
 svg {
   @include media-breakpoint-up(lg) {

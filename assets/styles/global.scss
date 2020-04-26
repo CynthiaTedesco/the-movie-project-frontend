@@ -1,20 +1,32 @@
 @font-face {
-  font-family: "jeff-script-regular";
-  src: url("~assets/fonts/jeff-script-regular.otf");
+  font-family: 'jeff-script-regular';
+  src: url('~assets/fonts/jeff-script-regular.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'analogue-85-black';
+  src: url('~assets/fonts/analogue85black.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'maax-rounded-bold';
+  src: url('~assets/fonts/Maax Rounded Bold.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'le-havre-rounded-w00-regular';
+  src: url('~assets/fonts/Le Havre Rounded W00 Regular.ttf');
   font-weight: normal;
   font-style: normal;
 }
 
-@font-face {
-  font-family: "analogue-85-black";
-  src: url("~assets/fonts/analogue85black.ttf");
-  // font-weight: normal;
-  // font-style: normal;
-}
 
 html {
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -132,4 +144,23 @@ button:focus {
   background-size: 40px 40px;
   position: relative;
   color: $dirty-white;
+}
+
+.page-container {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 1fr;
+  // grid-template-rows: repeat(6, 1fr);
+  min-height: 80vh;
+  margin-top: 2rem;
+
+  @include media-breakpoint-up(sm) {
+    margin-top: 0;
+  }
+  @include media-breakpoint-up(md) {
+    grid-template-columns: 20% 80%;
+  }
+  @include media-breakpoint-up(lg) {
+    max-height: 83vh;
+  }
 }

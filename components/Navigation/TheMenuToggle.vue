@@ -29,6 +29,7 @@ export default {
 .the-menu-toggle{
   color: #9f9c9c;
   cursor: pointer;
+  text-transform: capitalize;
 
   @include media-breakpoint-up(md) {
     margin-left: 1rem;

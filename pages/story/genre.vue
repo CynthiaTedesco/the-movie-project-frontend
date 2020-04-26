@@ -1,6 +1,11 @@
 <template>
   <section class="page-container">
-    <div class="description"></div>
+    <div class="description">
+      <div class="counter">1/20</div>
+      <div class="title">Which genre should your movie be?</div>
+      <div class="text">You cannot go wrong with a good old action movie</div>
+      <div class="share">Share</div>
+    </div>
     <BubblesInGroups v-if="Object.keys(groups).length" :movies="movies" :groups="groups" attr="genres"/>
   </section>
 </template>
@@ -48,7 +53,7 @@ export default {
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* 1 */
   display: block;
   font-weight: 300;
-  font-size: 100px;
+  font-size: 10px;
   color: $black;
   letter-spacing: 1px;
 }
@@ -61,7 +66,4 @@ export default {
   padding-bottom: 15px;
 }
 
-.test-button {
-  animation: rotating 1.7s linear infinite;
-}
 </style>

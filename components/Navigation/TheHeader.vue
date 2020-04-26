@@ -1,6 +1,6 @@
 <template>
   <div class="the-header header-container">
-    <div class="row px-0 py-2 py-lg-4 py-md-3">
+    <div class="row px-0 py-2 py-md-3">
       <div class="col-sm-9 the-header__left">
         <div class="how-to-make">
           How to make
@@ -58,7 +58,12 @@ export default {
   }
 }
 .the-header {
-  padding: 1rem 4rem;
+  padding: 1rem 2rem;
+  height: 100px;
+
+  @include media-breakpoint-up(sm){
+    padding: 1rem 4rem;
+  }
 }
 .header-logo {
   margin-left: auto;

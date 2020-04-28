@@ -6,7 +6,12 @@
       <div class="text">You cannot go wrong with a good old action movie</div>
       <div class="share">Share</div>
     </div>
-    <BubblesInGroups v-if="Object.keys(groups).length" :movies="movies" :groups="groups" attr="genres"/>
+    <BubblesInGroups 
+      v-if="Object.keys(groups).length" 
+      :movies="movies" 
+      :groups="groups" 
+      attr="genres"
+      name="genre_name"/>
   </section>
 </template>
 

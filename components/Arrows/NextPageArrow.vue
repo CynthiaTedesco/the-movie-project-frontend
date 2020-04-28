@@ -1,5 +1,5 @@
 <template>
-  <div @click="$router.push(target)">
+  <div @click.stop.prevent="$router.push(target)">
     <nuxt-link class="arrow" :to="target" />
   </div>
 </template>

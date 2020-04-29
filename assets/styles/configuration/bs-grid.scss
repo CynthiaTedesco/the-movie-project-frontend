@@ -15,8 +15,8 @@ $grid-breakpoints: (
   s: 425px,
   sm: 584px,
   md: 768px,
-  l: 860px,
-  lg: 1024px,
+  l: 860px, //being taken as 1024px
+  lg: 1024px, //unable to override boostrap value! being taken as 1200px
   xl: 1200px,
   xxl: 1500px
 );

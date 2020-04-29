@@ -78,5 +78,22 @@ div {
     font-size: 0.85em;
     padding: 0.2em 0.5em;
   }
+
+  @include media-breakpoint-down(l) {
+    display: block;
+    text-align: right;
+    padding: 2rem 4rem;
+    position: sticky;
+    top: 0;
+    .share {
+      margin-left: auto;
+    }
+  }
+}
+@include media-breakpoint-down(l) {
+  /deep/ .page-container {
+    grid-template-columns: 100%;
+    grid-template-rows: 130px auto;
+  }
 }
 </style>

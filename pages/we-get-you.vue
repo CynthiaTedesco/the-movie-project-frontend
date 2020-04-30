@@ -1,5 +1,5 @@
 <template>
-  <div class="presentation">
+  <div id="we-get-you" class="presentation">
     <div v-html="$t('feeling-unispired')"></div>
     <div class="covered">
       {{$t('covered')}}
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import NextPageArrow from '@/components/Arrows/NextPageArrow.vue'
+import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 export default {
   components: { NextPageArrow },
   transition: 'slide-top',

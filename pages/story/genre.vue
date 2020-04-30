@@ -6,7 +6,7 @@
       <div class="text">You cannot go wrong with a good old action movie</div>
       <div class="share">Share</div>
     </div>
-    <BubblesInGroups 
+    <Bubbles 
       v-if="Object.keys(groups).length" 
       :movies="movies" 
       :groups="groups" 
@@ -16,14 +16,12 @@
 </template>
 
 <script>
-import BubbleCloud from "@/components/Charts/BubbleCloud"
-import BubblesInGroups from "@/components/Charts/BubblesInGroups"
+import Bubbles from "@/Components/Charts/Bubbles"
 
 export default {
   layout: 'innerPage',
   components: {
-    BubbleCloud,
-    BubblesInGroups
+    Bubbles
   },
   data() {
     return {

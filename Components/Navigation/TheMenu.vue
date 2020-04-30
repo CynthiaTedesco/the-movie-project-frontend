@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import MenuGroup from '@/components/Navigation/MenuGroup.vue'
+import MenuGroup from '@/Components/Navigation/MenuGroup.vue'
 
 export default {
   name: 'TheMenu',

@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import TheHeader from '@/components/Navigation/TheHeader';
-import NextPageArrow from '@/components/Arrows/NextPageArrow.vue';
+import TheHeader from '@/Components/Navigation/TheHeader';
+import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue';
 import { mapGetters } from 'vuex';
 import { beautifyCashValue } from '@/assets/js/helpers.js';
 
@@ -69,7 +69,6 @@ export default {
   mounted () {
     const isMobile = document.documentElement.clientWidth <= 768;
     this.slicedMovies = isMobile ? this.movies.slice(0, this.mobileSize) : this.movies;
-    console.log('mounted', this.slicedMovies.length);
 
     this.$nextTick(function () {
       this.slicedMovies = isMobile ? this.movies.slice(0, this.mobileSize) : this.movies;

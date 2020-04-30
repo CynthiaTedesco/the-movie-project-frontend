@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import DoubleArrow from '@/components/Arrows/DoubleArrow';
-import RightArrow from '@/components/Arrows/RightArrow';
-import ArrowToBottom from '@/components/Arrows/ArrowToBottom';
+import DoubleArrow from '@/Components/Arrows/DoubleArrow';
+import RightArrow from '@/Components/Arrows/RightArrow';
+import ArrowToBottom from '@/Components/Arrows/ArrowToBottom';
 import { beautifyCashValue } from '@/assets/js/helpers.js'
 export default {
   components: {

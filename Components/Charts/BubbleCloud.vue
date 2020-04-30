@@ -1,5 +1,5 @@
 <template>
-  <div :id="id"></div>
+  <div :id="id" :style="divDimensions"></div>
 </template>
 
 <script>
@@ -8,9 +8,12 @@ const d3 = require('d3');
 export default {
   data () {
     return {
-      doit: false
+      doit: false,
+      calculated: [],
+      divDimensions: {}
     }
-  }, props: {
+  },
+  props: {
     data: {
       type: Array,
       required: true
@@ -18,6 +21,26 @@ export default {
     max: {
       type: Number,
       required: true
+    },
+    ranking: {
+      type: Number,
+      required: true
+    },
+    quantity: {
+      type: Number,
+      default: 50
+    },
+    maxRadius: {
+      type: Number,
+      default: 50
+    }
+  },
+  watch: {
+    calculated () {
+      if (this.calculated.length === this.data[1].length) {
+        this.setHeight();
+        this.$emit('done', this.ranking)
+      }
     }
   },
   beforeMount () {
@@ -38,25 +61,27 @@ export default {
     }
   },
   methods: {
-    eventListenerFn () {
-      clearTimeout(this.doit);
-      this.doit = setTimeout(this.resized, 300);
-    },
-    resized () {
-      console.log('resized function!!'); //TODO check
+    setHeight () {
+      const min = Math.min(...this.calculated);
+      const max = Math.max(...this.calculated);
+      const padding = 50;
+
+      const divHeight = max + (min > 0 ? (-1 * min) : Math.abs(min)) + this.maxRadius + padding;
+      console.log(`setting height for ${this.data[0]}`, divHeight);
+      this.divDimensions = { height: divHeight + 'px' };
     },
     ticked () {
       this.nodes.attr("cx", d => d.x);
       this.nodes.attr("cy", (d) => {
+        this.calculated.push(d.y);
         return d.y;
       });
+      this.setHeight();
     },
     title (d) {
       return d.title.split(' ').join('-')
     },
     draw () {
-      console.log('drawing', this.selector + '>svg');
-      console.log('removing', this.selector + '>svg');
       // d3.select(this.selector + '>svg').remove();
       const container = d3.select(this.selector).node().getBoundingClientRect();
 
@@ -76,7 +101,7 @@ export default {
         .force('y', d3.forceY(forceY).strength(0.1))
         .force("collide", d3.forceCollide(d => this.scale(d.revenue) + 2))
         .on('tick', this.ticked)
-      // .on('end', this.setLabels);
+        .on('end', this.onEndSimulation);
 
       this.svg = d3.select(this.selector).append("svg")
         .attr("width", '100%')
@@ -84,9 +109,7 @@ export default {
         .attr('viewBox', '0 0 ' + container.width + ' ' + container.height)
         .attr('preserveAspectRatio', 'xMinYMid meet')
         .attr("class", "nodes")
-      if (this.data[0].toLowerCase() === 'action') {
-        console.log('SVG', d3.select(this.selector).node());
-      }
+
       //TODO defs should be defined as computed property! or method
       const defs = this.svg.append('defs');
 
@@ -114,17 +137,21 @@ export default {
         .attr('class', (d) => `movie-${d.id}`)
         .attr("r", d => this.scale(d.revenue))
         .attr("fill", d => `url(#${this.title(d)})`)
+    },
+    onEndSimulation () {
+      this.setHeight();
+      // this.setLabels
+
     }
-  },
-  beforeDestroy () {
-    window.removeEventListener('resize', this.resized);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 div {
-  min-height: 300px;
-  max-width: 70vh;
+  min-height: 150px;
+  max-width: 80vw;
+  height: 100%;
+  margin: auto;
 }
 </style>

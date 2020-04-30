@@ -1,29 +1,36 @@
 <template>
-  <div class="presentation">
-    <div class="presentation-content" v-if="randomMovie">
-      <div class="images">
-        <RandomMovieBubble :movie="randomMovie" />
-      </div>
-      <div class="text">
-        <div class="how-to">
-          {{ $t('howToMake') }}
-          <br />
-          {{ $t('aBlockbuster') }}
+  <div class="everything">
+    <div class="presentation">
+      <div class="presentation-content" v-if="randomMovie">
+        <div class="images">
+          <RandomMovieBubble :movie="randomMovie" />
         </div>
-        <div class="step-by-step">{{ $t('stepByStep') }}</div>
+        <div class="text">
+          <div class="how-to">
+            {{ $t('howToMake') }}
+            <br />
+            {{ $t('aBlockbuster') }}
+          </div>
+          <div class="step-by-step">{{ $t('stepByStep') }}</div>
+        </div>
       </div>
+      <NextPageArrow class="white" target="#we-get-you" />
     </div>
-    <NextPageArrow class="white" target="/we-get-you" />
+    <WeGetYou />
   </div>
 </template>
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import RandomMovieBubble from '@/components/RandomMovieBubble.vue'
-import NextPageArrow from '@/components/Arrows/NextPageArrow.vue'
+import RandomMovieBubble from '@/Components/RandomMovieBubble.vue'
+import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
+import WeGetYou from '@/pages/we-get-you.vue'
 
 export default {
-  components: { RandomMovieBubble, NextPageArrow },
+  components: {
+    RandomMovieBubble,
+    NextPageArrow,
+    WeGetYou  },
   data() {
     return {
       randomMovie: null,

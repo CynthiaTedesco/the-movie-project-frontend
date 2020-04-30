@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import AppLogo from '@/components/AppLogo'
-import TheMenuToggle from '@/components/Navigation/TheMenuToggle'
+import AppLogo from '@/Components/AppLogo'
+import TheMenuToggle from '@/Components/Navigation/TheMenuToggle'
 
 export default {
   name: 'TheHeader',

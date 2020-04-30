@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import TheHeader from '@/components/Navigation/TheHeader';
-import TheMenu from '@/components/Navigation/TheMenu';
+import TheHeader from '@/Components/Navigation/TheHeader';
+import TheMenu from '@/Components/Navigation/TheMenu';
 
 export default {
   components: { TheHeader, TheMenu },

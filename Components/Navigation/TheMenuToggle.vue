@@ -13,7 +13,6 @@
 export default {
   computed: {
     category () {
-      console.log(this.$nuxt.$route.path)
       return this.$nuxt.$route.path.split('/')[1];
     },
     subcategory () {

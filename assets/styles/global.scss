@@ -154,7 +154,7 @@ button:focus {
 
   min-height: 450px;
   @include media-breakpoint-up(l) {
-    min-height: 550px;
+    min-height: calc(100vh - 100px);
   }
 
   @include media-breakpoint-up(sm) {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="inner-page">
     <TheHeader @menuToggle="displayMenu =!displayMenu" />
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
     <nuxt />
@@ -22,7 +22,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~/assets/styles/common.scss';
-
+.inner-page {
+  min-height: 100vh;
+  background-image: radial-gradient(#2b4ab7 0%, #ffffff 5%);
+  background-position: 0 0;
+  background-size: 40px 40px;
+}
 div {
   @include max-sized;
   margin: auto;

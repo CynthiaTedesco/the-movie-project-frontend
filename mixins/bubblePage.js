@@ -12,9 +12,10 @@ export default {
     }
   },
   async beforeMount() {
-    await this.$store.dispatch('checkGenres')
+    await this.$store.dispatch('checkGenres') //TODO de-hardcode this
     this.movies = await this.$store.getters.movies
-    // this.groups = this.groupBy(this.movies, 'genres');
+    const temp = this.groupBy(this.movies, 'genres')
+    this.groups = Object.entries(temp).sort((a, b) => b[1].length - a[1].length)
   },
   computed: {
     scale() {
@@ -53,6 +54,13 @@ export default {
         .on('mouseover', this.showTooltip)
         .on('mousemove', this.moveTooltip)
         .on('mouseleave', this.hideTooltip)
+    },
+    groupBy(xs, key) {
+      return xs.reduce(function(rv, x) {
+        const innerKey = x[key].find((a) => a.primary).genre_name
+        ;(rv[innerKey] = rv[innerKey] || []).push(x)
+        return rv
+      }, {})
     },
   },
 }

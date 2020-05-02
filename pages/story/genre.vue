@@ -1,43 +1,55 @@
 <template>
   <section class="page-container">
-    <div class="description">
-      <div class="counter">1/20</div>
-      <div class="title">Which genre should your movie be?</div>
-      <div class="text">You cannot go wrong with a good old action movie</div>
-      <div class="share">Share</div>
-    </div>
-    <Bubbles 
-      v-if="Object.keys(groups).length" 
-      :movies="movies" 
-      :groups="groups" 
+    <InnerPageDescription
+      :text="text" ordinal="1"
+      question="Which genre should your movie be?"
+    />
+    <Bubbles
+      v-if="groups.length"
+      :movies="movies"
+      :groups="groups"
       attr="genres"
-      name="genre_name"/>
+      name="genre_name"
+    />
   </section>
 </template>
 
 <script>
-import Bubbles from "@/Components/Charts/Bubbles"
+import Bubbles from "@/Components/Charts/Bubbles";
+import InnerPageDescription from "@/Components/InnerPageDescription";
 
 export default {
   layout: 'innerPage',
   components: {
+    InnerPageDescription,
     Bubbles
   },
-  data() {
+  data () {
     return {
       movies: [],
       groups: {}
     }
   },
-  async mounted() {
+  async mounted () {
     await this.$store.dispatch('checkGenres')
     this.movies = await this.$store.getters.movies
-    this.groups = this.groupBy(this.movies, 'genres');
+    const temp = this.groupBy(this.movies, 'genres');
+    this.groups = Object.entries(temp).sort((a, b) => b[1].length - a[1].length);
+  },
+  computed: {
+    text () {
+      if (this.groups.length) {
+        const name = this.groups[0][0];
+        return `You cannot go wrong with a good old ${name.toLowerCase()} movie`;
+      }
+
+      return '';
+    }
   },
   methods: {
-    groupBy(xs, key) {
+    groupBy (xs, key) {
       return xs.reduce(function (rv, x) {
-        const innerKey = x[key].find(a=>a.primary).genre_name;
+        const innerKey = x[key].find(a => a.primary).genre_name;
         (rv[innerKey] = rv[innerKey] || []).push(x)
         return rv
       }, {})
@@ -48,25 +60,4 @@ export default {
 
 <style lang="scss" scoped>
 @import '~assets/styles/common.scss';
-.description {
-  background: transparent;
-}
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 10px;
-  color: $black;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: $black;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
 </style>

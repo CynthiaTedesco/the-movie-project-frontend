@@ -2,13 +2,13 @@
   <BubbleCloudsSmall 
     v-if="this.display==='small'" 
     :max="maxRevenue"
-    :sortByQty="sortByQty" />
+    :sortByQty="groups" />
 
   <BubbleCloudsLarge 
     v-else 
     :data="data" 
     :max="maxRevenue" 
-    :sortByQty="sortByQty"/>
+    :sortByQty="groups"/>
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
   components: { BubbleCloudsSmall, BubbleCloudsLarge },
   mixins: [resizable],
   props: {
-    groups: Object,
+    groups: Array,
     movies: Array,
     attr: String,
     name: String
@@ -30,16 +30,14 @@ export default {
   data () {
     return {
       maxRevenue: 0,
-      sortByQty: [],
       data: [],
     }
   },
   beforeMount () {
-    this.sortByQty = Object.entries(this.groups).sort((a, b) => b[1].length - a[1].length);
     this.data = this.movies.map(m => {
       const primary = m[this.attr].find(a => a.primary);
       m.primary = primary;
-      m.primaryPos = this.sortByQty.findIndex(s => s[0] === primary[this.name]) + 1;
+      m.primaryPos = this.groups.findIndex(s => s[0] === primary[this.name]) + 1;
       return m;
     })
     this.maxRevenue = Math.max.apply(Math, this.data.map(d => d.revenue));

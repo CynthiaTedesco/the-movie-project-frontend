@@ -1,15 +1,30 @@
 <template>
-  <div ref="chartContainer" id="my_dataviz"></div>
+  <section class="page-container">
+    <InnerPageDescription
+      question="When does the movie should take place?"
+      :text="text"
+      ordinal="5"
+    />
+    <div ref="chartContainer" id="my_dataviz"></div>
+    <!-- <Bubbles 
+      v-if="Object.keys(groups).length" 
+      :movies="movies" 
+      :groups="groups" 
+      attr="genres"
+    name="genre_name"/>-->
+  </section>
 </template>
 
 <script>
 import dimensionable from '@/mixins/dimensionable.js';
 import bubblePage from '@/mixins/bubblePage.js';
+import InnerPageDescription from "@/Components/InnerPageDescription";
 const d3 = require('d3');
 
 export default {
   layout: 'innerPage',
   mixins: [dimensionable, bubblePage],
+  components: { InnerPageDescription },
   data () {
     return {
       data: []
@@ -40,6 +55,16 @@ export default {
     }
   },
   methods: {
+  },
+  computed: {
+    text () {
+      if (this.groups.length) {
+        const name = this.groups[0][0];
+        return `You cannot go wrong with a movie set in ${name.toLowerCase()}!`;
+      }
+
+      return '';
+    }
   }
 }
 </script>

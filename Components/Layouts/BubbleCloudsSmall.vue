@@ -42,6 +42,7 @@ export default {
     }
   },
   beforeMount () {
+    //TODO set the groups's quantity based on display height
     const others = this.sortByQty.slice(5, this.sortByQty.length).map(a => a[1]).flat();
     this.orderedGroups = [...this.sortByQty.slice(0, 5)]
     this.orderedGroups.push(['Others', others]);

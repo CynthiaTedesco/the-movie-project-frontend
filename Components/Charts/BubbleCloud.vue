@@ -78,8 +78,10 @@ export default {
       });
       this.setHeight();
     },
-    title (d) {
-      return d.title.split(' ').join('-')
+    defTitle (d) {
+      return d.title
+        .split(' ').join('-')
+        .split('\'').join('');
     },
     draw () {
       // d3.select(this.selector + '>svg').remove();
@@ -118,7 +120,7 @@ export default {
         .enter()
         .append("pattern")
         .attr("class", ".poster-pattern")
-        .attr('id', this.title)
+        .attr('id', this.defTitle)
         .attr('height', '100%')
         .attr('width', '100%')
         .attr('patternContentUnits', 'objectBoundingBox')
@@ -136,7 +138,7 @@ export default {
         .enter().append("circle")
         .attr('class', (d) => `movie-${d.id}`)
         .attr("r", d => this.scale(d.revenue))
-        .attr("fill", d => `url(#${this.title(d)})`)
+        .attr("fill", d => `url(#${this.defTitle(d)})`)
     },
     onEndSimulation () {
       this.setHeight();

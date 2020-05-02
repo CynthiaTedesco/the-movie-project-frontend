@@ -2,15 +2,15 @@
   <div class="menu-container container">
     <div v-if="show" class="menu-backdrop" @click="$emit('close')"></div>
     <transition name="slide-side">
-      <div v-if="show" class="menu menu-list">
+      <div v-if="show" class="menu menu-list" @click="$emit('close')">
         <MenuGroup v-for="menuItem in menuItems" :key="menuItem.title" :item="menuItem" />
       </div>
     </transition>
   </div>
 </template>
 
-<script lang="ts">
-import MenuGroup from '@/Components/Navigation/MenuGroup.vue'
+<script>
+import MenuGroup from '@/Components/Navigation/MenuGroup.vue';
 
 export default {
   name: 'TheMenu',

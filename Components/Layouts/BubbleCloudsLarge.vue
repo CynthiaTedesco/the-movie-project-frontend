@@ -52,8 +52,11 @@ export default {
         return d.y;
       });
     },
-    title (d) {
-      return d.title.split(' ').join('-')
+    defTitle (d) {
+      console.log('here!');
+      return d.title
+        .split(' ').join('-')
+        .split('\'').join('');
     },
     drawLargeLayout () {
       const xScale = d3.scaleOrdinal()
@@ -131,7 +134,7 @@ export default {
         .enter()
         .append("pattern")
         .attr("class", ".poster-pattern")
-        .attr('id', this.title)
+        .attr('id', this.defTitle)
         .attr('height', '100%')
         .attr('width', '100%')
         .attr('patternContentUnits', 'objectBoundingBox')
@@ -147,7 +150,7 @@ export default {
         .enter().append("circle")
         .attr('class', (d) => `movie-${d.id}`)
         .attr("r", d => this.scale(d.revenue))
-        .attr("fill", d => `url(#${this.title(d)})`)
+        .attr("fill", d => `url(#${this.defTitle(d)})`)
     },
     setLabels () {
       const radius = this.coordinates.revenues.map(revenue => { return this.scale(revenue) });

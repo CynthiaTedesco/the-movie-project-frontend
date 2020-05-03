@@ -61,7 +61,7 @@ export default {
   padding: 1rem 2rem;
   height: 100px;
 
-  @include media-breakpoint-up(sm){
+  @include media-breakpoint-up(sm) {
     padding: 1rem 4rem;
   }
 }
@@ -86,6 +86,7 @@ export default {
   /deep/ .location {
     padding-left: 1rem;
     margin-top: 1.5rem;
+    white-space: nowrap;
   }
 
   @include media-breakpoint-up(md) {

@@ -1,3 +1,5 @@
+const d3 = require('d3')
+
 export default {
   data() {
     return {
@@ -13,8 +15,14 @@ export default {
   },
   methods: {
     setDimensions() {
-      if (this.$refs.chartContainer) {
-        const container = this.$refs.chartContainer.getBoundingClientRect()
+      if (this.$refs.chartContainer || this.selector) {
+        const container = this.$refs.chartContainer
+          ? this.$refs.chartContainer.getBoundingClientRect()
+          : d3
+              .select(this.selector)
+              .node()
+              .getBoundingClientRect()
+
         this.width = container.width
         this.height = container.height
       }

@@ -3,7 +3,7 @@
     <BubbleCloud
       v-for="(group,index) in orderedGroups"
       :key="group[0]"
-      :data="group"
+      :category="group"
       :max="max"
       :ranking="index"
       :style="{'opacity': index === 0 || (renderDone[index-1] ? 1 : 0)}"
@@ -14,16 +14,15 @@
 
 <script>
 import BubbleCloud from '@/Components/Charts/BubbleCloud.vue';
-import dimensionable from '@/mixins/dimensionable.js';
-import bubbleChart from '@/mixins/bubbleChart.js';
-const d3 = require('d3');
+import bubbleChartContainer from '@/mixins/bubbleChartContainer.js';
 
 export default {
   components: { BubbleCloud },
-  mixins: [dimensionable, bubbleChart],
+  mixins: [bubbleChartContainer],
   data () {
     return {
       orderedGroups: [],
+      small: true,
       renderDone: {
         0: false,
         1: false,
@@ -31,16 +30,6 @@ export default {
         3: false,
         4: false
       }
-    }
-  },
-  beforeMount () {
-    //TODO set the groups's quantity based on display height
-    if (this.isMultiline) {
-      this.orderedGroups = [...this.groups.slice(0, 5)]
-      const others = this.groups.slice(5, this.groups.length).map(a => a[1]).flat();
-      this.orderedGroups.push(['Others', others]);
-    } else {
-      this.orderedGroups = this.groups;
     }
   },
   methods: {
@@ -56,6 +45,6 @@ export default {
   padding: 1rem 10%;
   min-height: 150px;
   height: auto;
-  margin-top: -100px;
+  margin-top: -50px;
 }
 </style>

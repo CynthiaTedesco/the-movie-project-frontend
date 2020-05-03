@@ -1,12 +1,12 @@
 <template>
-  <BubbleCloudsSmall 
+  <CategoriesSmall 
     v-if="this.display==='small'" 
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
     :attr="attr"/>
 
-  <BubbleCloudsLarge 
+  <CategoriesLarge 
     v-else 
     :movies="movies"
     :groups="groups"
@@ -16,13 +16,13 @@
 
 <script>
 const d3 = require('d3');
-import BubbleCloudsSmall from '@/Components/Layouts/BubbleCloudsSmall.vue';
-import BubbleCloudsLarge from '@/Components/Layouts/BubbleCloudsLarge.vue';
+import CategoriesSmall from '@/Components/Layouts/CategoriesSmall.vue';
+import CategoriesLarge from '@/Components/Layouts/CategoriesLarge.vue';
 import resizable from '@/mixins/resizable.js';
 
 export default {
   name: 'bubbles',
-  components: { BubbleCloudsSmall, BubbleCloudsLarge },
+  components: { CategoriesSmall, CategoriesLarge },
   mixins: [resizable],
   props: {
     movies: Array,

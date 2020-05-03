@@ -14,42 +14,43 @@ export default {
   },
   beforeMount() {
     if (this.movies) {
+      const updatedMovies = this.movies.map((m) => {
+        if (this.hasMany) {
+          const primary = m[this.attr].find((a) => a.primary)
+          m.category = {
+            name: primary[this.innerNameKey],
+            position:
+              this.groups.findIndex(
+                (s) => s[0] === primary[this.innerNameKey]
+              ) + 1,
+          }
+        } else {
+          m.category = {
+            name: m[this.attr][this.innerNameKey],
+            position:
+              this.groups.findIndex(
+                (s) => s[0] === m[this.attr][this.innerNameKey]
+              ) + 1,
+          }
+        }
+        return m
+      })
       //small display --> draw separate chart for each category
       if (this.small) {
         //create 'others' group if necessary
         if (this.isMultiline && this.groups.length > 6) {
-          this.orderedGroups = [...this.groups.slice(0, 5)]
+          this.data = [...this.groups.slice(0, 5)]
           const others = this.groups
             .slice(5, this.groups.length)
             .map((a) => a[1])
             .flat()
-          this.orderedGroups.push(['Others', others])
+          this.data.push(['Others', others])
         } else {
-          this.data = this.groups;
+          this.data = this.groups
         }
       } else {
         //large display --> draw one svg with different groups for each category
-        this.data = this.movies.map((m) => {
-          if (this.hasMany) {
-            const primary = m[this.attr].find((a) => a.primary)
-            m.category = {
-              name: primary[this.innerNameKey],
-              position:
-                this.groups.findIndex(
-                  (s) => s[0] === primary[this.innerNameKey]
-                ) + 1,
-            }
-          } else {
-            m.category = {
-              name: m[this.attr][this.innerNameKey],
-              position:
-                this.groups.findIndex(
-                  (s) => s[0] === m[this.attr][this.innerNameKey]
-                ) + 1,
-            }
-          }
-          return m
-        })
+        this.data = updatedMovies
       }
     }
   },

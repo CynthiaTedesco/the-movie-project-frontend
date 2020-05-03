@@ -1,7 +1,7 @@
 <template>
   <div ref="chartContainer" class="chart-container">
     <BubbleCloud
-      v-for="(group,index) in orderedGroups"
+      v-for="(group,index) in data"
       :key="group[0]"
       :category="group"
       :max="max"
@@ -21,7 +21,6 @@ export default {
   mixins: [bubbleChartContainer],
   data () {
     return {
-      orderedGroups: [],
       small: true,
       renderDone: {
         0: false,

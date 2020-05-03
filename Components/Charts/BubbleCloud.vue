@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" :style="divDimensions"></div>
+  <div :id="id" :style="divDimensions" class="bubble-cloud"></div>
 </template>
 
 <script>
@@ -108,10 +108,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div {
+.bubble-cloud {
   min-height: 150px;
   max-width: 80vw;
   height: 100%;
   margin: auto;
+  position: relative;
 }
 </style>

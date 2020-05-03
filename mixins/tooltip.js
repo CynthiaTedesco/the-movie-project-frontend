@@ -8,7 +8,7 @@ export default {
   },
   mounted() {
     this.tooltip = d3
-      .select('.chart-container')
+      .select(this.selector ? this.selector : '.chart-container')
       .append('div')
       .style('opacity', 0)
       .attr('class', 'tooltip')
@@ -25,13 +25,18 @@ export default {
       this.tooltip.transition().duration(200)
       this.tooltip
         .style('opacity', 1)
-        .style('min-width', estimatedWidth + 30 + 'px')
         .style('top', d3.mouse(origin)[1] + 20 + 'px')
         .html(html)
 
-      const left = d3.mouse(origin)[0] + 30
+      if(this.width < 400){
+        this.tooltip.style('max-width', '250px')
+      } else {
+        this.tooltip.style('min-width', estimatedWidth + 30 + 'px')
+      }
+      const left = d3.mouse(origin)[0] + 30;
+      const separation = this.width < 400 ? 20 : 100;
       if (left + estimatedWidth > this.width) {
-        this.tooltip.style('right', '100px').style('left', 'unset')
+        this.tooltip.style('right', separation+'px').style('left', 'unset')
       } else {
         this.tooltip.style('left', left + 'px').style('right', 'unset')
       }
@@ -40,11 +45,13 @@ export default {
       const origin = circles[index]
       const estimatedWidth = this.textWidth(d.title)
       const left = d3.mouse(origin)[0] + 30
+      const separation = this.width < 400 ? 20 : 100
 
       this.tooltip.style('top', d3.mouse(origin)[1] + 20 + 'px')
 
       if (left + estimatedWidth + 40 > this.width) {
-        this.tooltip.style('left', 'unset').style('right', '100px')
+        this.tooltip.style('right', separation + 'px').style('left', 'unset')
+        // this.tooltip.style('left', 'unset').style('right', separation+'px')
       } else {
         this.tooltip.style('left', left + 'px').style('right', 'unset')
       }

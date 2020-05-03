@@ -6,11 +6,7 @@ export default {
       width: 0,
       height: 0,
       maxCYs: [0, 0],
-      coordinates: {
-        columns: [0, 0, 0],
-        rows: [0, 0],
-        revenues: [0, 0], //revenues of the referenced circles (maxY)
-      },
+      coordinates: {},
     }
   },
   methods: {

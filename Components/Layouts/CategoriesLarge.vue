@@ -53,6 +53,13 @@ export default {
       this.appendCircles();
     },
     xForce (d) {
+      if (!this.coordinates[d.category.name]) {
+        this.coordinates[d.category.name] = {
+          revenue: d.revenue
+        }
+      }
+
+      let x;
       const container = this.$refs.chartContainer.getBoundingClientRect()
       const percentage = this.xScale(
         d.category.position <= 6 ? d.category.position : 6
@@ -60,31 +67,23 @@ export default {
 
       const xPerPercentage = (percentage * container.width) / 100
       if (percentage < 20) {
-        const x = Math.max(170, xPerPercentage)
-        if (this.coordinates.columns[0] === 0) {
-          this.coordinates.columns[0] = x
-        }
-        return x
+        x = Math.max(170, xPerPercentage)
       } else if (percentage > 50) {
-        const x = Math.min(container.width - 100, xPerPercentage)
-
-        if (percentage > 80) {
-          if (this.coordinates.columns[2] === 0) {
-            this.coordinates.columns[2] = x
-          }
-        } else {
-          if (this.coordinates.columns[1] === 0) {
-            this.coordinates.columns[1] = x
-          }
-        }
-
-        return x
+        x = Math.min(container.width - 100, xPerPercentage)
       }
 
+      this.coordinates[d.category.name].x = x;
+
       //no examples for this case
-      return container.width / 2;
+      return x || container.width / 2;
     },
     yForce (d) {
+      if (!this.coordinates[d.category.name]) {
+        this.coordinates[d.category.name] = {
+          revenue: d.revenue
+        }
+      }
+
       const percentage = this.yScale(
         d.category.position <= 6 ? d.category.position : 6
       )
@@ -100,17 +99,15 @@ export default {
         y = Math.min(300, container.height / 2)
       }
 
+      this.coordinates[d.category.name].y = y;
       return y
     },
     ticked () {
       this.nodes.attr('cx', (d) => d.x)
       this.nodes.attr('cy', (d) => {
-        if (d.category.position < 4 && d.y > this.coordinates.rows[0]) {
-          this.coordinates.rows[0] = d.y
-          this.coordinates.revenues[0] = d.revenue
-        } else if (d.category.position > 3 && d.y > this.coordinates.rows[1]) {
-          this.coordinates.rows[1] = d.y
-          this.coordinates.revenues[1] = d.revenue
+        if(d.y > this.coordinates[d.category.name].y){
+          this.coordinates[d.category.name].y = d.y;
+          this.coordinates[d.category.name].revenue = d.revenue;
         }
         return d.y
       })

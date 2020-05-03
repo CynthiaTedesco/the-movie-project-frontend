@@ -83,9 +83,6 @@ export default {
         .join('')
     },
     setLabels() {
-      //   const radius = this.coordinates.revenues.map((revenue) => {
-      //     return this.scale(revenue)
-      //   })
       this.categoriesNames = [
         ...new Set(
           this.groups.map((group, index) => {
@@ -95,113 +92,58 @@ export default {
       ]
 
       this.labels = this.svg.append('g').attr('class', 'labels')
-      const radius = [50, 50]
-      for (let i = 1; i < Math.min(this.groups.length, 7); i++) {
-        let x
-        let y
-        const spacing = this.isMultiline ? 2 : 1.5
+      for (let i = 0; i < Math.min(this.groups.length, 6); i++) {
+        let xx
+        let yy
+        const spacing = this.isMultiline ? 30 : 20
         const textWidth = this.textWidth(this.categoriesNames[i - 1])
-        switch (i) {
-          case 1: {
-            x = this.coordinates.columns[0] - textWidth / 2
-            y = this.coordinates.rows[0] + radius[0] * spacing
-            break
-          }
-          case 2: {
-            x = this.coordinates.columns[1] - textWidth / 2
-            y = this.coordinates.rows[0] + radius[0] * spacing
-            break
-          }
-          case 3: {
-            x = this.coordinates.columns[2] - textWidth / 2
-            y = this.coordinates.rows[0] + radius[0] * spacing
-            break
-          }
-          case 4: {
-            x = this.coordinates.columns[0] - textWidth / 2
-            y = this.coordinates.rows[1] + (radius[1] * spacing) / 2
-            break
-          }
-          case 5: {
-            x = this.coordinates.columns[1] - textWidth / 2
-            y = this.coordinates.rows[1] + (radius[1] * spacing) / 2
-            break
-          }
-          case 6: {
-            x = this.coordinates.columns[2] - textWidth / 2
-            y = this.coordinates.rows[1] + radius[1] * spacing
-            break
-          }
-        }
+
+        const coordinates = this.coordinates[this.groups[i][0]]
+        xx = coordinates.x // - textWidth / 2
+        yy = coordinates.y + this.scale(coordinates.revenue) + spacing
+
         this.labels
           .append('text')
-          .attr('x', x)
-          .attr('y', y)
+          .attr('x', xx)
+          .attr('y', yy)
           .attr('fill', '#aa9d9c')
           .attr('font-size', '14')
           .text(() => {
-            return this.categoriesNames[i - 1]
+            return this.categoriesNames[i]
           })
 
-        if (i === 1) {
+        if (i === 0) {
           this.labels
             .append('image')
             .attr('href', '/handmade-circle.gif')
             .attr('width', textWidth + 20)
             .attr('height', 34)
-            .attr('x', x - 9)
-            .attr('y', y - 22)
+            .attr('x', xx - 25)
+            .attr('y', yy - 22)
         }
       }
     },
     adjustLabels() {
-      const radius = [50, 50]
+      console.log('ADJUSTING!')
       this.labels.selectAll('text').each((text, index, texts) => {
-        let x
-        let y
-        const spacing = this.isMultiline ? 2 : 1.5
+        let xx
+        let yy
+        const spacing = this.isMultiline ? 30 : 30
         const textWidth = this.textWidth(this.categoriesNames[index])
-        switch (index + 1) {
-          case 1: {
-            x = this.coordinates.columns[0] - textWidth / 2
-            y = this.coordinates.rows[0] + radius[0] * spacing
-            break
-          }
-          case 2: {
-            x = this.coordinates.columns[1] - textWidth / 2
-            y = this.coordinates.rows[0] + radius[0] * spacing
-            break
-          }
-          case 3: {
-            x = this.coordinates.columns[2] - textWidth / 2
-            y = this.coordinates.rows[0] + radius[0] * spacing
-            break
-          }
-          case 4: {
-            x = this.coordinates.columns[0] - textWidth / 2
-            y = this.coordinates.rows[1] + (radius[1] * spacing) / 2
-            break
-          }
-          case 5: {
-            x = this.coordinates.columns[1] - textWidth / 2
-            y = this.coordinates.rows[1] + (radius[1] * spacing) / 2
-            break
-          }
-          case 6: {
-            x = this.coordinates.columns[2] - textWidth / 2
-            y = this.coordinates.rows[1] + radius[1] * spacing
-            break
-          }
-        }
+
+        const coordinates = this.coordinates[this.groups[index][0]]
+        xx = coordinates.x // - textWidth / 2
+        yy = coordinates.y + this.scale(coordinates.revenue) + spacing
+
         d3.select(texts[index])
-          .attr('x', x)
-          .attr('y', y)
+          .attr('x', xx)
+          .attr('y', yy)
 
         if (index === 0) {
           this.labels
             .select('image')
-            .attr('x', x - 9)
-            .attr('y', y - 22)
+            .attr('x', xx - 25)
+            .attr('y', yy - 22)
         }
       })
     },
@@ -238,4 +180,7 @@ export default {
       this.adjustLabels()
     },
   },
+//   beforeDestroy() {
+//     d3.select(this.selector || '.chart-container').remove()
+//   },
 }

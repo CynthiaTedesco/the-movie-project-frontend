@@ -7,7 +7,7 @@ export default {
     return {
       data: [],
       svg: null,
-      nodes: null
+      nodes: null,
     }
   },
   props: {
@@ -21,16 +21,21 @@ export default {
       this.data = this.movies.map((m) => {
         if (this.hasMany) {
           const primary = m[this.attr].find((a) => a.primary)
-          m.primary = primary
-          m.group =
-            this.groups.findIndex((s) => s[0] === primary[this.innerNameKey]) +
-            1
+          m.category = {
+            name: primary[this.innerNameKey],
+            position:
+              this.groups.findIndex(
+                (s) => s[0] === primary[this.innerNameKey]
+              ) + 1,
+          }
         } else {
-          m.group =
-            this.groups.findIndex(
-              (s) => s[0] === m[this.attr][this.innerNameKey]
-            ) + 1
-          debugger
+          m.category = {
+            name: m[this.attr][this.innerNameKey],
+            position:
+              this.groups.findIndex(
+                (s) => s[0] === m[this.attr][this.innerNameKey]
+              ) + 1,
+          }
         }
         return m
       })
@@ -196,7 +201,9 @@ export default {
 
           const forceX = (d) => {
             const container = this.$refs.chartContainer.getBoundingClientRect()
-            const percentage = xScale(d.group <= 6 ? d.group : 6)
+            const percentage = xScale(
+              d.category.position <= 6 ? d.category.position : 6
+            )
 
             const xPerPercentage = (percentage * container.width) / 100
             if (percentage < 20) {
@@ -206,7 +213,6 @@ export default {
               }
               return x
             } else if (percentage > 50) {
-              debugger
               const x = Math.min(container.width - 100, xPerPercentage)
 
               if (percentage > 80) {
@@ -223,7 +229,9 @@ export default {
             }
           }
           const forceY = (d) => {
-            const percentage = yScale(d.group <= 6 ? d.group : 6)
+            const percentage = yScale(
+              d.category.position <= 6 ? d.category.position : 6
+            )
             const container = this.$refs.chartContainer.getBoundingClientRect()
             let y
             if (this.isMultiline) {
@@ -252,7 +260,7 @@ export default {
               d3.forceCollide((d) => this.scale(d.revenue) + 2)
             )
             .on('tick', this.ticked)
-            .on('end', this.setLabels)
+            // .on('end', this.setLabels)
           break
         }
         case 'timeline': {

@@ -13,15 +13,24 @@ export default {
   },
   methods: {
     setDimensions() {
-      // const fn = () => {
-        if (this.$refs.chartContainer) {
-          const container = this.$refs.chartContainer.getBoundingClientRect()
-          this.width = container.width
-          this.height = container.height
-        }
-      // }
+      if (this.$refs.chartContainer) {
+        const container = this.$refs.chartContainer.getBoundingClientRect()
+        this.width = container.width
+        this.height = container.height
+      }
+    },
+    textWidth(text, fontSize = 14) {
+      const temp = document.createElement('div')
+      temp.style.position = 'absolute'
+      temp.innerHTML = text
+      temp.setAttribute('type', 'hidden')
+      temp.style.fontSize = fontSize
+      document.body.appendChild(temp)
+      const width = temp.clientWidth + 1
 
-      // fn()
+      temp.parentNode.removeChild(temp)
+
+      return width
     },
   },
 }

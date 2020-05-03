@@ -9,19 +9,18 @@
       :style="{'opacity': index === 0 || (renderDone[index-1] ? 1 : 0)}"
       @done="onRenderDone"
     />
-      <!-- v-show="index === 0 || renderDone[index-1]" -->
   </div>
 </template>
 
 <script>
 import BubbleCloud from '@/Components/Charts/BubbleCloud.vue';
 import dimensionable from '@/mixins/dimensionable.js';
-import resizable from '@/mixins/resizable.js';
+import bubbleChart from '@/mixins/bubbleChart.js';
 const d3 = require('d3');
 
 export default {
   components: { BubbleCloud },
-  mixins: [dimensionable, resizable],
+  mixins: [dimensionable, bubbleChart],
   data () {
     return {
       orderedGroups: [],
@@ -34,23 +33,19 @@ export default {
       }
     }
   },
-  props: {
-    max: Number,
-    sortByQty: {
-      type: Array,
-      required: true
-    }
-  },
   beforeMount () {
     //TODO set the groups's quantity based on display height
-    const others = this.sortByQty.slice(5, this.sortByQty.length).map(a => a[1]).flat();
-    this.orderedGroups = [...this.sortByQty.slice(0, 5)]
-    this.orderedGroups.push(['Others', others]);
+    if (this.isMultiline) {
+      this.orderedGroups = [...this.groups.slice(0, 5)]
+      const others = this.groups.slice(5, this.groups.length).map(a => a[1]).flat();
+      this.orderedGroups.push(['Others', others]);
+    } else {
+      this.orderedGroups = this.groups;
+    }
   },
   methods: {
     onRenderDone (ranking) {
       this.renderDone[ranking] = true;
-      console.log('on render done!!', ranking);
     }
   }
 }
@@ -59,7 +54,8 @@ export default {
 <style lang="scss" scoped>
 .chart-container {
   padding: 1rem 10%;
-  margin-top: 2rem;
   min-height: 150px;
+  height: auto;
+  margin-top: -100px;
 }
 </style>

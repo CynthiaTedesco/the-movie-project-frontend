@@ -36,6 +36,7 @@ export default {
 @import '~assets/styles/common.scss';
 .description {
   background: transparent;
+  z-index: 14;
 }
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,

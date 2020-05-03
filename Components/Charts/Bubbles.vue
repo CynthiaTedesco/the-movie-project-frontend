@@ -1,14 +1,17 @@
 <template>
   <BubbleCloudsSmall 
     v-if="this.display==='small'" 
-    :max="maxRevenue"
-    :sortByQty="groups" />
+    :movies="movies"
+    :groups="groups"
+    :hasMany="hasMany"
+    :attr="attr"/>
 
   <BubbleCloudsLarge 
     v-else 
-    :data="data" 
-    :max="maxRevenue" 
-    :sortByQty="groups"/>
+    :movies="movies"
+    :groups="groups"
+    :hasMany="hasMany"
+    :attr="attr"/>
 </template>
 
 <script>
@@ -22,25 +25,10 @@ export default {
   components: { BubbleCloudsSmall, BubbleCloudsLarge },
   mixins: [resizable],
   props: {
-    groups: Array,
     movies: Array,
+    groups: Array,
     attr: String,
-    name: String
-  },
-  data () {
-    return {
-      maxRevenue: 0,
-      data: [],
-    }
-  },
-  beforeMount () {
-    this.data = this.movies.map(m => {
-      const primary = m[this.attr].find(a => a.primary);
-      m.primary = primary;
-      m.primaryPos = this.groups.findIndex(s => s[0] === primary[this.name]) + 1;
-      return m;
-    })
-    this.maxRevenue = Math.max.apply(Math, this.data.map(d => d.revenue));
+    hasMany: Boolean
   },
 }
 </script>

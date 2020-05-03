@@ -1,7 +1,7 @@
 <template>
   <div class="the-menu-toggle" @click="$emit('toggle')">
     <template v-if="this.$nuxt.$route.path!=='/'">
-      {{ category }} 
+      {{ category }}
       <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>
       {{ subcategory }}
     </template>
@@ -23,9 +23,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/styles/common.scss";
+@import '~/assets/styles/common.scss';
 
-.the-menu-toggle{
+.the-menu-toggle {
+  z-index: 15;
   color: #9f9c9c;
   cursor: pointer;
   text-transform: capitalize;
@@ -35,5 +36,4 @@ export default {
     margin-top: 0.3rem;
   }
 }
-
 </style>

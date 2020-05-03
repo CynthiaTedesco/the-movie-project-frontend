@@ -8,7 +8,7 @@ export default {
   },
   mounted() {
     this.tooltip = d3
-      .select('#my_dataviz')
+      .select('.chart-container')
       .append('div')
       .style('opacity', 0)
       .attr('class', 'tooltip')

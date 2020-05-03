@@ -9,17 +9,19 @@
       :movies="movies"
       :groups="groups"
       attr="genres"
-      name="genre_name"
+      :hasMany="hasMany"
     />
   </section>
 </template>
 
 <script>
 import Bubbles from "@/Components/Charts/Bubbles";
+import bubblePage from '@/mixins/bubblePage.js';
 import InnerPageDescription from "@/Components/InnerPageDescription";
 
 export default {
   layout: 'innerPage',
+  mixins: [bubblePage],
   components: {
     InnerPageDescription,
     Bubbles
@@ -27,14 +29,10 @@ export default {
   data () {
     return {
       movies: [],
-      groups: {}
+      groups: {},
+      keyword: 'genres',
+      hasMany: true
     }
-  },
-  async mounted () {
-    await this.$store.dispatch('checkGenres')
-    this.movies = await this.$store.getters.movies
-    const temp = this.groupBy(this.movies, 'genres');
-    this.groups = Object.entries(temp).sort((a, b) => b[1].length - a[1].length);
   },
   computed: {
     text () {
@@ -46,15 +44,6 @@ export default {
       return '';
     }
   },
-  methods: {
-    groupBy (xs, key) {
-      return xs.reduce(function (rv, x) {
-        const innerKey = x[key].find(a => a.primary).genre_name;
-        (rv[innerKey] = rv[innerKey] || []).push(x)
-        return rv
-      }, {})
-    }
-  }
 };
 </script>
 

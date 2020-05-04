@@ -55,7 +55,8 @@ export default {
     xForce (d) {
       if (!this.coordinates[d.category.name]) {
         this.coordinates[d.category.name] = {
-          revenue: d.revenue
+          revenue: d.revenue,
+          movieId: d.id
         }
       }
 
@@ -80,7 +81,8 @@ export default {
     yForce (d) {
       if (!this.coordinates[d.category.name]) {
         this.coordinates[d.category.name] = {
-          revenue: d.revenue
+          revenue: d.revenue,
+          movieId: d.id
         }
       }
 
@@ -103,11 +105,15 @@ export default {
       return y
     },
     ticked () {
+      const self = this;
       this.nodes.attr('cx', (d) => d.x)
       this.nodes.attr('cy', (d) => {
-        if(d.y > this.coordinates[d.category.name].y){
-          this.coordinates[d.category.name].y = d.y;
-          this.coordinates[d.category.name].revenue = d.revenue;
+        if(d.y > self.coordinates[d.category.name].y){
+          self.coordinates[d.category.name].y = d.y;
+          self.coordinates[d.category.name].revenue = d.revenue;
+          self.coordinates[d.category.name].movieId = d.id;
+        } else if(d.id === self.coordinates[d.category.name].movieId){
+          self.coordinates[d.category.name].y = d.y;
         }
         return d.y
       })

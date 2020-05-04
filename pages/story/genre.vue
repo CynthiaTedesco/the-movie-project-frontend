@@ -20,6 +20,7 @@ import bubblePage from '@/mixins/bubblePage.js';
 import InnerPageDescription from "@/Components/InnerPageDescription";
 
 export default {
+  name: 'genre-page',
   layout: 'innerPage',
   mixins: [bubblePage],
   components: {

@@ -7,8 +7,12 @@ export default {
     return {
       svg: null,
       nodes: null,
+      simulation: null,
       categoriesNames: [],
     }
+  },
+  beforeDestroy() {
+    this.simulation.stop();
   },
   props: {
     movies: Array,
@@ -108,7 +112,7 @@ export default {
       for (let i = 0; i < Math.min(this.groups.length, 6); i++) {
         let xx
         let yy
-        const spacing = this.isMultiline ? 30 : 20
+        const spacing = this.isMultiline ? 50 : 30
         const textWidth = this.textWidth(this.categoriesNames[i - 1])
 
         const coordinates =
@@ -177,7 +181,7 @@ export default {
           // STEP 1: get them to the middle
           // STEP 2: don't have them collide!
 
-          const simulation = d3
+          this.simulation = d3
             .forceSimulation(data || this.data)
             .force('x', d3.forceX(xForce).strength(0.1))
             .force('y', d3.forceY(yForce).strength(0.1))
@@ -199,7 +203,4 @@ export default {
       this.adjustLabels()
     },
   },
-  //   beforeDestroy() {
-  //     d3.select(this.selector || '.chart-container').remove()
-  //   },
 }

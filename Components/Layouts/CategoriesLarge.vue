@@ -118,6 +118,77 @@ export default {
         return d.y
       })
     },
+    setLabels() {
+      this.categoriesNames = [
+        ...new Set(
+          this.groups.map((group, index) => {
+            return index > 4 ? 'others' : group[0].toLowerCase()
+          })
+        ),
+      ]
+
+      this.labels = this.svg.append('g').attr('class', 'labels')
+
+      for (let i = 0; i < Math.min(this.groups.length, 6); i++) {
+        let xx
+        let yy
+        const spacing = this.isMultiline ? 50 : 30
+        const textWidth = this.textWidth(this.categoriesNames[i - 1])
+
+        const coordinates =
+          i === 5
+            ? this.othersMaxCoordinates
+            : this.coordinates[this.groups[i][0]]
+        xx = coordinates.x
+        yy = coordinates.y + this.scale(coordinates.revenue) + spacing
+
+        this.labels
+          .append('text')
+          .attr('x', xx)
+          .attr('y', yy)
+          .attr('fill', '#aa9d9c')
+          .attr('font-size', '14')
+          .text(() => {
+            return this.categoriesNames[i]
+          })
+
+        if (i === 0) {
+          this.labels
+            .append('image')
+            .attr('href', '/handmade-circle.gif')
+            .attr('width', textWidth + 20)
+            .attr('height', 34)
+            .attr('x', xx - 25)
+            .attr('y', yy - 22)
+        }
+      }
+    },
+    adjustLabels() {
+      this.labels.selectAll('text').each((text, index, texts) => {
+        let xx
+        let yy
+        const spacing = this.isMultiline ? 30 : 30
+        const textWidth = this.textWidth(this.categoriesNames[index])
+
+        const coordinates =
+          index === texts.length - 1
+            ? this.othersMaxCoordinates
+            : this.coordinates[this.groups[index][0]]
+        xx = coordinates.x
+        yy = coordinates.y + this.scale(coordinates.revenue) + spacing
+
+        d3.select(texts[index])
+          .attr('x', xx)
+          .attr('y', yy)
+
+        if (index === 0) {
+          this.labels
+            .select('image')
+            .attr('x', xx - 25)
+            .attr('y', yy - 22)
+        }
+      })
+    },
   }
 }
 </script>

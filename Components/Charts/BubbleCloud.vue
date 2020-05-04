@@ -101,8 +101,43 @@ export default {
     },
     onEndSimulation () {
       this.setHeight();
-      // this.setLabels
-    }
+    },
+    setLabels() {
+      const label = this.category[0].toLowerCase();
+      const textWidth = this.textWidth(label);
+
+      const xx = (this.width - textWidth)/2;
+      const yy = 0;
+
+      this.label = d3
+        .select(this.$el)
+        .append('div')
+        .attr('class', 'cloud-label')
+        .style('position', 'absolute')
+        .style('color', '#aa9d9c')
+        .style('font-size', '14')
+        .style('left', xx+'px')
+        .style('bottom', 0)
+
+      this.labelText = this.label
+        .append('div')
+        .attr('class', 'text')
+        .style('position', 'relative')
+        .text(label);
+
+      if(d3.select('.bubble-cloud:first-child').node() === this.$el){
+        this.labelText
+          .append('img')
+          .attr('src', '/handmade-circle.gif')
+          .attr('width', textWidth + 20)
+          .attr('height', 34)
+          .style('position', 'absolute')
+          .style('right', '-10px')
+          .style('top', '-5px')
+      }
+    },
+    adjustLabels() {
+    },
   },
 };
 </script>

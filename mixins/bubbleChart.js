@@ -28,6 +28,18 @@ export default {
         .domain([0, this.max])
         .range([10, 50])
     },
+    othersMaxCoordinates() {
+      const others = this.groups.slice(5 - this.groups.length).map((o) => o[0])
+      let othersMaxCoordinates = { y: 0 }
+      others.forEach((categoryName) => {
+        const temp = this.coordinates[categoryName]
+        if (temp.y > othersMaxCoordinates.y) {
+          othersMaxCoordinates = temp
+        }
+      })
+
+      return othersMaxCoordinates
+    },
   },
   methods: {
     appendSvg() {
@@ -92,13 +104,17 @@ export default {
       ]
 
       this.labels = this.svg.append('g').attr('class', 'labels')
+
       for (let i = 0; i < Math.min(this.groups.length, 6); i++) {
         let xx
         let yy
         const spacing = this.isMultiline ? 30 : 20
         const textWidth = this.textWidth(this.categoriesNames[i - 1])
 
-        const coordinates = this.coordinates[this.groups[i][0]]
+        const coordinates =
+          i === 5
+            ? this.othersMaxCoordinates
+            : this.coordinates[this.groups[i][0]]
         xx = coordinates.x // - textWidth / 2
         yy = coordinates.y + this.scale(coordinates.revenue) + spacing
 
@@ -131,7 +147,10 @@ export default {
         const spacing = this.isMultiline ? 30 : 30
         const textWidth = this.textWidth(this.categoriesNames[index])
 
-        const coordinates = this.coordinates[this.groups[index][0]]
+        const coordinates =
+          index === texts.length - 1
+            ? this.othersMaxCoordinates
+            : this.coordinates[this.groups[index][0]]
         xx = coordinates.x // - textWidth / 2
         yy = coordinates.y + this.scale(coordinates.revenue) + spacing
 
@@ -180,7 +199,7 @@ export default {
       this.adjustLabels()
     },
   },
-//   beforeDestroy() {
-//     d3.select(this.selector || '.chart-container').remove()
-//   },
+  //   beforeDestroy() {
+  //     d3.select(this.selector || '.chart-container').remove()
+  //   },
 }

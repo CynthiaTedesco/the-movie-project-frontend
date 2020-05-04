@@ -1,5 +1,5 @@
 <template>
-  <div @click.stop.prevent="$router.push(target)">
+  <div @click.self="onClick">
     <nuxt-link class="arrow" :to="target" />
   </div>
 </template>
@@ -10,6 +10,11 @@ export default {
     target: {
       type: String,
       required: true
+    }
+  },
+  methods:{
+    onClick(){
+      this.$router.push(this.target);
     }
   }
 }

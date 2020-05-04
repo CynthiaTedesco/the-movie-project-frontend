@@ -1,5 +1,5 @@
 <template>
-  <div class="top-movies">
+  <div class="top-movies" id="top-movies">
     <TheHeader
       @menuToggle="displayMenu =!displayMenu"
       :hide-logo="true"

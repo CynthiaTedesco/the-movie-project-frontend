@@ -30,7 +30,7 @@ export default {
   components: {
     RandomMovieBubble,
     NextPageArrow,
-    WeGetYou  },
+    WeGetYou },
   data() {
     return {
       randomMovie: null,

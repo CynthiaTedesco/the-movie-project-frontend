@@ -29,6 +29,7 @@ export default {
   background-image: radial-gradient(#2b4ab7 0%, #ffffff 5%);
   background-position: 0 0;
   background-size: 40px 40px;
+  position: relative;
 }
 div {
   @include max-sized;

@@ -21,6 +21,7 @@
           <div class="revenue">{{revenue(movie)}}</div>
         </div>
       </div>
+      <NextPageArrow class="white" :target="nextView" />
     </div>
   </div>
 </template>
@@ -40,7 +41,7 @@ export default {
       isMobile: false,
       slicedMovies: [],
       mobileSize: 20,
-      nextView: 'genre'
+      nextView: 'genres'
     };
   },
   watch: {

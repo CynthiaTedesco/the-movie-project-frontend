@@ -21,18 +21,10 @@ export default {
   methods: {
     onClick () {
       this.$nextTick(() => {
-        let scroll = false;
-        let parent = this.$parent;
-        let target = parent ? parent.$refs[this.target] : null;
-
-        if (target && target.$el) {
-          scroll = true;
-        } else {
-          //we check grandparent
-          parent = parent.$parent;
-          target = parent ? parent.$refs[this.target] : null;
-          scroll = target && target.$el;
-        }
+        const parent = this.$parent;
+        const grandParent = parent ? parent.$parent : null;
+        const target = grandParent && grandParent.getTarget ? grandParent.getTarget(this.target) : null;
+        const scroll = target && target.$el;
 
         if (scroll) {
           target.$el.scrollIntoView();

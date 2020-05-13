@@ -1,6 +1,6 @@
 <template>
   <div class="everything">
-    <div class="presentation">
+    <div class="presentation page">
       <div class="presentation-content" v-if="randomMovie">
         <div class="images">
           <RandomMovieBubble :movie="randomMovie" />
@@ -14,32 +14,45 @@
           <div class="step-by-step">{{ $t('stepByStep') }}</div>
         </div>
       </div>
-      <NextPageArrow class="white" target="#we-get-you" />
+      <NextPageArrow class="white" :target="nextView" />
     </div>
-    <WeGetYou />
+    <WeGetYou ref="we-get-you" />
+    <TopMovies ref="top-movies" />
+    <Genres />
+    <!-- <component v-for="page in pages" :key="page.key" v-bind:is="page.component"/> -->
+    <!-- <Genre ref="genre" /> -->
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { mapGetters } from 'vuex'
 import RandomMovieBubble from '@/Components/RandomMovieBubble.vue'
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 import WeGetYou from '@/pages/we-get-you.vue'
+import TopMovies from '@/pages/movies/top-movies.vue'
+import Genres from '@/Components/Pages/Genres.vue'
+import SettingTime from '@/pages/story/settingTime.vue'
 
 export default {
   components: {
     RandomMovieBubble,
     NextPageArrow,
-    WeGetYou },
-  data() {
+    TopMovies,
+    WeGetYou,
+    Genres,
+    SettingTime
+  },
+  data () {
     return {
       randomMovie: null,
+      nextView: 'we-get-you',
+      pages: []
     }
   },
   computed: {
     ...mapGetters(['randomMovies'])
   },
-  created() {
+  created () {
     const fn = (i, randomMovies = this.randomMovies) => {
       if (i > 2) {
         i = 0

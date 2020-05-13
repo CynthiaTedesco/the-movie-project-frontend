@@ -6,7 +6,9 @@
           How to make
           <br />a blockbuster
         </div>
-        <TheMenuToggle class="location" v-if="!hideMenuToggle" @toggle="$emit('menuToggle')" />
+        <TheMenuToggle class="location" v-if="!hideMenuToggle" @toggle="$emit('menuToggle')">
+          <slot></slot>
+        </TheMenuToggle>
         <span class="location" v-else-if="title">{{title}}</span>
       </div>
       <div class="col-sm-3" v-if="!hideLogo">

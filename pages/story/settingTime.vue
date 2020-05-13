@@ -1,5 +1,5 @@
 <template>
-  <section class="page-container">
+  <section class="page-container page">
     <InnerPageDescription
       question="When does the movie should take place?"
       :text="text"

@@ -1,6 +1,8 @@
 <template>
-  <div @click.self="onClick">
-    <nuxt-link class="arrow" :to="target" />
+  <div @click.stop.prevent="onClick">
+    <span class="arrow"></span>
+    <!-- <nuxt-link class="arrow"/> -->
+    <!-- :to="target"  -->
   </div>
 </template>
 
@@ -10,11 +12,32 @@ export default {
     target: {
       type: String,
       required: true
+    },
+    render: {
+      type: Boolean,
+      required: false
     }
   },
-  methods:{
-    onClick(){
-      this.$router.push(this.target);
+  methods: {
+    onClick () {
+      this.$nextTick(() => {
+        let scroll = false;
+        let parent = this.$parent;
+        let target = parent ? parent.$refs[this.target] : null;
+
+        if (target && target.$el) {
+          scroll = true;
+        } else {
+          //we check grandparent
+          parent = parent.$parent;
+          target = parent ? parent.$refs[this.target] : null;
+          scroll = target && target.$el;
+        }
+
+        if (scroll) {
+          target.$el.scrollIntoView();
+        }
+      });
     }
   }
 }
@@ -33,11 +56,19 @@ div {
   width: 100%;
   height: 50px;
   text-align: center;
+  // position: sticky;
 
   &.white {
     .arrow {
       border-bottom-color: white;
       border-right-color: white;
+    }
+  }
+
+  &.blue-ferdio {
+    .arrow {
+      border-bottom-color: $blue-ferdio;
+      border-right-color: $blue-ferdio;
     }
   }
 }

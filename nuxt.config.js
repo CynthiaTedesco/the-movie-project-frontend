@@ -1,7 +1,7 @@
 const { locales } = require('./i18n/_config')
 
 module.exports = {
-  mode: 'spa',
+  mode: 'universal',
   /*
    ** Headers of the page
    */

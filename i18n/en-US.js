@@ -11,6 +11,8 @@ export default {
     'top-movies': 'Top Movies',
     story: {
       genre: 'Genre',
+      universe: 'Universe',
+      series: 'Series',
       leadAge: 'Lead/Age',
       leadGender: 'Lead/Gender',
       mainCharacter: 'Main character',
@@ -26,6 +28,7 @@ export default {
     },
     production: {
       budget: 'Budget',
+      cinematography: 'Cinematography',
       directorAge: 'Director/Age',
       directorGender: 'Director/Gender',
       country: 'Country'

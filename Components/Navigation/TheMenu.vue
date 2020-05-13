@@ -35,23 +35,16 @@ export default {
           route: '',
           title: 'Story',
           subItems: [
+            { route: '/story/universe', title: 'menu.story.universe' },
             { route: '/story/genre', title: 'menu.story.genre' },
-            { route: '/story/leadAge', title: 'menu.story.leadAge' },
-            { route: '/story/leadGender', title: 'menu.story.leadGender' },
-            { route: '/story/mainCharacter', title: 'menu.story.mainCharacter' },
             { route: '/story/origin', title: 'menu.story.origin' },
-            { route: '/story/settingTime', title: 'menu.story.time' },
-            { route: '/story/settingPlace', title: 'menu.story.place' },
-            { route: '/story/plot', title: 'menu.story.plot' }
-          ]
-        },
-        {
-          route: '',
-          title: 'Script',
-          subItems: [
+            { route: '/story/series', title: 'menu.story.series' },
             { route: '/script/language', title: 'menu.script.language' },
-            { route: '/script/length', title: 'menu.script.length' },
-            { route: '/script/wordCount', title: 'menu.script.wordCount' },
+            { route: '/story/leadGender', title: 'menu.story.leadGender' },
+            { route: '/story/leadAge', title: 'menu.story.leadAge' },
+            // { route: '/story/settingTime', title: 'menu.story.time' },
+            // { route: '/story/settingPlace', title: 'menu.story.place' },
+            // { route: '/story/plot', title: 'menu.story.plot' }
           ]
         },
         {
@@ -59,9 +52,12 @@ export default {
           title: 'Production',
           subItems: [
             { route: '/production/budget', title: 'menu.production.budget' },
-            { route: '/production/directorAge', title: 'menu.production.directorAge' },
             { route: '/production/directorGender', title: 'menu.production.directorGender' },
+            { route: '/production/directorAge', title: 'menu.production.directorAge' },
             { route: '/production/country', title: 'menu.production.country' },
+            { route: '/production/cinematography', title: 'menu.production.cinematography' },
+            { route: '/script/length', title: 'menu.script.length' },
+            { route: '/script/wordCount', title: 'menu.script.wordCount' },
           ]
         },
         {

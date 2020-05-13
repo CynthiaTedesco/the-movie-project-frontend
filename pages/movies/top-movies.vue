@@ -1,5 +1,5 @@
 <template>
-  <div class="top-movies" id="top-movies">
+  <div class="top-movies page" id="top-movies">
     <TheHeader
       @menuToggle="displayMenu =!displayMenu"
       :hide-logo="true"
@@ -21,7 +21,6 @@
           <div class="revenue">{{revenue(movie)}}</div>
         </div>
       </div>
-      <NextPageArrow class="white" target="/story/genre" />
     </div>
   </div>
 </template>
@@ -40,7 +39,8 @@ export default {
       displayMenu: false,
       isMobile: false,
       slicedMovies: [],
-      mobileSize: 20
+      mobileSize: 20,
+      nextView: 'genre'
     };
   },
   watch: {
@@ -130,6 +130,7 @@ export default {
     z-index: 2;
     margin-left: auto;
     margin-right: auto;
+    top: 0;
     left: 0;
     right: 0;
     
@@ -137,7 +138,7 @@ export default {
     background-image: radial-gradient(#d0d0d0 0%, #2b4ab7 5%);
     background-position: 0 0;
     background-size: 40px 40px;
-    position: fixed;
+    // position: fixed;
     color: #dad8d8;
     @include max-sized;
   }

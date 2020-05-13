@@ -1,12 +1,12 @@
 <template>
-  <div id="we-get-you" class="presentation">
+  <div id="we-get-you" class="presentation page">
     <div v-html="$t('feeling-unispired')"></div>
     <div class="covered">
       {{$t('covered')}}
       <img src="/divider.png" />
     </div>
     <div v-html="description"></div>
-    <NextPageArrow class="white" target="movies/top-movies" />
+    <NextPageArrow class="white" :target="nextView" />
   </div>
 </template>
 
@@ -14,6 +14,11 @@
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 export default {
   components: { NextPageArrow },
+  data(){
+    return{
+      nextView: 'top-movies'
+    }
+  },
   transition: 'slide-top',
   computed: {
     description () {

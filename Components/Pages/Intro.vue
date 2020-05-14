@@ -13,7 +13,7 @@
         <div class="step-by-step">{{ $t('stepByStep') }}</div>
       </div>
     </div>
-    <NextPageArrow class="white" :target="nextView" />
+    <NextPageArrow class="white" target="we-get-you" />
   </div>
 </template>
 
@@ -25,11 +25,6 @@ export default {
   components: {
     RandomMovieBubble,
     NextPageArrow
-  },
-  data () {
-    return {
-      nextView: 'we-get-you',
-    }
   },
   props: {
     randomMovie: {

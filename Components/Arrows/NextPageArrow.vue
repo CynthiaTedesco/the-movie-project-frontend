@@ -1,12 +1,12 @@
 <template>
   <div @click.stop.prevent="onClick">
     <span class="arrow"></span>
-    <!-- <nuxt-link class="arrow"/> -->
-    <!-- :to="target"  -->
   </div>
 </template>
 
 <script>
+import EventBus from '@/assets/js/eventBus.js';
+
 export default {
   props: {
     target: {
@@ -21,14 +21,7 @@ export default {
   methods: {
     onClick () {
       this.$nextTick(() => {
-        const parent = this.$parent;
-        const grandParent = parent ? parent.$parent : null;
-        const target = grandParent && grandParent.getTarget ? grandParent.getTarget(this.target) : null;
-        const scroll = target && target.$el;
-
-        if (scroll) {
-          target.$el.scrollIntoView();
-        }
+        EventBus.$emit('scrollToTarget', this.target);
       });
     }
   }

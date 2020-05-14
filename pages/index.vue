@@ -5,8 +5,9 @@
     <TopMovies ref="top-movies" />
     <component
       ref="pages"
-      v-for="page in pages"
+      v-for="(page, i) in pages"
       :key="page.key"
+      :data-index="i"
       v-bind:is="page.component"
       :order="page.order"
     />
@@ -16,11 +17,15 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import Vue from 'vue'
 import Intro from '@/Components/Pages/Intro.vue'
 import WeGetYou from '@/pages/we-get-you.vue'
 import TopMovies from '@/pages/movies/top-movies.vue'
 import Genres from '@/Components/Pages/Genres.vue'
-import SettingTime from '@/pages/story/settingTime.vue'
+import Universes from '@/Components/Pages/Universes.vue'
+import Origins from '@/Components/Pages/Origins.vue'
+import Results from '@/Components/Pages/Results.vue'
+import EventBus from '@/assets/js/eventBus.js';
 
 export default {
   name: 'index',
@@ -29,16 +34,31 @@ export default {
     WeGetYou,
     TopMovies,
     Genres,
-    SettingTime
+    Universes,
+    Origins,
+    Results
+  },
+  watch: {
+    pages (o, n) {
+      this.$nextTick(() => {
+
+        //add observer to the new ones
+        this.$refs.pages.forEach(page => {
+          this.observer.observe(page.$el);
+        });
+      });
+    }
   },
   data () {
     return {
       randomMovie: null,
+      observer: null,
       pages: [],
       pendingPages: [
-        { order: 0, key: 'genres', component: Genres },
+        // { order: 0, key: 'universe', component: Universes },
         { order: 1, key: 'genres', component: Genres },
-        { order: 2, key: 'genres', component: Genres }
+        { order: 2, key: 'origins', component: Origins },
+        { order: 19, key: 'results', component: Results },
       ]
     }
   },
@@ -62,10 +82,20 @@ export default {
       fn(0)
     }
 
+    EventBus.$on('scrollToTarget', this.scrollToTarget);
+  },
+  mounted () {
+    this.scrollTrigger();
     this.loadNewPage();
   },
   methods: {
-    getTarget (targetKey) {
+    scrollToTarget (targetKey) {
+      const targetElement = this.getTargetElement(targetKey);
+      if (targetElement) {
+        targetElement.$el.scrollIntoView();
+      }
+    },
+    getTargetElement (targetKey) {
       if (this.$refs[targetKey]) {
         return this.$refs[targetKey];
       }
@@ -77,8 +107,26 @@ export default {
       return null;
     },
     loadNewPage () {
-      const nextPending = this.pendingPages.slice(0, 1).shift();
-      this.pages.push(nextPending);
+      const nextPending = this.pendingPages.shift();
+      if (nextPending) {
+        Vue.set(this.pages, this.pages.length, nextPending);
+      }
+    },
+    scrollTrigger () {
+      const options = {
+        threshold: 0.1
+      }
+      this.observer = new IntersectionObserver(this.scrollAndLoad, options);
+    },
+    scrollAndLoad (entries) {
+      entries.forEach(entry => {
+        console.log(entry);
+        if (entry.isIntersecting) {
+          const currentIndex = entry.target.getAttribute('data-index');
+
+          this.loadNewPage();
+        }
+      });
     }
   }
 }

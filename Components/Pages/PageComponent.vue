@@ -39,16 +39,16 @@ export default {
   background-size: 40px 40px;
   position: relative;
 
-  // .the-header {
-  //   position: fixed;
-  //   top: 0;
-  //   width: 100%;
-  //   background: white;
-  //   z-index: 15;
-  //   background-image: radial-gradient(#2b4ab7 0%, #ffffff 5%);
-  //   background-position: 0 0;
-  //   background-size: 40px 40px;
-  // }
+  .the-header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: white;
+    z-index: 15;
+    background-image: radial-gradient(#2b4ab7 0%, #ffffff 5%);
+    background-position: 0 0;
+    background-size: 40px 40px;
+  }
 }
 div {
   @include max-sized;

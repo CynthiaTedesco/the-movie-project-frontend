@@ -134,7 +134,6 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    
 
     background-image: radial-gradient(#d0d0d0 0%, #2b4ab7 5%);
     background-position: 0 0;
@@ -142,6 +141,13 @@ export default {
     // position: fixed;
     color: #dad8d8;
     @include max-sized;
+
+    @include media-breakpoint-down(l) {
+      .location {
+        position: relative;
+        padding: 0;
+      }
+    }
   }
   .presentation {
     padding: 100px 0;

@@ -44,6 +44,5 @@ export default {
   padding: 1rem 10%;
   min-height: 150px;
   height: auto;
-  margin-top: -50px;
 }
 </style>

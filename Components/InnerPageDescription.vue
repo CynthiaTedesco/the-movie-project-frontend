@@ -3,11 +3,25 @@
     <div class="counter">{{counter}}</div>
     <div class="title">{{question}}</div>
     <div v-if="text" class="text">{{text}}</div>
-    <div class="share">Share</div>
+    <div class="share">
+      <span class="label">Share</span>
+      <a href="#" class="icon">
+        <font-awesome-icon class="share-icon" :icon="['fas', 'external-link-alt']" />
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faExternalLinkAlt)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+
 export default {
   props: {
     text: {
@@ -37,6 +51,17 @@ export default {
 .description {
   background: transparent;
   z-index: 14;
+  .share {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+      font-size: 0.8rem;
+      color: white;
+    }
+  }
+
 }
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,

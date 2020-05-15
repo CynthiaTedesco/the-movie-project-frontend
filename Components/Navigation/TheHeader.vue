@@ -1,7 +1,7 @@
 <template>
   <div class="the-header header-container">
     <div class="row px-0 py-2 py-md-3">
-      <div class="col-sm-9 the-header__left">
+      <div class="col-xs-12 col-sm-9 the-header__left">
         <div class="how-to-make">
           How to make
           <br />a blockbuster
@@ -11,7 +11,7 @@
         </TheMenuToggle>
         <span class="location" v-else-if="title">{{title}}</span>
       </div>
-      <div class="col-sm-3" v-if="!hideLogo">
+      <div class="col-sm-3 d-none" v-if="!hideLogo">
         <app-logo class="header-logo" />
       </div>
       <!-- <div class="col-sm-1"></div> -->
@@ -80,6 +80,7 @@ export default {
 .the-header__left {
   display: flex;
   flex-direction: column;
+  position: relative;
 
   span.location {
     color: $dirty-white;
@@ -89,6 +90,13 @@ export default {
     padding-left: 1rem;
     margin-top: 1.5rem;
     white-space: nowrap;
+    @include media-breakpoint-down(l) {
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin: 0;
+      white-space: normal;
+    }
   }
 
   @include media-breakpoint-up(md) {

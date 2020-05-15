@@ -1,5 +1,5 @@
 <template>
-  <div @click.stop.prevent="onClick">
+  <div @click.stop.prevent="onClick" class="arrow-container">
     <span class="arrow"></span>
   </div>
 </template>
@@ -41,7 +41,6 @@ div {
   width: 100%;
   height: 50px;
   text-align: center;
-  // position: sticky;
 
   &.white {
     .arrow {

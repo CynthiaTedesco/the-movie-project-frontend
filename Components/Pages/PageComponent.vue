@@ -80,11 +80,11 @@ div {
 
   .counter {
     margin-bottom: 0.5em;
-    font-family: 'le-havre-rounded-w00-regular';
+    font-family: 'niveau-grotesk-light';
   }
 
   .title {
-    font-family: 'maax-rounded-bold';
+    font-family: 'niveau-grotesk-bold';
     font-size: 1.1rem;
     line-height: 1.1em;
   }

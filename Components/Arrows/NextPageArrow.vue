@@ -36,11 +36,12 @@ div,
   position: absolute;
   cursor: pointer;
 }
-div {
+.arrow-container {
   bottom: 0;
   width: 100%;
   height: 50px;
   text-align: center;
+  z-index: 15;
 
   &.white {
     .arrow {

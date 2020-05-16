@@ -127,8 +127,7 @@ export default {
   /deep/ .page-container {
     @include media-breakpoint-down(l) {
       grid-template-columns: 100%;
-      grid-template-rows: auto 120px;
-      // height: 100%;
+      grid-template-rows: auto 140px;
       height: calc(100vh - 100px);
 
       .description {
@@ -139,7 +138,7 @@ export default {
         padding: 0;
         margin: 0;
         padding-left: 3rem;
-        max-height: 120px;
+        max-height: 140px;
 
         .share {
           position: absolute;

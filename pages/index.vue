@@ -114,7 +114,7 @@ export default {
     },
     scrollTrigger () {
       const options = {
-        threshold: 0.1
+        threshold: 0.6
       }
       this.observer = new IntersectionObserver(this.scrollAndLoad, options);
     },
@@ -122,8 +122,9 @@ export default {
       entries.forEach(entry => {
         console.log(entry);
         if (entry.isIntersecting) {
+          //TODO check if I need to use this index
           const currentIndex = entry.target.getAttribute('data-index');
-
+          entry.target.scrollIntoView()//TODO FIX does not work
           this.loadNewPage();
         }
       });

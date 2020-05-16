@@ -8,7 +8,7 @@
     />
     <div class="presentation">
       <div v-if="movies" class="bubbles" :class="bubblesClasses">
-        <div v-for="movie in slicedMovies" :key="movie.id">
+        <div v-for="movie in movies" :key="movie.id">
           <div class="bubble">
             <img
               :src="movie.poster.url"
@@ -29,70 +29,35 @@
 <script>
 import TheHeader from '@/Components/Navigation/TheHeader';
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue';
-import { mapGetters } from 'vuex';
-import { beautifyCashValue } from '@/assets/js/helpers.js';
+import { beautifyCashValue, slices } from '@/assets/js/helpers.js';
+import { mapGetters } from 'vuex'
+import filter from '@/mixins/filter.js';
 
 export default {
   // layout: 'innerPage',
   components: { TheHeader, NextPageArrow },
+  mixins: [filter],
   data () {
     return {
+      movies: [],
       displayMenu: false,
-      isMobile: false,
-      slicedMovies: [],
-      mobileSize: 20,
       nextView: 'genres'
     };
   },
-  watch: {
-    isMobile () {
-      if (this.isMobile) {
-        if (this.slicedMovies.length > this.mobileSize) {
-          console.log('watcher');
-          this.slicedMovies = this.movies.slice(0, this.mobileSize);
-        }
-      } else {
-        if (this.slicedMovies.length < this.movies.length) {
-          console.log('watcher');
-          this.slicedMovies = this.movies
-        }
-      }
-
-      if (this.slicedMovies.length === 0) {
-        console.log('watcher');
-        this.slicedMovies = this.movies
-      }
-    },
-    slicedMovies (a, b) {
-      console.log('watcher slicedMovies', a.length, b.length);
-    }
-  },
-  mounted () {
-    const isMobile = document.documentElement.clientWidth <= 768;
-    this.slicedMovies = isMobile ? this.movies.slice(0, this.mobileSize) : this.movies;
-
-    this.$nextTick(function () {
-      this.slicedMovies = isMobile ? this.movies.slice(0, this.mobileSize) : this.movies;
-      window.addEventListener('resize', this.getWindowWidth);
-
-      //Init
-      this.getWindowWidth()
-    })
-
+  async beforeMount(){
+    const sli = slices();
+    debugger
+    this.movies = await this.$store.getters.movies(sli);
   },
   computed: {
-    ...mapGetters(['movies']),
     bubblesClasses () {
-      return 'top-' + this.slicedMovies.length + '-movies';
+      return 'top-' + this.movies.length + '-movies';
     },
     title () {
-      return `The top ${this.slicedMovies.length} highest grossing movies`;
+      return `The top ${this.movies.length} highest grossing movies`;
     },
   },
   methods: {
-    getWindowWidth (event) {
-      this.isMobile = document.documentElement.clientWidth <= 768;
-    },
     revenue (movie) {
       return beautifyCashValue(movie.revenue);
     },
@@ -209,6 +174,10 @@ export default {
           height: 200%;
           border-radius: 50%;
         }
+      }
+
+      @include media-breakpoint-down(l){
+        padding: 0 2rem;
       }
     }
   }

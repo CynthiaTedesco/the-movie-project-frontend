@@ -1,4 +1,5 @@
 const d3 = require('d3')
+import { slices } from '@/assets/js/helpers.js'
 
 export default {
   data() {
@@ -13,9 +14,10 @@ export default {
     if (this.hasMany) {
       const capitalized = this.keyword.replace(/^\w/, (c) => c.toUpperCase())
       const functionName = `check${capitalized}`
-      await this.$store.dispatch(functionName) //TODO de-hardcode this
+      await this.$store.dispatch(functionName)
     }
-    this.movies = await this.$store.getters.movies
+
+    this.movies = await this.$store.getters.movies(slices())
     const temp = this.groupBy(this.movies, this.keyword, this.hasMany)
     this.groups = Object.entries(temp).sort((a, b) => b[1].length - a[1].length)
   },

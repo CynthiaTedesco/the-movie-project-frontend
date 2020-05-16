@@ -143,11 +143,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~/assets/styles/common.scss';
+
 .bubble-cloud {
   min-height: 150px;
   max-width: 80vw;
   height: 100%;
   margin: auto;
   position: relative;
+
+  @include media-breakpoint-down(l){
+    width: 100%;
+  }
 }
 </style>

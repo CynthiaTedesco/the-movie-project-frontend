@@ -42,6 +42,7 @@ export default {
 
   @include media-breakpoint-down(l) {
     display: grid;
+    grid-template-rows: 100px 0 auto;
   }
 
   /deep/ .arrow-container {
@@ -127,7 +128,8 @@ export default {
     @include media-breakpoint-down(l) {
       grid-template-columns: 100%;
       grid-template-rows: auto 120px;
-      height: 100%;
+      // height: 100%;
+      height: calc(100vh - 100px);
 
       .description {
         grid-row: 2;
@@ -165,6 +167,5 @@ export default {
 
 div {
   @include max-sized;
-  margin: auto;
 }
 </style>

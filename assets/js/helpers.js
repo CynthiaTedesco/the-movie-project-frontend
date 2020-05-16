@@ -10,3 +10,12 @@ export function beautifyCashValue(labelValue) {
     ? Math.floor(Math.abs(Number(labelValue)) / 1.0e3) + 'K$'
     : Math.floor(Math.abs(Number(labelValue)))
 }
+export function isMobile() {
+  return document.documentElement.clientWidth <= 768
+}
+export function slices() {
+  if (!document) {
+    return 50
+  }
+  return isMobile() ? 20 : 50
+}

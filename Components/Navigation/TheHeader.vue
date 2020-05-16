@@ -96,6 +96,7 @@ export default {
       top: 0;
       margin: 0;
       white-space: normal;
+      margin-right: 1rem;
     }
   }
 

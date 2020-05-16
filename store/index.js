@@ -5,7 +5,7 @@ const createStore = () => {
     state: {
       movies: [],
       randomMovies: null,
-      isMobile: false
+      isMobile: false,
     },
     mutations: {
       setMovies(state, movies) {
@@ -17,15 +17,15 @@ const createStore = () => {
       },
       setIsMobile(state, isMobile) {
         state.isMobile = isMobile
-      }
+      },
     },
     actions: {
       checkMovies(vuexContext) {
-        if (vuexContext.getters.movies.length === 0) {
+        if (vuexContext.getters.movies().length === 0) {
           console.log('checking movies!!')
-          return this.$axios.$get('/movies').then(allTheMovies => {
+          return this.$axios.$get('/movies').then((allTheMovies) => {
             const movies = allTheMovies
-              .filter(m => m.valid)
+              .filter((m) => m.valid)
               .sort((a, b) => b.revenue - a.revenue)
             const moviesToCommit = movies.slice(
               0,
@@ -37,7 +37,7 @@ const createStore = () => {
 
             // choose random movies
             // TODO remove when data is sanitized
-            const moviesWithPoster = allTheMovies.filter(m => m.poster)
+            const moviesWithPoster = allTheMovies.filter((m) => m.poster)
 
             const indexesArray = Array.from(
               Array(moviesWithPoster.length).keys()
@@ -57,7 +57,7 @@ const createStore = () => {
             const randomMovies = [
               moviesWithPoster[index1],
               moviesWithPoster[index2],
-              moviesWithPoster[index3]
+              moviesWithPoster[index3],
             ]
             vuexContext.commit('setRandomMovies', randomMovies)
             return { movies: moviesToCommit, randomMovies }
@@ -69,7 +69,7 @@ const createStore = () => {
         const associations = this.$axios.get('/movies-genres')
         const genres = this.$axios.get('/genres')
 
-        return Promise.all([associations, genres]).then(results => {
+        return Promise.all([associations, genres]).then((results) => {
           return vuexContext.dispatch('updateMoviesWithGenres', results)
         })
       },
@@ -77,15 +77,14 @@ const createStore = () => {
         const genres = params[1].data
         const associations = params[0].data
 
-        const updatedMovies = vuexContext.getters.movies.map(movie => {
+        const updatedMovies = vuexContext.getters.movies().map((movie) => {
           movie.genres = associations
-            .filter(a => a.movie_id == movie.id)
-            .map(a2 => {
+            .filter((a) => a.movie_id == movie.id)
+            .map((a2) => {
               return {
                 genre_id: a2.genre_id,
                 primary: a2.primary,
-                genre_name: genres
-                  .find(g => g.id == a2.genre_id).name
+                genre_name: genres.find((g) => g.id == a2.genre_id).name,
               }
             })
           return movie
@@ -96,15 +95,21 @@ const createStore = () => {
       // return { associations: results[0].data, genres: results[1].data }
       setIsMobile(vuexContext, isMobile) {
         vuexContext.commit('setIsMobile', isMobile)
-      }
+      },
     },
     getters: {
       movies(state) {
-        return state.movies
+        return (limit) => {
+          if (limit) {
+            return state.movies.slice(0, limit)
+          } else {
+            return state.movies
+          }
+        }
       },
       randomMovie(state) {
         //TODO remove when data is sanitized
-        const moviesWithPoster = state.movies.filter(m => m.poster)
+        const moviesWithPoster = state.movies.filter((m) => m.poster)
         const randomIndex = Math.floor(
           Math.random() * Math.floor(moviesWithPoster.length)
         )
@@ -116,8 +121,8 @@ const createStore = () => {
       },
       onMobile(state) {
         return state.isMobile
-      }
-    }
+      },
+    },
   })
 }
 

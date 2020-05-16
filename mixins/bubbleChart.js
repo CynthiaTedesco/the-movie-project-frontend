@@ -1,4 +1,5 @@
 const d3 = require('d3')
+import { isMobile } from '@/assets/js/helpers.js'
 import tooltip from '@/mixins/tooltip.js'
 
 export default {
@@ -12,24 +13,27 @@ export default {
     }
   },
   beforeDestroy() {
-    this.simulation.stop();
+    this.simulation.stop()
   },
   props: {
     movies: Array,
   },
   watch: {
     nodes(a, b) {
-      this.$nextTick(() => {
-        setTimeout(this.setLabels, 1000)
-      })
+      if (!isMobile()) {
+        this.$nextTick(() => {
+          setTimeout(this.setLabels, 1000)
+        })
+      }
     },
   },
   computed: {
     scale() {
+      const maxRadius = isMobile() ? 70 : 50
       return d3
         .scaleLinear()
         .domain([0, this.max])
-        .range([10, 50])
+        .range([10, maxRadius])
     },
     othersMaxCoordinates() {
       const others = this.groups.slice(5 - this.groups.length).map((o) => o[0])

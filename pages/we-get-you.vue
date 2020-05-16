@@ -22,7 +22,7 @@ export default {
   transition: 'slide-top',
   computed: {
     description () {
-      return `We analyzed the top ${this.$store.getters.movies.length} highest grossing movies,<br/>` +
+      return `We analyzed the top ${this.$store.getters.movies().length} highest grossing movies,<br/>` +
         'to create the ultimate guide for you <br/>to turn your movie idea into a blockbuster.';
     }
   }

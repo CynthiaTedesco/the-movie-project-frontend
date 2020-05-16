@@ -20,16 +20,16 @@ export default {
   },
   watch: {
     nodes(a, b) {
-      if (!isMobile()) {
-        this.$nextTick(() => {
-          setTimeout(this.setLabels, 1000)
-        })
-      }
+      this.$nextTick(() => {
+        setTimeout(this.setLabels, 1000)
+      })
     },
   },
   computed: {
     scale() {
-      const maxRadius = isMobile() ? 70 : 50
+      const maxRadius = isMobile()
+        ? (document.documentElement.clientWidth * 0.3) / 2
+        : 50
       return d3
         .scaleLinear()
         .domain([0, this.max])

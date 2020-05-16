@@ -1,4 +1,5 @@
 const d3 = require('d3')
+import { isMobile } from '@/assets/js/helpers.js'
 
 export default {
   data() {
@@ -21,6 +22,16 @@ export default {
 
         this.width = container.width
         this.height = container.height
+      }
+
+      //if is hidden and we are in a mobile view
+      //then we force dimensions to be the same as its container
+      if (!this.width || !this.height) {
+        if (isMobile() && this.$parent.$refs.inner) {
+          const container = this.$parent.$refs.inner.getBoundingClientRect()
+          this.width = container.width
+          this.height = container.height
+        }
       }
     },
     textWidth(text, fontSize = 14) {

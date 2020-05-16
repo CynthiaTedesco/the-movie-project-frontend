@@ -1,6 +1,14 @@
 <template>
-  <div ref="chartContainer" class="chart-container">
+  <b-carousel
+    ref="chartContainer"
+    id="carousel-1"
+    class="chart-container carousel"
+    :interval="0"
+    controls
+  >
     <BubbleCloud
+      class="carousel-item"
+      :class="{active: activeCase === index}"
       v-for="(group,index) in data"
       :key="group[0]"
       :category="group"
@@ -9,7 +17,7 @@
       :style="{'opacity': index === 0 || (renderDone[index-1] ? 1 : 0)}"
       @done="onRenderDone"
     />
-  </div>
+  </b-carousel>
 </template>
 
 <script>
@@ -22,6 +30,7 @@ export default {
   data () {
     return {
       small: true,
+      activeCase: 0,
       renderDone: {
         0: false,
         1: false,
@@ -40,9 +49,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~/assets/styles/common.scss';
+
 .chart-container {
   padding: 1rem 10%;
   min-height: 150px;
   height: auto;
+}
+.carousel {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  /deep/ .carousel-inner {
+    height: 100%;
+    overflow: visible;
+  }
+
+  /deep/ .carousel-control-next {
+    margin-right: -3.5rem;
+    color: $blue-ferdio;
+  }
+  /deep/ .carousel-control-prev {
+    margin-left: -3.5rem;
+    color: $blue-ferdio;
+  }
 }
 </style>

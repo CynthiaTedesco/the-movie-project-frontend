@@ -46,7 +46,6 @@ export default {
   },
   async beforeMount(){
     const sli = slices();
-    debugger
     this.movies = await this.$store.getters.movies(sli);
   },
   computed: {

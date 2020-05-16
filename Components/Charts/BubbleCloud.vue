@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" :style="divDimensions" class="bubble-cloud"></div>
+  <div :id="id" class="bubble-cloud"></div>
 </template>
 
 <script>
@@ -14,7 +14,6 @@ export default {
     return {
       doit: false,
       calculated: [],
-      divDimensions: {}
     }
   },
   props: {
@@ -42,7 +41,6 @@ export default {
   watch: {
     calculated () {
       if (this.calculated.length === this.category[1].length) {
-        this.setHeight();
         this.$emit('done', this.ranking)
       }
     }
@@ -68,21 +66,12 @@ export default {
     }
   },
   methods: {
-    setHeight () {
-      const min = Math.min(...this.calculated);
-      const max = Math.max(...this.calculated);
-      const padding = 50;
-
-      const divHeight = max + (min > 0 ? (-1 * min) : Math.abs(min)) + this.maxRadius + padding;
-      this.divDimensions = { height: divHeight + 'px' };
-    },
     ticked () {
       this.nodes.attr("cx", d => d.x);
       this.nodes.attr("cy", (d) => {
         this.calculated.push(d.y);
         return d.y;
       });
-      this.setHeight();
     },
     draw () {
       const data = this.category[1];
@@ -99,14 +88,11 @@ export default {
       this.appendDefinitions(data);
       this.appendCircles(data);
     },
-    onEndSimulation () {
-      this.setHeight();
-    },
-    setLabels() {
+    setLabels () {
       const label = this.category[0].toLowerCase();
       const textWidth = this.textWidth(label);
 
-      const xx = (this.width - textWidth)/2;
+      const xx = (this.width - textWidth) / 2;
       const yy = 0;
 
       this.label = d3
@@ -116,7 +102,7 @@ export default {
         .style('position', 'absolute')
         .style('color', '#aa9d9c')
         .style('font-size', '14')
-        .style('left', xx+'px')
+        .style('left', xx + 'px')
         .style('bottom', 0)
 
       this.labelText = this.label
@@ -125,7 +111,7 @@ export default {
         .style('position', 'relative')
         .text(label);
 
-      if(d3.select('.bubble-cloud:first-child').node() === this.$el){
+      if (d3.select('.bubble-cloud:first-child').node() === this.$el) {
         this.labelText
           .append('img')
           .attr('src', '/handmade-circle.gif')
@@ -136,7 +122,7 @@ export default {
           .style('top', '-5px')
       }
     },
-    adjustLabels() {
+    adjustLabels () {
     },
   },
 };
@@ -152,7 +138,7 @@ export default {
   margin: auto;
   position: relative;
 
-  @include media-breakpoint-down(l){
+  @include media-breakpoint-down(l) {
     width: 100%;
   }
 }

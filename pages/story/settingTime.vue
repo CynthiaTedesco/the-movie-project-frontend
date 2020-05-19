@@ -2,8 +2,8 @@
   <section class="page-container page">
     <InnerPageDescription
       question="When does the movie should take place?"
+      pageKey="lala"
       :text="text"
-      ordinal="5"
     />
     <Bubbles
       v-if="groups.length"
@@ -21,7 +21,7 @@ import Bubbles from "@/Components/Charts/Bubbles";
 import InnerPageDescription from "@/Components/InnerPageDescription";
 
 export default {
-  name: 'setting-time-page',
+  name: 'SettingTimePage',
   layout: 'innerPage',
   mixins: [bubblePage],
   components: { InnerPageDescription, Bubbles },

@@ -1,12 +1,12 @@
 <template>
-  <PageComponent next="origins" >
+  <PageComponent next="OriginPage" >
     <template v-slot:menu>Story / Genre</template>
     <template v-slot>
       <section id="genres" class="page-container page">
         <InnerPageDescription
           :text="text"
-          ordinal="1"
-          question="Which genre should your movie be?"
+          page-key="genres"
+          :question="question"
         />
         <Bubbles
           v-if="groups.length"
@@ -27,7 +27,7 @@ import bubblePage from '@/mixins/bubblePage.js';
 import InnerPageDescription from "@/Components/InnerPageDescription";
 
 export default {
-  name: 'genre-page',
+  name: 'GenrePage',
   components: { PageComponent },
   mixins: [bubblePage],
   components: {
@@ -41,6 +41,12 @@ export default {
       groups: {},
       keyword: 'genres',
       hasMany: true
+    }
+  },
+  props:{
+    question: {
+      type: String,
+      required: true
     }
   },
   computed: {

@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="results">Origins</PageComponent>
+  <PageComponent next="ResultsPage">Origins</PageComponent>
 </template>
 
 <script>
@@ -10,7 +10,7 @@ import InnerPageDescription from "@/Components/InnerPageDescription";
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
-name: 'origins-page',
+name: 'OriginPage',
   components: { PageComponent },
 //   mixins: [bubblePage],
   components: {

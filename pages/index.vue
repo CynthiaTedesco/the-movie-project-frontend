@@ -8,9 +8,10 @@
       v-for="(page, i) in pages"
       :key="page.key"
       :data-index="i"
+      :question="page.question"
       v-bind:is="page.component"
-      :order="page.order"
     />
+    <!-- :order="page.order" -->
   </div>
 </template>
 
@@ -25,7 +26,8 @@ import Genres from '@/Components/Pages/Genres.vue'
 import Universes from '@/Components/Pages/Universes.vue'
 import Origins from '@/Components/Pages/Origins.vue'
 import Results from '@/Components/Pages/Results.vue'
-import EventBus from '@/assets/js/eventBus.js';
+import EventBus from '@/assets/js/eventBus.js'
+import MENUITEMS from '@/constants/menuItems.js'
 
 export default {
   name: 'index',
@@ -41,11 +43,13 @@ export default {
   watch: {
     pages (o, n) {
       this.$nextTick(() => {
+        if (this.$refs.pages) {
 
-        //add observer to the new ones
-        this.$refs.pages.forEach(page => {
-          this.observer.observe(page.$el);
-        });
+          //add observer to the new ones
+          this.$refs.pages.forEach(page => {
+            this.observer.observe(page.$el);
+          });
+        }
       });
     }
   },
@@ -54,12 +58,7 @@ export default {
       randomMovie: null,
       observer: null,
       pages: [],
-      pendingPages: [
-        // { order: 0, key: 'universe', component: Universes },
-        { order: 1, key: 'genres', component: Genres },
-        { order: 2, key: 'origins', component: Origins },
-        { order: 19, key: 'results', component: Results },
-      ]
+      pendingPages: [...MENUITEMS]
     }
   },
   computed: {
@@ -101,7 +100,8 @@ export default {
       }
       const index = this.pages.findIndex(page => page.key === targetKey);
       if (index > -1) {
-        return this.$refs.pages[index];
+        const name = `<${this.pages[index].key}>`;
+        return this.$refs.pages.find(page => page._name === name);
       }
 
       return null;
@@ -124,7 +124,7 @@ export default {
         if (entry.isIntersecting) {
           //TODO check if I need to use this index
           const currentIndex = entry.target.getAttribute('data-index');
-          entry.target.scrollIntoView()//TODO FIX does not work
+          entry.target.scrollIntoView()
           this.loadNewPage();
         }
       });

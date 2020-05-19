@@ -1,5 +1,22 @@
 <template>
-  <PageComponent next="genres">Universes</PageComponent>
+  <PageComponent next="GenrePage">
+    <template v-slot:menu>Story /<br/> Universes</template>
+    <template v-slot>
+      <section id="universes" class="page-container page">
+        <InnerPageDescription
+          :question="question"
+          pageKey="lalsa"
+          :text="text"
+        />
+        <!-- <Bubbles
+          v-if="groups.length"
+          :movies="movies"
+          :groups="groups"
+          attr="universes"
+        />-->
+      </section>
+    </template>
+  </PageComponent>
 </template>
 
 <script>
@@ -7,12 +24,13 @@ import PageComponent from '@/Components/Pages/PageComponent'
 import Bubbles from "@/Components/Charts/Bubbles";
 import bubblePage from '@/mixins/bubblePage.js';
 import InnerPageDescription from "@/Components/InnerPageDescription";
+
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
-  name: 'universes-page',
+  name: 'UniversePage',
   components: { PageComponent },
-  //   mixins: [bubblePage],
+  mixins: [bubblePage],
   components: {
     PageComponent,
     InnerPageDescription,
@@ -24,7 +42,12 @@ export default {
       movies: [],
       groups: {},
       keyword: 'universes',
-      hasMany: true
+    }
+  },
+  props: {
+    question: {
+      type: String,
+      required: true
     }
   },
   computed: {

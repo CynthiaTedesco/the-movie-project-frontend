@@ -17,12 +17,14 @@ import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import MENUITEMS from '@/constants/menuItems.js'
 
 library.add(faExternalLinkAlt)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 
 export default {
+  name:'inner-page-description',
   props: {
     text: {
       type: String,
@@ -32,15 +34,16 @@ export default {
       type: String,
       required: true
     },
-    ordinal: {
+    pageKey: {
       type: String,
       required: true
     }
   },
   computed: {
     counter () {
-      const total = 20;//TODO save menu items in the store
-      return `${this.ordinal}/${total}`
+      const ordinal = MENUITEMS.findIndex(a=>a.pageKey===this.pageKey)+1;
+      const total = MENUITEMS.length;
+      return `${ordinal+1}/${total}`
     }
   }
 }

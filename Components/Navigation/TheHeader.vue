@@ -1,7 +1,7 @@
 <template>
   <div class="the-header header-container">
     <div class="row px-0 py-2 py-md-3">
-      <div class="col-xs-12 col-sm-9 the-header__left">
+      <div class="col-xs-12 the-header__left">
         <div class="how-to-make">
           How to make
           <br />a blockbuster
@@ -90,6 +90,9 @@ export default {
     padding-left: 1rem;
     margin-top: 1.5rem;
     white-space: nowrap;
+    br {
+      display: none;
+    }
     @include media-breakpoint-down(l) {
       position: absolute;
       right: 0;
@@ -97,6 +100,10 @@ export default {
       margin: 0;
       white-space: normal;
       margin-right: 1rem;
+
+      br {
+        display: block;
+      }
     }
   }
 

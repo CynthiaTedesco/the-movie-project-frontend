@@ -21,7 +21,7 @@
           <div class="revenue">{{revenue(movie)}}</div>
         </div>
       </div>
-      <NextPageArrow class="white" :target="nextView" />
+      <NextPageArrow class="white" target="UniversePage" />
     </div>
   </div>
 </template>
@@ -40,8 +40,7 @@ export default {
   data () {
     return {
       movies: [],
-      displayMenu: false,
-      nextView: 'genres'
+      displayMenu: false
     };
   },
   async beforeMount(){

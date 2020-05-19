@@ -6,7 +6,7 @@
 import Genres from '@/Components/Pages/Genres'
 
 export default {
-  name: 'genre-page',
+  name: 'GenrePage',
   components: { Genres },
 };
 </script>

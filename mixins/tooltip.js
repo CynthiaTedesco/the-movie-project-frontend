@@ -20,7 +20,7 @@ export default {
     showTooltip(d, index, circles) {
       const origin = circles[index]
       const estimatedWidth = this.textWidth(d.title)
-      const html = `<strong>${d.title}</strong><br/>${d.category.name}`
+      const html = `<strong>${d.title}</strong><br/>${d.category[this.attr].name}`
 
       this.tooltip.transition().duration(200)
       this.tooltip

@@ -12,12 +12,13 @@ export default {
     attr: String,
     hasMany: Boolean,
   },
-  beforeMount() {
+  mounted() {
     if (this.movies) {
       const updatedMovies = this.movies.map((m) => {
+        m.category = m.category || {}
         if (this.hasMany) {
           const primary = m[this.attr].find((a) => a.primary)
-          m.category = {
+          m.category[this.attr] = {
             name: primary[this.innerNameKey],
             position:
               this.groups.findIndex(
@@ -25,7 +26,7 @@ export default {
               ) + 1,
           }
         } else {
-          m.category = {
+          m.category[this.attr] = {
             name: m[this.attr][this.innerNameKey],
             position:
               this.groups.findIndex(

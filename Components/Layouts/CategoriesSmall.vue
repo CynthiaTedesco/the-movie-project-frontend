@@ -12,9 +12,9 @@
       v-for="(group,index) in data"
       :key="group[0]"
       :category="group"
+      :attr="attr"
       :max="max"
       :ranking="index"
-      :style="{'opacity': index === 0 || (renderDone[index-1] ? 1 : 0)}"
       @done="onRenderDone"
     />
   </b-carousel>
@@ -31,14 +31,11 @@ export default {
     return {
       small: true,
       activeCase: 0,
-      renderDone: {
-        0: false,
-        1: false,
-        2: false,
-        3: false,
-        4: false
-      }
+      renderDone: {},
     }
+  },
+  mounted () {
+    this.groups.map((b, i) => this.renderDone[i] = false);
   },
   methods: {
     onRenderDone (ranking) {

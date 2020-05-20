@@ -53,7 +53,7 @@ export default {
       this.appendCircles();
     },
     xForce (d) {
-      if (!this.coordinates[d.category.name]) {
+      if (!this.coordinates[d.category[this.attr].name]) {
         this.coordinates[d.category.name] = {
           revenue: d.revenue,
           movieId: d.id
@@ -63,7 +63,7 @@ export default {
       let x;
       const container = this.$refs.chartContainer.getBoundingClientRect()
       const percentage = this.xScale(
-        d.category.position <= 6 ? d.category.position : 6
+        d.category.position <= 6 ? d.category[this.attr].position : 6
       )
 
       const xPerPercentage = (percentage * container.width) / 100
@@ -73,13 +73,13 @@ export default {
         x = Math.min(container.width - 100, xPerPercentage)
       }
 
-      this.coordinates[d.category.name].x = x;
+      this.coordinates[d.category[this.attr].name].x = x;
 
       //no examples for this case
       return x || container.width / 2;
     },
     yForce (d) {
-      if (!this.coordinates[d.category.name]) {
+      if (!this.coordinates[d.category[this.attr].name]) {
         this.coordinates[d.category.name] = {
           revenue: d.revenue,
           movieId: d.id
@@ -108,12 +108,12 @@ export default {
       const self = this;
       this.nodes.attr('cx', (d) => d.x)
       this.nodes.attr('cy', (d) => {
-        if(d.y > self.coordinates[d.category.name].y){
-          self.coordinates[d.category.name].y = d.y;
-          self.coordinates[d.category.name].revenue = d.revenue;
-          self.coordinates[d.category.name].movieId = d.id;
-        } else if(d.id === self.coordinates[d.category.name].movieId){
-          self.coordinates[d.category.name].y = d.y;
+        if(d.y > self.coordinates[d.category[this.attr].name].y){
+          self.coordinates[d.category[this.attr].name].y = d.y;
+          self.coordinates[d.category[this.attr].name].revenue = d.revenue;
+          self.coordinates[d.category[this.attr].name].movieId = d.id;
+        } else if(d.id === self.coordinates[d.category[this.attr].name].movieId){
+          self.coordinates[d.category[this.attr].name].y = d.y;
         }
         return d.y
       })

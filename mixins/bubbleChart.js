@@ -79,11 +79,11 @@ export default {
       const defs = this.svg.append('defs')
 
       defs
-        .selectAll('.poster-pattern')
+        .selectAll('poster-pattern')
         .data(data)
         .enter()
         .append('pattern')
-        .attr('class', '.poster-pattern')
+        .attr('class', 'poster-pattern')
         .attr('id', this.defTitle)
         .attr('height', '100%')
         .attr('width', '100%')
@@ -95,11 +95,15 @@ export default {
         .attr('xlink:href', (d) => d.poster.url)
     },
     defTitle(d) {
-      return d.title
-        .split(' ')
-        .join('-')
-        .split("'")
-        .join('')
+      return (
+        this.attr +
+        '-' +
+        d.title
+          .split(' ')
+          .join('-')
+          .split("'")
+          .join('')
+      )
     },
     createSimulation(name, props) {
       switch (name) {
@@ -125,8 +129,6 @@ export default {
           break
         }
         case 'timeline': {
-        }
-        case 'divided-timeline': {
         }
       }
     },

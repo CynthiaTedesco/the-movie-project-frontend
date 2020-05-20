@@ -36,10 +36,15 @@ export default {
     maxRadius: {
       type: Number,
       default: 50
+    },
+    attr: {
+      type: String,
+      required: true
     }
   },
   watch: {
     calculated () {
+      //first and soft calculation of forces to manage spacing (it will continue slightly adjusting though)
       if (this.calculated.length === this.category[1].length) {
         this.$emit('done', this.ranking)
       }
@@ -53,7 +58,7 @@ export default {
   },
   computed: {
     id () {
-      return this.category[0].split(' ').join('-');
+      return this.attr + this.category[0].split(' ').join('-');
     },
     selector () {
       return `#${this.id}`;
@@ -102,7 +107,7 @@ export default {
         .style('position', 'absolute')
         .style('color', '#aa9d9c')
         .style('font-size', '14')
-        .style('left', xx + 'px')
+        .style('right', '30px')
         .style('bottom', 0)
 
       this.labelText = this.label
@@ -111,7 +116,7 @@ export default {
         .style('position', 'relative')
         .text(label);
 
-      if (d3.select('.bubble-cloud:first-child').node() === this.$el) {
+      if (d3.select(`#${this.attr} .bubble-cloud:first-child`).node() === this.$el) {
         this.labelText
           .append('img')
           .attr('src', '/handmade-circle.gif')

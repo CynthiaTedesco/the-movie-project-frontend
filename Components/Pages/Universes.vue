@@ -2,18 +2,18 @@
   <PageComponent next="GenrePage">
     <template v-slot:menu>Story /<br/> Universes</template>
     <template v-slot>
-      <section id="universes" class="page-container page">
+      <section id="universe" class="page-container page">
         <InnerPageDescription
           :question="question"
-          pageKey="lalsa"
+          pageKey="universe"
           :text="text"
         />
-        <!-- <Bubbles
+        <Bubbles
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          attr="universes"
-        />-->
+          attr="universe"
+        />
       </section>
     </template>
   </PageComponent>
@@ -41,7 +41,7 @@ export default {
     return {
       movies: [],
       groups: {},
-      keyword: 'universes',
+      keyword: 'universe', //used in mixin
     }
   },
   props: {

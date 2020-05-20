@@ -17,7 +17,10 @@ export default {
       await this.$store.dispatch(functionName)
     }
 
-    this.movies = await this.$store.getters.movies(slices())
+    //deep copy
+    this.movies = JSON.parse(
+      JSON.stringify(await this.$store.getters.movies(slices()))
+    )
     const temp = this.groupBy(this.movies, this.keyword, this.hasMany)
     this.groups = Object.entries(temp).sort((a, b) => b[1].length - a[1].length)
   },

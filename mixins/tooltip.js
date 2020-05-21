@@ -8,7 +8,7 @@ export default {
   },
   mounted() {
     this.tooltip = d3
-      .select(this.selector ? this.selector : '.chart-container')
+      .select(`#${this.attr} ${this.selector ? this.selector : '.chart-container'}`)
       .append('div')
       .style('opacity', 0)
       .attr('class', 'tooltip')

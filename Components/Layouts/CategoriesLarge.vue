@@ -37,7 +37,7 @@ export default {
       return d3
         .scaleOrdinal()
         .domain([1, 2, 3, 4, 5, 6])
-        .range([5, 55, 85, 5, 55, 85]) //percentages
+        .range([5, 50, 85, 5, 50, 85]) //percentages
     },
   },
   methods: {
@@ -69,7 +69,7 @@ export default {
       const xPerPercentage = (percentage * container.width) / 100
       if (percentage < 20) {
         x = Math.max(170, xPerPercentage)
-      } else if (percentage > 50) {
+      } else if (percentage >= 50) {
         x = Math.min(container.width - 100, xPerPercentage)
       }
 
@@ -108,17 +108,17 @@ export default {
       const self = this;
       this.nodes.attr('cx', (d) => d.x)
       this.nodes.attr('cy', (d) => {
-        if(d.y > self.coordinates[d.category[this.attr].name].y){
+        if (d.y > self.coordinates[d.category[this.attr].name].y) {
           self.coordinates[d.category[this.attr].name].y = d.y;
           self.coordinates[d.category[this.attr].name].revenue = d.revenue;
           self.coordinates[d.category[this.attr].name].movieId = d.id;
-        } else if(d.id === self.coordinates[d.category[this.attr].name].movieId){
+        } else if (d.id === self.coordinates[d.category[this.attr].name].movieId) {
           self.coordinates[d.category[this.attr].name].y = d.y;
         }
         return d.y
       })
     },
-    setLabels() {
+    setLabels () {
       this.categoriesNames = [
         ...new Set(
           this.groups.map((group, index) => {
@@ -133,15 +133,13 @@ export default {
         let xx
         let yy
         const spacing = this.isMultiline ? 50 : 30
-        const textWidth = this.textWidth(this.categoriesNames[i - 1])
-
+        const textWidth = this.textWidth(this.categoriesNames[i])
         const coordinates =
-          i === 5
+          i === 5 && this.categoriesNames[i] === 'others'
             ? this.othersMaxCoordinates
             : this.coordinates[this.groups[i][0]]
         xx = coordinates.x
         yy = coordinates.y + this.scale(coordinates.revenue) + spacing
-
         this.labels
           .append('text')
           .attr('x', xx)
@@ -158,25 +156,23 @@ export default {
             .attr('href', '/handmade-circle.gif')
             .attr('width', textWidth + 20)
             .attr('height', 34)
-            .attr('x', xx - 25)
+            .attr('x', xx - 15)
             .attr('y', yy - 22)
         }
       }
     },
-    adjustLabels() {
+    adjustLabels () {
       this.labels.selectAll(`#${this.attr} text`).each((text, index, texts) => {
         let xx
         let yy
         const spacing = this.isMultiline ? 30 : 30
         const textWidth = this.textWidth(this.categoriesNames[index])
-
         const coordinates =
-          index === texts.length - 1
+          index === texts.length - 1 && this.categoriesNames[index] === 'others'
             ? this.othersMaxCoordinates
             : this.coordinates[this.groups[index][0]]
         xx = coordinates.x
         yy = coordinates.y + this.scale(coordinates.revenue) + spacing
-
         d3.select(texts[index])
           .attr('x', xx)
           .attr('y', yy)
@@ -184,7 +180,7 @@ export default {
         if (index === 0) {
           this.labels
             .select('image')
-            .attr('x', xx - 25)
+            .attr('x', xx - 15)
             .attr('y', yy - 22)
         }
       })

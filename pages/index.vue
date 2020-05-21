@@ -120,7 +120,6 @@ export default {
     },
     scrollAndLoad (entries) {
       entries.forEach(entry => {
-        console.log(entry);
         if (entry.isIntersecting) {
           //TODO check if I need to use this index
           const currentIndex = entry.target.getAttribute('data-index');

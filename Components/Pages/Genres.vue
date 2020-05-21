@@ -28,7 +28,6 @@ import InnerPageDescription from "@/Components/InnerPageDescription";
 
 export default {
   name: 'GenrePage',
-  components: { PageComponent },
   mixins: [bubblePage],
   components: {
     PageComponent,

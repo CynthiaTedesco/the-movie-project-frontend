@@ -1,5 +1,22 @@
 <template>
-  <PageComponent next="ResultsPage">Origins</PageComponent>
+  <PageComponent next="ResultsPage" class="story_origin">
+    <template v-slot:menu>Story /<br/> Origin</template>
+    <template v-slot>
+      <section id="story_origin" class="page-container page">
+        <InnerPageDescription
+          :question="question"
+          pageKey="story_origin"
+          :text="text"
+        />
+        <Bubbles
+          v-if="groups.length"
+          :movies="movies"
+          :groups="groups"
+          attr="story_origin"
+        />
+      </section>
+    </template>
+  </PageComponent>
 </template>
 
 <script>
@@ -7,12 +24,12 @@ import PageComponent from '@/Components/Pages/PageComponent'
 import Bubbles from "@/Components/Charts/Bubbles";
 import bubblePage from '@/mixins/bubblePage.js';
 import InnerPageDescription from "@/Components/InnerPageDescription";
+
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
-name: 'OriginPage',
-  components: { PageComponent },
-//   mixins: [bubblePage],
+  name: 'OriginPage',
+  mixins: [bubblePage],
   components: {
     PageComponent,
     InnerPageDescription,
@@ -23,8 +40,13 @@ name: 'OriginPage',
     return {
       movies: [],
       groups: {},
-      keyword: 'origins',
-      hasMany: true
+      keyword: 'story_origin'
+    }
+  },
+  props: {
+    question: {
+      type: String,
+      required: true
     }
   },
   computed: {

@@ -29,7 +29,6 @@ import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
   name: 'UniversePage',
-  components: { PageComponent },
   mixins: [bubblePage],
   components: {
     PageComponent,

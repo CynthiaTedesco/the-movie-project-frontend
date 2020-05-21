@@ -11,14 +11,14 @@ const d3 = require('d3');
 export default {
   data () {
     return {
-      doit: null,
+      doit: null, //has to do with resizable mixin. TODO check
     }
   },
   mixins: [dimensionable, bubbleChartContainer, bubbleChart],
   mounted () {
     this.$nextTick(() => {
       this.setDimensions();
-      d3.select("svg").remove();
+      d3.select(`#${this.attr} svg`).remove();
 
       this.draw();
     });
@@ -54,7 +54,7 @@ export default {
     },
     xForce (d) {
       if (!this.coordinates[d.category[this.attr].name]) {
-        this.coordinates[d.category.name] = {
+        this.coordinates[d.category[this.attr].name] = {
           revenue: d.revenue,
           movieId: d.id
         }
@@ -63,7 +63,7 @@ export default {
       let x;
       const container = this.$refs.chartContainer.getBoundingClientRect()
       const percentage = this.xScale(
-        d.category.position <= 6 ? d.category[this.attr].position : 6
+        d.category[this.attr].position <= 6 ? d.category[this.attr].position : 6
       )
 
       const xPerPercentage = (percentage * container.width) / 100
@@ -80,14 +80,14 @@ export default {
     },
     yForce (d) {
       if (!this.coordinates[d.category[this.attr].name]) {
-        this.coordinates[d.category.name] = {
+        this.coordinates[d.category[this.attr].name] = {
           revenue: d.revenue,
           movieId: d.id
         }
       }
 
       const percentage = this.yScale(
-        d.category.position <= 6 ? d.category.position : 6
+        d.category[this.attr].position <= 6 ? d.category[this.attr].position : 6
       )
       const container = this.$refs.chartContainer.getBoundingClientRect()
       let y
@@ -101,7 +101,7 @@ export default {
         y = Math.min(300, container.height / 2)
       }
 
-      this.coordinates[d.category.name].y = y;
+      this.coordinates[d.category[this.attr].name].y = y;
       return y
     },
     ticked () {
@@ -164,7 +164,7 @@ export default {
       }
     },
     adjustLabels() {
-      this.labels.selectAll('text').each((text, index, texts) => {
+      this.labels.selectAll(`#${this.attr} text`).each((text, index, texts) => {
         let xx
         let yy
         const spacing = this.isMultiline ? 30 : 30

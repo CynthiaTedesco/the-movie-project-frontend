@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="OriginPage" >
+  <PageComponent next="OriginPage" class="genres">
     <template v-slot:menu>Story / Genre</template>
     <template v-slot>
       <section id="genres" class="page-container page">

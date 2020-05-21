@@ -51,7 +51,7 @@ export default {
   methods: {
     appendSvg() {
       this.svg = d3
-        .select(this.selector || '.chart-container')
+        .select(`#${this.attr} ${this.selector || '.chart-container'}`)
         .append('svg')
         .attr('width', '100%')
         .attr('height', '100%')

@@ -41,7 +41,7 @@ div,
   width: 100%;
   height: 50px;
   text-align: center;
-  z-index: 15;
+  z-index: 17; /*on top of the chart-container if necessary */
 
   &.white {
     .arrow {

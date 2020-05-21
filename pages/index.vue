@@ -25,6 +25,15 @@ import TopMovies from '@/pages/movies/top-movies.vue'
 import Genres from '@/Components/Pages/Genres.vue'
 import Universes from '@/Components/Pages/Universes.vue'
 import Origins from '@/Components/Pages/Origins.vue'
+
+import Series from '@/Components/Pages/Series.vue'
+import Languages from '@/Components/Pages/Languages.vue'
+import Genders from '@/Components/Pages/Genders.vue'
+import Restrictions from '@/Components/Pages/Restrictions.vue'
+import Posters from '@/Components/Pages/Posters.vue'
+import Countries from '@/Components/Pages/Countries.vue'
+import Cinematographies from '@/Components/Pages/Cinematographies.vue'
+
 import Results from '@/Components/Pages/Results.vue'
 import EventBus from '@/assets/js/eventBus.js'
 import MENUITEMS from '@/constants/menuItems.js'
@@ -38,6 +47,9 @@ export default {
     Genres,
     Universes,
     Origins,
+
+    Series, Languages, Genders,Restrictions,Posters,Countries,Cinematographies,
+
     Results
   },
   watch: {

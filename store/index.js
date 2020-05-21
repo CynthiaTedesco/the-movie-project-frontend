@@ -73,6 +73,33 @@ const createStore = () => {
           return vuexContext.dispatch('updateMoviesWithGenres', results)
         })
       },
+      checkLanguages(vuexContext) {
+        console.log('checking languages!')
+        const associations = this.$axios.get('/movies-languages')
+        const languages = this.$axios.get('/languages')
+
+        return Promise.all([associations, languages]).then((results) => {
+          return vuexContext.dispatch('updateMoviesWithLanguages', results)
+        })
+      },
+      updateMoviesWithLanguages(vuexContext, params) {
+        const languages = params[1].data
+        const associations = params[0].data
+
+        const updatedMovies = vuexContext.getters.movies().map((movie) => {
+          movie.languages = associations
+            .filter((a) => a.movie_id == movie.id)
+            .map((a2) => {
+              return {
+                language_id: a2.language_id,
+                primary: a2.primary,
+                language_name: languages.find((g) => g.id == a2.language_id).name,
+              }
+            })
+          return movie
+        })
+        vuexContext.commit('setMovies', updatedMovies)
+      },
       updateMoviesWithGenres(vuexContext, params) {
         const genres = params[1].data
         const associations = params[0].data

@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="ResultsPage" class="serie">
+  <PageComponent next="LanguagePage" class="serie">
     <template v-slot:menu>Story /<br/> Series</template>
     <template v-slot>
       <section id="serie" class="page-container page">

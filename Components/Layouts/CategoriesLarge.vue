@@ -26,18 +26,41 @@ export default {
   computed: {
     yScale () {
       const yScale = d3.scaleOrdinal()
-      if (this.isMultiline) {
-        yScale.domain([1, 2, 3, 4, 5, 6]).range([0, 0, 0, 50, 50, 50]) //percentages
-      } else {
+      if (this.groups.length <= 3) {
         yScale.domain([1, 2, 3]).range([50, 50, 50]) //percentages
+      } else {
+        yScale.domain([1, 2, 3, 4, 5, 6]).range([0, 0, 0, 50, 50, 50]) //percentages
       }
+
       return yScale;
     },
     xScale () {
-      return d3
-        .scaleOrdinal()
-        .domain([1, 2, 3, 4, 5, 6])
-        .range([5, 50, 85, 5, 50, 85]) //percentages
+      const xScale = d3
+        .scaleOrdinal();
+
+      switch (this.groups.length) {
+        case 1: {
+          xScale.domain([1]).range([50]) //percentages
+          break;
+        } case 2: {
+          xScale.domain([1, 2]).range([25, 75]) //percentages
+          break
+        } case 3: {
+          xScale.domain([1, 2, 3]).range([5, 50, 85]) //percentages
+          break
+        } case 4: {
+          xScale.domain([1, 2, 3, 4]).range([5, 30, 60, 90]) //percentages
+          break
+        } case 5: {
+          xScale.domain([1, 2, 3, 4, 5]).range([5, 50, 85, 25, 75]) //percentages
+          break
+        } default: {
+          xScale.domain([1, 2, 3, 4, 5, 6]).range([5, 50, 85, 5, 50, 85]) //percentages
+          break
+        }
+      }
+
+      return xScale;
     },
   },
   methods: {

@@ -23,12 +23,12 @@ export default [
     component: 'Series',
     question: 'Is your movie part of a bigger story?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'LanguagePage',
-  //   component: 'Languages',
-  //   question: 'In what language should you tell the story?',
-  // },
+  {
+    // order: 2,
+    key: 'LanguagePage',
+    component: 'Languages',
+    question: 'In what language should you tell the story?',
+  },
   // {
   //   // order: 2,
   //   key: 'LeadActorGenderPage',

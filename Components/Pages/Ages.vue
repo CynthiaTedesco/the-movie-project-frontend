@@ -5,17 +5,18 @@
       <section id="characters-age" class="page-container page">
         <InnerPageDescription
           :question="question"
-          pageKey="characters-age"
+          pageKey="LeadActorAgePage"
           :text="text"
         />
-        <!-- <Bubbles
+        <Bubbles
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
           attr="characters"
           :hasMany="hasMany"
           :singleKeyword="singleKeyword"
-        /> -->
+          :axis="true"
+        />
       </section>
     </template>
   </PageComponent>

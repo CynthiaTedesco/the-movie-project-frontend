@@ -5,7 +5,7 @@
       <section id="story_origin" class="page-container page">
         <InnerPageDescription
           :question="question"
-          pageKey="story_origin"
+          pageKey="OriginPage"
           :text="text"
         />
         <Bubbles

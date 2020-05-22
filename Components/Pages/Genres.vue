@@ -5,7 +5,7 @@
       <section id="genres" class="page-container page">
         <InnerPageDescription
           :text="text"
-          page-key="genres"
+          page-key="GenrePage"
           :question="question"
         />
         <Bubbles

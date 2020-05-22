@@ -41,9 +41,10 @@ export default {
   },
   computed: {
     counter () {
-      const ordinal = MENUITEMS.findIndex(a=>a.pageKey===this.pageKey)+1;
-      const total = MENUITEMS.length;
-      return `${ordinal+1}/${total}`
+      const index = MENUITEMS.findIndex(a=>a.key === this.pageKey);
+      const ordinal = index + 1;
+      const total = MENUITEMS.length-1;
+      return `${ordinal}/${total}`
     }
   }
 }

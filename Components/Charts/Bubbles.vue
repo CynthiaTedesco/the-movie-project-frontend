@@ -1,14 +1,14 @@
 <template>
-  <CategoriesSmall 
-    v-if="this.display==='small'" 
+  <CategoriesSmall
+    v-if="!axis && display==='small'"
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
     :singleKeyword="singleKeyword"
     :attr="attr"/>
 
-  <CategoriesLarge 
-    v-else 
+  <CategoriesLarge
+    v-else-if="!axis && display!=='small'"
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
@@ -31,7 +31,11 @@ export default {
     groups: Array,
     attr: String,
     hasMany: Boolean,
-    singleKeyword: String
+    singleKeyword: String,
+    axis: {
+      type: Boolean,
+      default: false
+    }
   },
 }
 </script>

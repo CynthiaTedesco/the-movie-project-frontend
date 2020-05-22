@@ -5,7 +5,7 @@
       <section id="characters" class="page-container page">
         <InnerPageDescription
           :question="question"
-          pageKey="characters"
+          pageKey="LeadActorGenderPage"
           :text="text"
         />
         <Bubbles

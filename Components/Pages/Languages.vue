@@ -6,7 +6,7 @@
     </template>
     <template v-slot>
       <section id="languages" class="page-container page">
-        <InnerPageDescription :question="question" pageKey="languages" :text="text" />
+        <InnerPageDescription :question="question" pageKey="LanguagePage" :text="text" />
         <Bubbles
           v-if="groups.length"
           :movies="movies"

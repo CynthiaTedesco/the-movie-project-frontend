@@ -5,7 +5,7 @@
       <section id="serie" class="page-container page">
         <InnerPageDescription
           :question="question"
-          pageKey="serie"
+          pageKey="SeriePage"
           :text="text"
         />
         <Bubbles

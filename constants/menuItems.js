@@ -35,12 +35,12 @@ export default [
     component: 'Genders',
     question: 'Who should your story resolve around?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'LeadActorAgePage',
-  //   component: 'Ages',
-  //   question: 'Who should your story resolve around?',
-  // },
+  {
+    // order: 2,
+    key: 'LeadActorAgePage',
+    component: 'Ages',
+    question: 'Who should your story resolve around?',
+  },
   // {
   //   // order: 2,
   //   key: 'BudgetPage',

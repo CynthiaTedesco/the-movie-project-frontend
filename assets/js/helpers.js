@@ -1,3 +1,5 @@
+import { isValid } from 'date-fns';
+
 export function beautifyCashValue(labelValue) {
   // Nine Zeroes for Billions
   // Math.abs(Number(labelValue)) >= 1.0e+9
@@ -18,4 +20,15 @@ export function slices() {
     return 50
   }
   return isMobile() ? 20 : 50
+}
+export function calculateAge (birthdate, releaseDate) {
+  if (!birthdate || !releaseDate) { return '' }
+  if (!isValid(new Date(birthdate)) || !isValid(new Date(releaseDate))) {
+    return '';
+  }
+
+  const diff_ms = new Date(releaseDate).getTime() - new Date(birthdate).getTime();
+  const age_dt = new Date(diff_ms);
+
+  return Math.abs(age_dt.getUTCFullYear() - 1970);
 }

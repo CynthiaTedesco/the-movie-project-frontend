@@ -1,18 +1,20 @@
 <template>
-  <PageComponent next="LeadActorGenderPage" class="languages">
-    <template v-slot:menu>
-      Story /
-      <br />Language
-    </template>
+  <PageComponent next="ResultsPage" class="characters">
+    <template v-slot:menu>Story /<br/> Lead actor gender</template>
     <template v-slot>
-      <section id="languages" class="page-container page">
-        <InnerPageDescription :question="question" pageKey="languages" :text="text" />
+      <section id="characters" class="page-container page">
+        <InnerPageDescription
+          :question="question"
+          pageKey="characters"
+          :text="text"
+        />
         <Bubbles
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          attr="languages"
+          attr="characters"
           :hasMany="hasMany"
+          :singleKeyword="singleKeyword"
         />
       </section>
     </template>
@@ -28,7 +30,7 @@ import InnerPageDescription from "@/Components/InnerPageDescription";
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
-  name: 'LanguagePage',
+  name: 'LeadActorGenderPage',
   mixins: [bubblePage],
   components: {
     PageComponent,
@@ -40,7 +42,8 @@ export default {
     return {
       movies: [],
       groups: {},
-      keyword: 'languages', //used in mixin
+      keyword: 'characters', //used in mixin,
+      singleKeyword: 'gender',
       hasMany: true
     }
   },

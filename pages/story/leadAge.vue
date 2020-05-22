@@ -32,7 +32,7 @@ export default {
   methods: {
     groupBy(xs, key) {
       return xs.reduce(function (rv, x) {
-        const innerKey = x[key].find(a=>a.primary).genre_name;
+        const innerKey = x[key].find(a=>a.primary||a.main).genre_name;
         (rv[innerKey] = rv[innerKey] || []).push(x)
         return rv
       }, {})

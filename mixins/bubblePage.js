@@ -30,9 +30,12 @@ export default {
       return xs.reduce((rv, x) => {
         let innerKey
         if (this.hasMany) {
-          const singleKeyword = this.keyword.slice(0, -1)
-          const nameKey = `${singleKeyword}_name`
-          innerKey = x[key].find((a) => a.primary)[nameKey]
+          if(!this.singleKeyword){
+            let singleKeyword = this.keyword.slice(0, -1)
+            singleKeyword = singleKeyword === 'character' ? 'actor' : singleKeyword;
+            this.singleKeyword = `${singleKeyword}_name`
+          }
+          innerKey = x[key].find((a) => a.primary||a.main)[this.singleKeyword]
         } else {
           innerKey = x[key] ? x[key].name : ''
         }

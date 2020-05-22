@@ -12,6 +12,7 @@
       v-for="(group,index) in data"
       :key="group[0]"
       :category="group"
+      :singleKeyword="singleKeyword"
       :attr="attr"
       :max="max"
       :ranking="index"
@@ -33,6 +34,9 @@ export default {
       activeCase: 0,
       renderDone: {},
     }
+  },
+  props: {
+    singleKeyword: String
   },
   mounted () {
     this.groups.map((b, i) => this.renderDone[i] = false);

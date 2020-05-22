@@ -28,8 +28,9 @@ export default {
   computed: {
     scale() {
       const maxRadius = isMobile()
-        ? (document.documentElement.clientWidth * 0.3) / 2
+        ? (document.documentElement.clientWidth * 0.25) / 2
         : 50
+      console.log('maxRadius', maxRadius)
       return d3
         .scaleLinear()
         .domain([0, this.max])

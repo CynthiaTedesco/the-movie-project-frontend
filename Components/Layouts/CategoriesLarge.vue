@@ -92,7 +92,7 @@ export default {
       const xPerPercentage = (percentage * container.width) / 100
       if (percentage < 20) {
         x = Math.max(170, xPerPercentage)
-      } else if (percentage >= 50) {
+      } else {
         x = Math.min(container.width - 100, xPerPercentage)
       }
 
@@ -161,6 +161,7 @@ export default {
           i === 5 && this.categoriesNames[i] === 'others'
             ? this.othersMaxCoordinates
             : this.coordinates[this.groups[i][0]]
+
         xx = coordinates.x
         yy = coordinates.y + this.scale(coordinates.revenue) + spacing
         this.labels

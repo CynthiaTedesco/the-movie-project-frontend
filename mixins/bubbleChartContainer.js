@@ -11,26 +11,27 @@ export default {
     groups: Array,
     attr: String,
     hasMany: Boolean,
+    singleKeyword: String
   },
   mounted() {
     if (this.movies) {
       const updatedMovies = this.movies.map((m) => {
         m.category = m.category || {}
         if (this.hasMany) {
-          const primary = m[this.attr].find((a) => a.primary)
+          const primary = m[this.attr].find((a) => a.primary || a.main)
           m.category[this.attr] = {
-            name: primary[this.innerNameKey],
+            name: primary[this.singleKeyword || this.innerNameKey],
             position:
               this.groups.findIndex(
-                (s) => s[0] === primary[this.innerNameKey]
+                (s) => s[0] === primary[this.singleKeyword || this.innerNameKey]
               ) + 1,
           }
         } else {
           m.category[this.attr] = {
-            name: m[this.attr][this.innerNameKey],
+            name: m[this.attr][this.singleKeyword || this.innerNameKey],
             position:
               this.groups.findIndex(
-                (s) => s[0] === m[this.attr][this.innerNameKey]
+                (s) => s[0] === m[this.attr][this.singleKeyword || this.innerNameKey]
               ) + 1,
           }
         }

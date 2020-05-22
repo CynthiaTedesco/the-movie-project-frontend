@@ -4,6 +4,7 @@
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
+    :singleKeyword="singleKeyword"
     :attr="attr"/>
 
   <CategoriesLarge 
@@ -11,6 +12,7 @@
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
+    :singleKeyword="singleKeyword"
     :attr="attr"/>
 </template>
 
@@ -28,7 +30,8 @@ export default {
     movies: Array,
     groups: Array,
     attr: String,
-    hasMany: Boolean
+    hasMany: Boolean,
+    singleKeyword: String
   },
 }
 </script>

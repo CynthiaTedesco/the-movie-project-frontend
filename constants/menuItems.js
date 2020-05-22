@@ -29,12 +29,12 @@ export default [
     component: 'Languages',
     question: 'In what language should you tell the story?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'LeadActorGenderPage',
-  //   component: 'Genders',
-  //   question: 'Who should your story resolve around?',
-  // },
+  {
+    // order: 2,
+    key: 'LeadActorGenderPage',
+    component: 'Genders',
+    question: 'Who should your story resolve around?',
+  },
   // {
   //   // order: 2,
   //   key: 'LeadActorAgePage',

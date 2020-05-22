@@ -82,6 +82,24 @@ const createStore = () => {
           return vuexContext.dispatch('updateMoviesWithLanguages', results)
         })
       },
+      checkDirectors(vuexContext) {
+        console.log('checking directors!')
+        const associations = this.$axios.get('/movies-directors')
+        const directors = this.$axios.get('/directors')
+
+        return Promise.all([associations, directors]).then((results) => {
+          return vuexContext.dispatch('updateMoviesWithDirectors', results)
+        })
+      },
+      checkCharacters(vuexContext) {
+        console.log('checking characters!')
+        const associations = this.$axios.get('/movies-characters')
+        const characters = this.$axios.get('/characters')
+
+        return Promise.all([associations, characters]).then((results) => {
+          return vuexContext.dispatch('updateMoviesWithCharacters', results)
+        })
+      },
       updateMoviesWithLanguages(vuexContext, params) {
         const languages = params[1].data
         const associations = params[0].data
@@ -93,8 +111,60 @@ const createStore = () => {
               return {
                 language_id: a2.language_id,
                 primary: a2.primary,
-                language_name: languages.find((g) => g.id == a2.language_id).name,
+                language_name: languages.find((g) => g.id == a2.language_id)
+                  .name,
               }
+            })
+          return movie
+        })
+        vuexContext.commit('setMovies', updatedMovies)
+      },
+      updateMoviesWithDirectors(vuexContext, params) {
+        const directors = params[1].data
+        const associations = params[0].data
+
+        const updatedMovies = vuexContext.getters.movies().map((movie) => {
+          movie.directors = associations
+            .filter((a) => a.movie_id == movie.id)
+            .map((a2) => {
+              const toReturn = {
+                person_id: a2.person_id,
+                primary: a2.primary,
+              }
+              const person = directors
+                .find((g) => g.id == a2.person_id)
+              if (person) {
+                ;(toReturn.name = person.name),
+                  (toReturn.gender = person.gender),
+                  (toReturn.birthdate = person.date_of_birth)
+              }
+
+              return toReturn
+            })
+          return movie
+        })
+        vuexContext.commit('setMovies', updatedMovies)
+      },
+      updateMoviesWithCharacters(vuexContext, params) {
+        const characters = params[1].data
+        const associations = params[0].data
+
+        const updatedMovies = vuexContext.getters.movies().map((movie) => {
+          movie.characters = associations
+            .filter((a) => a.movie_id == movie.id)
+            .map((a2) => {
+              const toReturn = {
+                person_id: a2.person_id,
+                main: a2.main,
+              }
+              const person = characters.find((g) => g.id == a2.person_id)
+              if(person){
+                toReturn.name = person.name,
+                toReturn.gender = person.gender,
+                toReturn.birthdate = person.date_of_birth
+              }
+
+              return toReturn
             })
           return movie
         })

@@ -5,7 +5,8 @@
     :groups="groups"
     :hasMany="hasMany"
     :singleKeyword="singleKeyword"
-    :attr="attr"/>
+    :attr="attr"
+  />
 
   <CategoriesLarge
     v-else-if="!axis && display!=='small'"
@@ -13,23 +14,43 @@
     :groups="groups"
     :hasMany="hasMany"
     :singleKeyword="singleKeyword"
-    :attr="attr"/>
+    :attr="attr"
+  />
+
+  <AxisLarge
+    v-else-if="axis && display!=='small'"
+    :movies="movies"
+    :groups="groups"
+    :hasMany="hasMany"
+    :singleKeyword="singleKeyword"
+    :attr="attr"
+  />
+  <AxisSmall
+    v-else-if="axis && display==='small'"
+    :movies="movies"
+    :groups="groups"
+    :hasMany="hasMany"
+    :singleKeyword="singleKeyword"
+    :attr="attr"
+  />
 </template>
 
 <script>
-const d3 = require('d3');
-import CategoriesSmall from '@/Components/Layouts/CategoriesSmall.vue';
-import CategoriesLarge from '@/Components/Layouts/CategoriesLarge.vue';
-import {isMobile} from '@/assets/js/helpers.js'
+const d3 = require("d3");
+import CategoriesSmall from "@/Components/Layouts/CategoriesSmall.vue";
+import CategoriesLarge from "@/Components/Layouts/CategoriesLarge.vue";
+import AxisSmall from "@/Components/Layouts/AxisSmall.vue";
+import AxisLarge from "@/Components/Layouts/AxisLarge.vue";
+import { isMobile } from "@/assets/js/helpers.js";
 
 export default {
-  name: 'bubbles',
-  components: { CategoriesSmall, CategoriesLarge },
+  name: "bubbles",
+  components: { CategoriesSmall, CategoriesLarge, AxisSmall, AxisLarge },
   data() {
     return {
-      display: 'large',
+      display: "large",
       doit: false
-    }
+    };
   },
   props: {
     movies: Array,
@@ -43,39 +64,39 @@ export default {
     }
   },
   beforeMount() {
-    this.display = this.calculateDisplay()
+    this.display = this.calculateDisplay();
   },
   mounted() {
-    window.addEventListener('resize', this.eventListenerFn)
+    window.addEventListener("resize", this.eventListenerFn);
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.resized)
+    window.removeEventListener("resize", this.resized);
   },
   methods: {
     eventListenerFn() {
-      clearTimeout(this.doit)
-      this.doit = setTimeout(this.resized, 300)
+      clearTimeout(this.doit);
+      this.doit = setTimeout(this.resized, 300);
     },
     calculateDisplay() {
-      const width = document.documentElement.clientWidth
+      const width = document.documentElement.clientWidth;
       if (isMobile()) {
-        return 'small'
+        return "small";
       }
 
-      return 'large'
+      return "large";
     },
     async resized() {
-      this.display = this.calculateDisplay()
-      if(await this.$store.getters.onMobile !== isMobile()){
-        this.$store.dispatch('setIsMobile', isMobile());
+      this.display = this.calculateDisplay();
+      if ((await this.$store.getters.onMobile) !== isMobile()) {
+        this.$store.dispatch("setIsMobile", isMobile());
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style lang="scss">
-@import '@/assets/styles/common.scss';
+@import "@/assets/styles/common.scss";
 svg {
   overflow: visible;
 }

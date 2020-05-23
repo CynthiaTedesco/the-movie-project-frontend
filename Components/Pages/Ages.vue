@@ -45,7 +45,8 @@ export default {
       groups: {},
       keyword: 'characters', //used in mixin,
       singleKeyword: 'age',
-      hasMany: true
+      hasMany: true,
+      axis: true
     }
   },
   props: {

@@ -20,12 +20,17 @@
 const d3 = require('d3');
 import CategoriesSmall from '@/Components/Layouts/CategoriesSmall.vue';
 import CategoriesLarge from '@/Components/Layouts/CategoriesLarge.vue';
-import resizable from '@/mixins/resizable.js';
+import {isMobile} from '@/assets/js/helpers.js'
 
 export default {
   name: 'bubbles',
   components: { CategoriesSmall, CategoriesLarge },
-  mixins: [resizable],
+  data() {
+    return {
+      display: 'large',
+      doit: false
+    }
+  },
   props: {
     movies: Array,
     groups: Array,
@@ -36,6 +41,35 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  beforeMount() {
+    this.display = this.calculateDisplay()
+  },
+  mounted() {
+    window.addEventListener('resize', this.eventListenerFn)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.resized)
+  },
+  methods: {
+    eventListenerFn() {
+      clearTimeout(this.doit)
+      this.doit = setTimeout(this.resized, 300)
+    },
+    calculateDisplay() {
+      const width = document.documentElement.clientWidth
+      if (isMobile()) {
+        return 'small'
+      }
+
+      return 'large'
+    },
+    async resized() {
+      this.display = this.calculateDisplay()
+      if(await this.$store.getters.onMobile !== isMobile()){
+        this.$store.dispatch('setIsMobile', isMobile());
+      }
+    },
   },
 }
 </script>

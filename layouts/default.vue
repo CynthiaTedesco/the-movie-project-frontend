@@ -5,19 +5,23 @@
 </template>
 
 <script>
+import { isMobile } from "@/assets/js/helpers.js";
 
 export default {
-  middleware: ['device', 'movies'],
-  data () {
+  middleware: ["movies"],
+  data() {
     return {
       displayMenu: false
     };
+  },
+  mounted() {
+    this.$store.dispatch("setIsMobile", isMobile());
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import "~/assets/styles/common.scss";
 
 div {
   @include max-sized;

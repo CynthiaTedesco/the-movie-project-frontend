@@ -13,7 +13,9 @@ export default {
     }
   },
   beforeDestroy() {
-    this.simulation.stop()
+    if(this.simulation){
+      this.simulation.stop()
+    }
   },
   props: {
     movies: Array,

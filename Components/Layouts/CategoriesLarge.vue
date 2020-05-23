@@ -9,11 +9,6 @@ import bubbleChart from '@/mixins/bubbleChart.js';
 const d3 = require('d3');
 
 export default {
-  data () {
-    return {
-      doit: null, //has to do with resizable mixin. TODO check
-    }
-  },
   mixins: [dimensionable, bubbleChartContainer, bubbleChart],
   mounted () {
     this.$nextTick(() => {

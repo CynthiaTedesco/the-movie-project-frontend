@@ -13,7 +13,7 @@ export function beautifyCashValue(labelValue) {
     : Math.floor(Math.abs(Number(labelValue)))
 }
 export function isMobile() {
-  return document.documentElement.clientWidth <= 768
+  return document.documentElement.clientWidth <= 860
 }
 export function slices() {
   if (!document) {

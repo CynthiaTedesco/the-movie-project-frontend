@@ -12,7 +12,6 @@ export default {
   mixins: [dimensionable, bubbleChart],
   data () {
     return {
-      doit: false,
       calculated: [],
     }
   },

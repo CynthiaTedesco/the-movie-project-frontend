@@ -30,8 +30,9 @@ export default {
   computed: {
     scale() {
       const maxRadius = isMobile()
-        ? (document.documentElement.clientWidth * 0.25) / 2
-        : 50;
+        ?
+        (Math.min(this.width, this.height) * 0.30) / 2
+        : (Math.min(this.width, this.height) * 0.1);
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()
@@ -61,9 +62,15 @@ export default {
         .attr("viewBox", "0 0 " + this.width + " " + this.height)
         .attr("preserveAspectRatio", "xMinYMid meet")
         .attr("class", "nodes");
+
+      let g = this.svg.selectAll("g").data([null]);
+      g = g.enter().append("g");
+      // if(this.axis){
+      g.merge(g).attr("transform", `translate(10,10)`);
+      // }
+      this.svg = g;
     },
     appendCircles(data = this.data) {
-
       this.nodes = this.svg
         .selectAll("circle")
         .data(data)

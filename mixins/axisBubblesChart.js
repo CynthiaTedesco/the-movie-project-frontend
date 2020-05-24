@@ -71,7 +71,7 @@ export default {
       const { g, innerWidth, innerHeight } = this.marginConvention(this.svg, {
         width: this.width,
         height: this.height,
-        margin: { top: 0, left: 70, right: 90, bottom: 75 },
+        margin: { top: 0, left: 70, right: 90, bottom: 100 },
       });
 
       this.innerWidth = innerWidth;
@@ -106,10 +106,13 @@ export default {
         })
         .attr("fill", "gray")
         .style("font-size", "14px");
+
+      const distance = this.xScale(this.groups[1][0]) - this.xScale(this.groups[0][0]);
+
       xAxisG
         .selectAll(".tick line")
         .attr("stroke", "gray")
-        .attr("transform", `translate(${50}, 35)`)
+        .attr("transform", `translate(${distance/2}, 35)`)
         .attr("y2", (d, i, a) => {
           if (i + 1 === a.length) {
             return "0";

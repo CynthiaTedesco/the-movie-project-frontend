@@ -65,9 +65,6 @@ export default {
 
       let g = this.svg.selectAll("g").data([null]);
       g = g.enter().append("g");
-      // if(this.axis){
-      g.merge(g).attr("transform", `translate(10,10)`);
-      // }
       this.svg = g;
     },
     appendCircles(data = this.data) {

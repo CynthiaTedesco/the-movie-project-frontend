@@ -47,6 +47,7 @@ export default {
       // };
       // this.createSimulation('category', props);
       this.appendSvg();
+      this.appendAxis();
       // this.appendDefinitions();
       // this.appendCircles();
     }

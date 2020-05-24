@@ -12,7 +12,7 @@ export default {
       simulation: null,
       categoriesNames: [],
       innerWidth: null,
-      innewHeight: null,
+      innerHeight: null,
     };
   },
   beforeDestroy() {
@@ -60,11 +60,11 @@ export default {
       const { g, innerWidth, innerHeight } = this.marginConvention(this.svg, {
         width: this.width,
         height: this.height,
-        margin: { top: 0, left: 10, right: 10, bottom: 50 },
+        margin: { top: 0, left: 40, right: 40, bottom: 75 },
       });
 
       this.innerWidth = innerWidth;
-      this.innewHeight = innerHeight;
+      this.innerHeight = innerHeight;
 
       this.marginGroup = g;
 
@@ -78,7 +78,41 @@ export default {
         .attr("rx", 100)
         .attr("fill", "black");
     },
-    appendAxis() {},
+    appendAxis() {
+      const xScale = d3
+        .scaleLinear()
+        .domain([0, this.groups.length-1])
+        .range([0, this.innerWidth]);
+      const xAxis = d3.axisBottom(xScale);
+      let xAxisG = this.marginGroup.selectAll(".x-axis").data([null]);
+      xAxisG = xAxisG
+        .enter()
+        .append("g")
+        .attr("class", "x-axis")
+        .merge(xAxisG)
+        .attr("transform", `translate(0, ${this.innerHeight})`);
+
+      xAxisG.call(xAxis);
+      xAxisG
+        .selectAll(".tick text")
+        .attr("fill", "gray")
+        .style('font-size', '14px')
+        .text(this.tickText);
+      xAxisG.selectAll(".tick line").attr("stroke", "transparent");
+      xAxisG.selectAll(".domain").attr("stroke", "transparent");
+
+      const xAxisLabels = xAxisG.selectAll("text").data([null]);
+      xAxisLabels
+        .enter()
+        .append("text")
+        .merge(xAxisLabels);
+    },
+    tickText(d, i) {
+      if (this.groups.length <= i) {
+        return "";
+      }
+      return this.groups[i][0];
+    },
     appendCircles(data = this.data) {
       this.nodes = this.svg
         .selectAll("circle")
@@ -174,7 +208,7 @@ export default {
         .enter()
         .append("g")
         .merge(g)
-        .attr('class', `${className}`)
+        .attr("class", `${className}`)
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
       const innerWidth = width - margin.left - margin.right;

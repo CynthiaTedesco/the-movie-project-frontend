@@ -26,7 +26,7 @@ export default {
     width(current, old) {
       console.log(`width has changed from ${old} to ${this.width}`);
       this.draw();
-    },
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -44,24 +44,24 @@ export default {
       this.createSimulation(props);
       this.appendSvg();
       this.appendAxis();
-      // this.appendDefinitions();
+      this.appendDefinitions();
       this.appendCircles();
     },
-    xValue(d){
+    xValue(d) {
       return d.axisGroups[this.attr].name;
     },
-    xForce (d) {
+    xForce(d) {
       return this.xScale(this.xValue(d));
     },
-    yForce (d) {
+    yForce(d) {
       return this.innerHeight;
     },
-    ticked () {
+    ticked() {
       const self = this;
-      // this.nodes.attr('cx', (d) => d.x)
-      this.nodes.attr('cy', (d) => {
-        return d.y
-      })
+      this.nodes.attr("cy", d => {
+        const toReturn = Math.min(d.y, self.innerHeight - 40);
+        return toReturn < -1 ? self.scale(d.revenue) * 2.2 : toReturn;
+      });
     },
   }
 };

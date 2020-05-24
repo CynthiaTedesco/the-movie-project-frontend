@@ -36,6 +36,7 @@ export default {
 
       //merge movies with axis data
       this.data = [].concat.apply([], this.groups.map(g=>g[1]));
+      this.data = this.data.sort((m1,m2)=>m1.revenue-m2.revenue)
     }
   },
   computed: {

@@ -5,31 +5,41 @@
 <script>
 import BubbleCloud from "@/Components/Charts/BubbleCloud.vue";
 import axisBubblesChartContainer from "@/mixins/axisBubblesChartContainer.js";
-import dimensionable from '@/mixins/dimensionable.js';
-import axisBubblesChart from '@/mixins/axisBubblesChart.js';
-import AGES from '@/constants/ages.js'
-const d3 = require('d3');
+import dimensionable from "@/mixins/dimensionable.js";
+import axisBubblesChart from "@/mixins/axisBubblesChart.js";
+import AGES from "@/constants/ages.js";
+const d3 = require("d3");
 
 export default {
   components: { BubbleCloud },
   mixins: [axisBubblesChartContainer, dimensionable, axisBubblesChart],
   data() {
     return {
-      small: true,
+      small: true
     };
   },
   props: {
     singleKeyword: String
   },
-  mounted () {
+  watch: {
+    width(current, old) {
+      console.log(`width has changed from ${old} to ${this.width}`);
+      this.draw();
+    },
+    height(current, old) {
+      console.log(`height has changed from ${old} to ${this.height}`);
+      this.draw();
+    }
+  },
+  mounted() {
     this.$nextTick(() => {
       this.setDimensions();
-      d3.select(`#${this.attr} svg`).remove();
+      // d3.select(`#${this.attr} svg`).remove();
       this.draw();
     });
   },
-  methods:{
-    draw () {
+  methods: {
+    draw() {
       // const props = {
       //   xForce: this.xForce,
       //   yForce: this.yForce,
@@ -39,7 +49,7 @@ export default {
       this.appendSvg();
       // this.appendDefinitions();
       // this.appendCircles();
-    },
+    }
     // xForce (d) {
     //   if (!this.coordinates[d.category[this.attr].name]) {
     //     this.coordinates[d.category[this.attr].name] = {

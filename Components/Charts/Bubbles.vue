@@ -17,16 +17,18 @@
     :attr="attr"
   />
 
-  <AxisLarge
+  <!-- <AxisLarge
     v-else-if="axis && display!=='small'"
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
     :singleKeyword="singleKeyword"
     :attr="attr"
-  />
+  />-->
+  <!-- && display==='small'" -->
   <AxisSmall
-    v-else-if="axis && display==='small'"
+    ref="axisChart"
+    v-else-if="axis"
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
@@ -40,12 +42,17 @@ const d3 = require("d3");
 import CategoriesSmall from "@/Components/Layouts/CategoriesSmall.vue";
 import CategoriesLarge from "@/Components/Layouts/CategoriesLarge.vue";
 import AxisSmall from "@/Components/Layouts/AxisSmall.vue";
-import AxisLarge from "@/Components/Layouts/AxisLarge.vue";
+// import AxisLarge from "@/Components/Layouts/AxisLarge.vue";
 import { isMobile } from "@/assets/js/helpers.js";
 
 export default {
   name: "bubbles",
-  components: { CategoriesSmall, CategoriesLarge, AxisSmall, AxisLarge },
+  components: {
+    CategoriesSmall,
+    CategoriesLarge,
+    AxisSmall
+    // AxisLarge
+  },
   data() {
     return {
       display: "large",
@@ -86,9 +93,16 @@ export default {
       return "large";
     },
     async resized() {
-      this.display = this.calculateDisplay();
-      if ((await this.$store.getters.onMobile) !== isMobile()) {
-        this.$store.dispatch("setIsMobile", isMobile());
+      if (this.axis) {
+        this.$nextTick(() => {
+          this.$refs.axisChart.setDimensions();
+        });
+      } else {
+        //TODO decide if we need a different visualizacion for axis on mobile
+        this.display = this.calculateDisplay();
+        if ((await this.$store.getters.onMobile) !== isMobile()) {
+          this.$store.dispatch("setIsMobile", isMobile());
+        }
       }
     }
   }

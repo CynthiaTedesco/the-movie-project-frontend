@@ -20,7 +20,8 @@ export default {
               .node()
               .getBoundingClientRect()
 
-        this.width = container.width
+        //container does not resized itself if it already contains a fixed sized svg inside!
+        this.width = Math.min(container.width, document.body.clientWidth)
         this.height = container.height
       }
 

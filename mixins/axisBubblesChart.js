@@ -7,9 +7,12 @@ export default {
   data() {
     return {
       svg: null,
+      marginGroup: null,
       nodes: null,
       simulation: null,
       categoriesNames: [],
+      innerWidth: null,
+      innewHeight: null,
     };
   },
   beforeDestroy() {
@@ -23,9 +26,8 @@ export default {
   computed: {
     scale() {
       const maxRadius = isMobile()
-        ?
-        (Math.min(this.width, this.height) * 0.30) / 2
-        : (Math.min(this.width, this.height) * 0.1);
+        ? (Math.min(this.width, this.height) * 0.3) / 2
+        : Math.min(this.width, this.height) * 0.1;
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()
@@ -36,27 +38,47 @@ export default {
   methods: {
     appendSvg() {
       const chartContainerSelector = this.selector || ".chart-container";
-      const parentSelector = this.singleKeyword ?
-        `${this.attr}-${this.singleKeyword}`
-        : this.attr
-        
-      console.log('selector', `#${parentSelector} ${chartContainerSelector}`);
-      this.svg = d3
-        .select(`#${parentSelector} ${chartContainerSelector}`)
-        .append("svg")
-        .attr("width", "100%")
-        .attr("height", "100%")
-        .attr("viewBox", "0 0 " + this.width + " " + this.height)
-        .attr("preserveAspectRatio", "xMinYMid meet")
-        .attr("class", "nodes");
+      const parentSelector = this.singleKeyword
+        ? `${this.attr}-${this.singleKeyword}`
+        : this.attr;
 
-      let g = this.svg.selectAll("g").data([null]);
-      g = g.enter().append("g");
-      // if(this.axis){
-      g.merge(g).attr("transform", `translate(10,10)`);
-      // }
-      this.svg = g;
+      const container = d3.selectAll(
+        `#${parentSelector} ${chartContainerSelector}`
+      );
+
+      this.svg = container.selectAll("svg").data([null]);
+
+      this.svg = this.svg
+        .enter()
+        .append("svg")
+        .merge(this.svg)
+        .attr("width", this.width)
+        .attr("height", this.height)
+        .attr("class", "nodes")
+        .style("border", "1px solid black");
+
+      const { g, innerWidth, innerHeight } = this.marginConvention(this.svg, {
+        width: this.width,
+        height: this.height,
+        margin: { top: 0, left: 10, right: 10, bottom: 50 },
+      });
+
+      this.innerWidth = innerWidth;
+      this.innewHeight = innerHeight;
+
+      this.marginGroup = g;
+
+      let rect = this.marginGroup.selectAll("rect").data([null]);
+      rect = rect
+        .enter()
+        .append("rect")
+        .merge(rect)
+        .attr("width", innerWidth)
+        .attr("height", innerHeight)
+        .attr("rx", 100)
+        .attr("fill", "black");
     },
+    appendAxis() {},
     appendCircles(data = this.data) {
       this.nodes = this.svg
         .selectAll("circle")
@@ -143,6 +165,22 @@ export default {
     },
     onEndSimulation() {
       this.adjustLabels();
+    },
+    marginConvention(selection, props) {
+      const { width, height, margin, className = "margin-group" } = props;
+
+      let g = selection.selectAll(`.${className}`).data([null]);
+      g = g
+        .enter()
+        .append("g")
+        .merge(g)
+        .attr('class', `${className}`)
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+
+      return { g, innerWidth, innerHeight };
     },
   },
 };

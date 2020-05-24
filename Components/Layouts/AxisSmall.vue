@@ -15,7 +15,8 @@ export default {
   mixins: [axisBubblesChartContainer, dimensionable, axisBubblesChart],
   data() {
     return {
-      small: true
+      small: true,
+      axis: true
     };
   },
   props: {

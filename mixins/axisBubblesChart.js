@@ -13,6 +13,7 @@ export default {
       categoriesNames: [],
       innerWidth: null,
       innerHeight: null,
+      ticksDensity: 70
     };
   },
   beforeDestroy() {
@@ -83,7 +84,8 @@ export default {
         .scaleLinear()
         .domain([0, this.groups.length-1])
         .range([0, this.innerWidth]);
-      const xAxis = d3.axisBottom(xScale);
+      const xAxis = d3.axisBottom(xScale)
+      .ticks(this.innerWidth / this.ticksDensity);
       let xAxisG = this.marginGroup.selectAll(".x-axis").data([null]);
       xAxisG = xAxisG
         .enter()
@@ -95,6 +97,7 @@ export default {
       xAxisG.call(xAxis);
       xAxisG
         .selectAll(".tick text")
+        .attr('class', 'tick-label')
         .attr("fill", "gray")
         .style('font-size', '14px')
         .text(this.tickText);

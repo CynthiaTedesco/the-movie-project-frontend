@@ -37,7 +37,7 @@ export default {
     scale() {
       let maxRadius = 0;
       if (this.axis) {
-        maxRadius = (this.innerWidth / this.groups.length) * 0.4;
+        maxRadius = (this.innerWidth / this.groups.length) * 0.7;
       } else {
         maxRadius = isMobile()
           ? (Math.min(this.width, this.height) * 0.3) / 2
@@ -67,28 +67,17 @@ export default {
         .attr("width", this.width)
         .attr("height", this.height)
         .attr("class", "nodes")
-        .style("border", "1px solid black");
 
       const { g, innerWidth, innerHeight } = this.marginConvention(this.svg, {
         width: this.width,
         height: this.height,
-        margin: { top: 0, left: 40, right: 40, bottom: 75 },
+        margin: { top: 0, left: 70, right: 70, bottom: 75 },
       });
 
       this.innerWidth = innerWidth;
       this.innerHeight = innerHeight;
 
       this.marginGroup = g;
-
-      let rect = this.marginGroup.selectAll("rect").data([null]);
-      rect = rect
-        .enter()
-        .append("rect")
-        .merge(rect)
-        .attr("width", innerWidth)
-        .attr("height", innerHeight)
-        .attr("rx", 100)
-        .attr("fill", "black");
     },
     appendAxis() {
       const xAxis = d3
@@ -132,6 +121,8 @@ export default {
         .merge(this.nodes)
         .attr("class", (d) => `movie-${d.id}`)
         .attr("fill", "red")
+        .attr('cx', d => this.xScale(this.xValue(d)))
+        // .attr('cy', this.innerHeight)
         .attr("r", 0);
       // .attr("fill", (d) => `url(#${this.defTitle(d)})`)
       if (this.width > 500) {
@@ -184,20 +175,16 @@ export default {
       );
     },
     createSimulation(props) {
-      const { xForce, onTickFn, onEndFn, data } = props;
+      const { xForce, yForce, onTickFn, onEndFn, data } = props;
       this.simulation = d3
         .forceSimulation(data || this.data)
         .force("x", d3.forceX(xForce).strength(0.4))
+        .force("y", d3.forceY(yForce).strength(0.1))
         .force(
           "collide",
-          d3.forceCollide((d) => this.scale(d.revenue) + 2)
+          d3.forceCollide((d) => this.scale(d.revenue) + 7).iterations(10)
         )
         .on("tick", onTickFn);
-
-      this.simulation.force(
-        "day-collide",
-        d3.forceCollide((d) => d.r + 2).iterations(16)
-      );
     },
     onEndSimulation() {
       this.adjustLabels();

@@ -31,7 +31,6 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.setDimensions();
-      // d3.select(`#${this.attr} svg`).remove();
       this.draw();
     });
   },
@@ -39,7 +38,7 @@ export default {
     draw() {
       const props = {
         xForce: this.xForce,
-      //   yForce: this.yForce,
+        yForce: this.yForce,
         onTickFn: this.ticked
       };
       this.createSimulation(props);
@@ -48,62 +47,18 @@ export default {
       // this.appendDefinitions();
       this.appendCircles();
     },
-    xForce (d) {
-      return this.xScale(d.axisGroups[this.attr].name);
-    //   if (!this.coordinates[d.category[this.attr].name]) {
-    //     this.coordinates[d.category[this.attr].name] = {
-    //       revenue: d.revenue,
-    //       movieId: d.id
-    //     }
-    //   }
-
-    //   let x;
-    //   const container = this.$refs.chartContainer.getBoundingClientRect()
-    //   const percentage = this.xScale(
-    //     d.category[this.attr].position <= 6 ? d.category[this.attr].position : 6
-    //   )
-
-    //   const xPerPercentage = (percentage * container.width) / 100
-    //   if (percentage < 20) {
-    //     x = Math.max(170, xPerPercentage)
-    //   } else {
-    //     x = Math.min(container.width - 100, xPerPercentage)
-    //   }
-
-    //   this.coordinates[d.category[this.attr].name].x = x;
-
-    //   //no examples for this case
-    //   return x || container.width / 2;
+    xValue(d){
+      return d.axisGroups[this.attr].name;
     },
-    // yForce (d) {
-    //   if (!this.coordinates[d.category[this.attr].name]) {
-    //     this.coordinates[d.category[this.attr].name] = {
-    //       revenue: d.revenue,
-    //       movieId: d.id
-    //     }
-    //   }
-
-    //   const percentage = this.yScale(
-    //     d.category[this.attr].position <= 6 ? d.category[this.attr].position : 6
-    //   )
-    //   const container = this.$refs.chartContainer.getBoundingClientRect()
-    //   let y
-    //   if (this.isMultiline) {
-    //     if (percentage === 0) {
-    //       y = 140
-    //     } else {
-    //       y = Math.min(700, (75 * container.height) / 100)
-    //     }
-    //   } else {
-    //     y = Math.min(300, container.height / 2)
-    //   }
-
-    //   this.coordinates[d.category[this.attr].name].y = y;
-    //   return y
-    // },
+    xForce (d) {
+      return this.xScale(this.xValue(d));
+    },
+    yForce (d) {
+      return this.innerHeight;
+    },
     ticked () {
       const self = this;
-      this.nodes.attr('cx', (d) => d.x)
+      // this.nodes.attr('cx', (d) => d.x)
       this.nodes.attr('cy', (d) => {
         return d.y
       })

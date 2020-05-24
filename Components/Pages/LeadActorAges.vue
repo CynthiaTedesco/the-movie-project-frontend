@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="ResultsPage" class="characters-age">
+  <PageComponent next="BudgetPage" class="characters-age">
     <template v-slot:menu>Story /<br/> Lead actor age</template>
     <template v-slot>
       <section id="characters-age" class="page-container page">
@@ -14,6 +14,7 @@
           :groups="groups"
           attr="characters"
           :hasMany="hasMany"
+          :winner="winner"
           :singleKeyword="singleKeyword"
           :axis="true"
         />

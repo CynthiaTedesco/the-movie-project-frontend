@@ -38,15 +38,15 @@ export default [
   {
     // order: 2,
     key: 'LeadActorAgePage',
-    component: 'Ages',
+    component: 'LeadActorAges',
     question: 'Who should your story resolve around?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'BudgetPage',
-  //   component: 'Budgets',
-  //   question: 'How much will you have to invest?',
-  // },
+  {
+    // order: 2,
+    key: 'BudgetPage',
+    component: 'Budgets',
+    question: 'How much will you have to invest?',
+  },
   // {
   //   // order: 2,
   //   key: 'DirectorGenderPage',
@@ -56,7 +56,7 @@ export default [
   // {
   //   // order: 2,
   //   key: 'DirectorAgePage',
-  //   component: 'Ages',
+  //   component: 'DirectorAges',
   //   question: 'Who should direct youre movie?',
   // },
   // {

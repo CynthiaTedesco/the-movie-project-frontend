@@ -37,7 +37,7 @@ export default {
     scale() {
       let maxRadius = 0;
       if (this.axis) {
-        maxRadius = (this.innerWidth / this.groups.length) * 0.7;
+        maxRadius = Math.min((this.innerWidth / this.groups.length) * 0.7, 60);
       } else {
         maxRadius = isMobile()
           ? (Math.min(this.width, this.height) * 0.3) / 2
@@ -82,6 +82,7 @@ export default {
     appendAxis() {
       const xAxis = d3
         .axisBottom(this.xScale)
+        .tickPadding(30)
         .ticks(this.innerWidth / this.ticksDensity);
       let xAxisG = this.marginGroup.selectAll(".x-axis").data([null]);
       xAxisG = xAxisG
@@ -91,13 +92,31 @@ export default {
         .merge(xAxisG)
         .attr("transform", `translate(0, ${this.innerHeight})`);
 
+      const self = this;
+
       xAxisG.call(xAxis);
       xAxisG
         .selectAll(".tick text")
-        .attr("class", "tick-label")
+        .attr("class", (d) => {
+          const classes = ["tick-label"];
+          if (this.winner === d) {
+            classes.push("winner");
+          }
+          return classes.join(" ");
+        })
         .attr("fill", "gray")
         .style("font-size", "14px");
-      xAxisG.selectAll(".tick line").attr("stroke", "transparent");
+      xAxisG
+        .selectAll(".tick line")
+        .attr("stroke", "gray")
+        .attr("transform", `translate(${50}, 35)`)
+        .attr("y2", (d, i, a) => {
+          if (i + 1 === a.length) {
+            return "0";
+          } else {
+            return "15";
+          }
+        });
       xAxisG.selectAll(".domain").attr("stroke", "transparent");
 
       const xAxisLabels = xAxisG.selectAll("text").data([null]);
@@ -105,6 +124,19 @@ export default {
         .enter()
         .append("text")
         .merge(xAxisLabels);
+
+      //append winner image
+      const winner = xAxisG.select(".winner");
+      winner
+        .select(function() {
+          return this.parentNode;
+        })
+        .append("image")
+        .attr("href", "/handmade-circle.gif")
+        .attr("width", this.textWidth(winner.text()) + 20)
+        .attr("height", 34)
+        .attr("x", (-1 * this.textWidth(winner.text())) / 2 - 10)
+        .attr("y", 22);
     },
     appendCircles(data = this.data) {
       this.nodesGroup = this.marginGroup.selectAll(".nodes-group").data([null]);
@@ -144,11 +176,14 @@ export default {
         .remove();
     },
     appendDefinitions(data = this.data) {
-      const defs = this.svg.append("defs");
+      let defs = this.svg.selectAll("defs").data([null]);
+      defs = defs
+        .enter()
+        .append("defs")
+        .merge(defs);
 
-      defs
-        .selectAll("poster-pattern")
-        .data(data)
+      defs = this.svg.selectAll(".poster-pattern").data(data);
+      defs = defs
         .enter()
         .append("pattern")
         .attr("class", "poster-pattern")
@@ -160,7 +195,8 @@ export default {
         .attr("height", 1)
         .attr("width", 1)
         .attr("preserveAspectRatio", "none")
-        .attr("xlink:href", (d) => d.poster.url);
+        .attr("xlink:href", (d) => d.poster.url)
+        .merge(defs);
     },
     defTitle(d) {
       return (
@@ -182,11 +218,12 @@ export default {
         .force("y", d3.forceY(yForce).strength(0.1))
         .force(
           "collide",
-          d3.forceCollide((d) => this.scale(d.revenue) + 7)
-          // .strength(0.5)
-          .iterations(15)
-          )
-        .on("tick", onTickFn)
+          d3
+            .forceCollide((d) => this.scale(d.revenue) + 7)
+            // .strength(0.5)
+            .iterations(15)
+        )
+        .on("tick", onTickFn);
     },
     onEndSimulation() {
       this.adjustLabels();

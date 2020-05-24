@@ -1,4 +1,5 @@
 const d3 = require("d3");
+import { beautifyCashValue } from "@/assets/js/helpers.js";
 
 export default {
   data() {
@@ -10,6 +11,7 @@ export default {
     movies: Array,
     groups: Array,
     attr: String,
+    winner: String,
     // hasMany: Boolean,
     singleKeyword: String,
   },
@@ -20,10 +22,17 @@ export default {
           m.axisGroups = m.axisGroups || {};
 
           let lead;
+          let tooltip = "";
           if (this.singleKeyword === "age") {
-            lead = m.characters.find((a) => a.main);
+            lead = m[this.attr].find((a) => a.main);
+            tooltip = lead ? `${lead.name} (${lead.age})` : "";
+          } else {
+            switch (this.attr) {
+              case "budget": {
+                tooltip = beautifyCashValue(m[this.attr]);
+              }
+            }
           }
-          const tooltip = lead ? `${lead.name} (${lead.age})` : "";
 
           m.axisGroups[this.attr] = {
             name: group[0],
@@ -35,8 +44,11 @@ export default {
       });
 
       //merge movies with axis data
-      this.data = [].concat.apply([], this.groups.map(g=>g[1]));
-      this.data = this.data.sort((m1,m2)=>m1.revenue-m2.revenue)
+      this.data = [].concat.apply(
+        [],
+        this.groups.map((g) => g[1])
+      );
+      this.data = this.data.sort((m1, m2) => m1.revenue - m2.revenue);
     }
   },
   computed: {

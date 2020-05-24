@@ -13,6 +13,7 @@ export default {
       groups: {},
       svg: null,
       nodes: null,
+      winner: String
     };
   },
   async beforeMount() {
@@ -56,9 +57,19 @@ export default {
         (a, b) => b[1].length - a[1].length
       );
     }
+
+    this.setWinner();
   },
 
   methods: {
+    setWinner(){
+      this.winner = [...this.groups].sort((group1, group2)=>{
+        const total1 = group1[1].map(a=>parseFloat(a.revenue)).reduce((a, b) => a + b, 0);
+        const total2 = group2[1].map(a=>parseFloat(a.revenue)).reduce((a, b) => a + b, 0);
+
+        return total2 - total1
+      })[0][0];
+    },
     groupBy(xs, key) {
       return xs.reduce((rv, x) => {
         let innerKey;
@@ -73,7 +84,11 @@ export default {
             this.singleKeyword
           ];
         } else {
-          innerKey = x[key] ? x[key].name : "";
+          if(this.plain){
+            innerKey = x[key]
+          } else {
+            innerKey = x[key] ? x[key].name : "";
+          }
         }
         if (innerKey) {
           (rv[innerKey] = rv[innerKey] || []).push(x);
@@ -189,30 +204,22 @@ export default {
         return [budgetLabel, []];
       });
       Object.entries(base).map((entry) => {
-        const budget = entry[0];
+        const budget = entry[0]/10e5;
         const movies = entry[1];
-        if (budget <= 15) {
+        if (budget < 100) {
           temp[0][1] = temp[0][1].concat(movies);
-        } else if (budget <= 20) {
+        } else if (budget < 150) {
           temp[1][1] = temp[1][1].concat(movies);
-        } else if (budget <= 25) {
+        } else if (budget < 200) {
           temp[2][1] = temp[2][1].concat(movies);
-        } else if (budget <= 30) {
+        } else if (budget < 250) {
           temp[3][1] = temp[3][1].concat(movies);
-        } else if (budget <= 35) {
+        } else if (budget < 300) {
           temp[4][1] = temp[4][1].concat(movies);
-        } else if (budget <= 40) {
+        } else if (budget < 350) {
           temp[5][1] = temp[5][1].concat(movies);
-        } else if (budget <= 45) {
+        } else {
           temp[6][1] = temp[6][1].concat(movies);
-        } else if (budget <= 50) {
-          temp[7][1] = temp[7][1].concat(movies);
-        } else if (budget <= 55) {
-          temp[8][1] = temp[8][1].concat(movies);
-        } else if (budget <= 60) {
-          temp[9][1] = temp[9][1].concat(movies);
-        } else if (budget >= 60) {
-          temp[10][1] = temp[10][1].concat(movies);
         }
       });
 

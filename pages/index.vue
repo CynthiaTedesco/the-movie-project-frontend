@@ -29,7 +29,8 @@ import Origins from '@/Components/Pages/Origins.vue'
 import Series from '@/Components/Pages/Series.vue'
 import Languages from '@/Components/Pages/Languages.vue'
 import Genders from '@/Components/Pages/Genders.vue'
-import Ages from '@/Components/Pages/Ages.vue'
+import Budgets from '@/Components/Pages/Budgets.vue'
+import LeadActorAges from '@/Components/Pages/LeadActorAges.vue'
 // import Restrictions from '@/Components/Pages/Restrictions.vue'
 // import Posters from '@/Components/Pages/Posters.vue'
 // import Countries from '@/Components/Pages/Countries.vue'
@@ -46,10 +47,10 @@ export default {
     WeGetYou,
     TopMovies,
     Genres,
-    Ages,
+    LeadActorAges,
     Universes,
     Origins,
-
+    Budgets,
     Series, Languages, Genders,
     // Restrictions,Posters,Countries,Cinematographies,
 
@@ -139,7 +140,7 @@ export default {
           //TODO check if I need to use this index
           const currentIndex = entry.target.getAttribute('data-index');
           entry.target.scrollIntoView()
-          this.loadNewPage();
+          this.loadNewPage()
         }
       });
     }

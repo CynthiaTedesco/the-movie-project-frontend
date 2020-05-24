@@ -27,10 +27,6 @@ export default {
       console.log(`width has changed from ${old} to ${this.width}`);
       this.draw();
     },
-    height(current, old) {
-      console.log(`height has changed from ${old} to ${this.height}`);
-      this.draw();
-    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -41,18 +37,19 @@ export default {
   },
   methods: {
     draw() {
-      // const props = {
-      //   xForce: this.xForce,
+      const props = {
+        xForce: this.xForce,
       //   yForce: this.yForce,
-      //   onTickFn: this.ticked
-      // };
-      // this.createSimulation('category', props);
+        onTickFn: this.ticked
+      };
+      this.createSimulation(props);
       this.appendSvg();
       this.appendAxis();
       // this.appendDefinitions();
-      // this.appendCircles();
-    }
-    // xForce (d) {
+      this.appendCircles();
+    },
+    xForce (d) {
+      return this.xScale(d.axisGroups[this.attr].name);
     //   if (!this.coordinates[d.category[this.attr].name]) {
     //     this.coordinates[d.category[this.attr].name] = {
     //       revenue: d.revenue,
@@ -77,7 +74,7 @@ export default {
 
     //   //no examples for this case
     //   return x || container.width / 2;
-    // },
+    },
     // yForce (d) {
     //   if (!this.coordinates[d.category[this.attr].name]) {
     //     this.coordinates[d.category[this.attr].name] = {
@@ -104,20 +101,13 @@ export default {
     //   this.coordinates[d.category[this.attr].name].y = y;
     //   return y
     // },
-    // ticked () {
-    //   const self = this;
-    //   this.nodes.attr('cx', (d) => d.x)
-    //   this.nodes.attr('cy', (d) => {
-    //     if (d.y > self.coordinates[d.category[this.attr].name].y) {
-    //       self.coordinates[d.category[this.attr].name].y = d.y;
-    //       self.coordinates[d.category[this.attr].name].revenue = d.revenue;
-    //       self.coordinates[d.category[this.attr].name].movieId = d.id;
-    //     } else if (d.id === self.coordinates[d.category[this.attr].name].movieId) {
-    //       self.coordinates[d.category[this.attr].name].y = d.y;
-    //     }
-    //     return d.y
-    //   })
-    // },
+    ticked () {
+      const self = this;
+      this.nodes.attr('cx', (d) => d.x)
+      this.nodes.attr('cy', (d) => {
+        return d.y
+      })
+    },
   }
 };
 </script>

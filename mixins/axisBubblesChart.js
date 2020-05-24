@@ -13,7 +13,8 @@ export default {
       categoriesNames: [],
       innerWidth: null,
       innerHeight: null,
-      ticksDensity: 70
+      ticksDensity: 70,
+      nodesGroup: null,
     };
   },
   beforeDestroy() {
@@ -25,29 +26,39 @@ export default {
     movies: Array,
   },
   computed: {
+    container() {
+      const chartContainerSelector = this.selector || ".chart-container";
+      const parentSelector = this.singleKeyword
+        ? `${this.attr}-${this.singleKeyword}`
+        : this.attr;
+
+      return d3.selectAll(`#${parentSelector} ${chartContainerSelector}`);
+    },
     scale() {
-      const maxRadius = isMobile()
-        ? (Math.min(this.width, this.height) * 0.3) / 2
-        : Math.min(this.width, this.height) * 0.1;
+      let maxRadius = 0;
+      if (this.axis) {
+        maxRadius = (this.innerWidth / this.groups.length) * 0.4;
+      } else {
+        maxRadius = isMobile()
+          ? (Math.min(this.width, this.height) * 0.3) / 2
+          : Math.min(this.width, this.height) * 0.1;
+      }
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()
         .domain([0, this.max])
         .range([10, maxRadius]);
     },
+    xScale() {
+      return d3
+        .scalePoint()
+        .domain(this.groups.map((g) => g[0]))
+        .range([0, this.innerWidth]);
+    },
   },
   methods: {
     appendSvg() {
-      const chartContainerSelector = this.selector || ".chart-container";
-      const parentSelector = this.singleKeyword
-        ? `${this.attr}-${this.singleKeyword}`
-        : this.attr;
-
-      const container = d3.selectAll(
-        `#${parentSelector} ${chartContainerSelector}`
-      );
-
-      this.svg = container.selectAll("svg").data([null]);
+      this.svg = this.container.selectAll("svg").data([null]);
 
       this.svg = this.svg
         .enter()
@@ -80,12 +91,9 @@ export default {
         .attr("fill", "black");
     },
     appendAxis() {
-      const xScale = d3
-        .scaleLinear()
-        .domain([0, this.groups.length-1])
-        .range([0, this.innerWidth]);
-      const xAxis = d3.axisBottom(xScale)
-      .ticks(this.innerWidth / this.ticksDensity);
+      const xAxis = d3
+        .axisBottom(this.xScale)
+        .ticks(this.innerWidth / this.ticksDensity);
       let xAxisG = this.marginGroup.selectAll(".x-axis").data([null]);
       xAxisG = xAxisG
         .enter()
@@ -97,10 +105,9 @@ export default {
       xAxisG.call(xAxis);
       xAxisG
         .selectAll(".tick text")
-        .attr('class', 'tick-label')
+        .attr("class", "tick-label")
         .attr("fill", "gray")
-        .style('font-size', '14px')
-        .text(this.tickText);
+        .style("font-size", "14px");
       xAxisG.selectAll(".tick line").attr("stroke", "transparent");
       xAxisG.selectAll(".domain").attr("stroke", "transparent");
 
@@ -110,25 +117,28 @@ export default {
         .append("text")
         .merge(xAxisLabels);
     },
-    tickText(d, i) {
-      if (this.groups.length <= i) {
-        return "";
-      }
-      return this.groups[i][0];
-    },
     appendCircles(data = this.data) {
-      this.nodes = this.svg
-        .selectAll("circle")
-        .data(data)
+      this.nodesGroup = this.marginGroup.selectAll(".nodes-group").data([null]);
+      this.nodesGroup = this.nodesGroup
+        .enter()
+        .append("g")
+        .attr("class", "nodes-group")
+        .merge(this.nodesGroup);
+
+      this.nodes = this.nodesGroup.selectAll("circle").data(data);
+      this.nodes = this.nodes
         .enter()
         .append("circle")
+        .merge(this.nodes)
         .attr("class", (d) => `movie-${d.id}`)
-        .attr("r", 0)
-        .attr("fill", (d) => `url(#${this.defTitle(d)})`)
-        .on("mouseover", this.showTooltip)
-        .on("mouseleave", this.hideTooltip);
+        .attr("fill", "red")
+        .attr("r", 0);
+      // .attr("fill", (d) => `url(#${this.defTitle(d)})`)
       if (this.width > 500) {
-        this.nodes.on("mousemove", this.moveTooltip);
+        this.nodes
+          .on("mouseover", this.showTooltip)
+          .on("mouseleave", this.hideTooltip)
+          .on("mousemove", this.moveTooltip);
       }
 
       this.nodes
@@ -137,7 +147,7 @@ export default {
         .attr("r", (d) => this.scale(d.revenue));
 
       //removes dom elements not corresponding to any data
-      this.svg
+      this.marginGroup
         .selectAll("circle")
         .data(data)
         .exit()
@@ -173,32 +183,21 @@ export default {
           .join("")
       );
     },
-    createSimulation(name, props) {
-      switch (name) {
-        case "category": {
-          const { xForce, yForce, onTickFn, onEndFn, data } = props;
+    createSimulation(props) {
+      const { xForce, onTickFn, onEndFn, data } = props;
+      this.simulation = d3
+        .forceSimulation(data || this.data)
+        .force("x", d3.forceX(xForce).strength(0.4))
+        .force(
+          "collide",
+          d3.forceCollide((d) => this.scale(d.revenue) + 2)
+        )
+        .on("tick", onTickFn);
 
-          // the simulation is a collection of forces
-          // about where we want our circles to go
-          // and how we want out circles to interact
-          // STEP 1: get them to the middle
-          // STEP 2: don't have them collide!
-
-          this.simulation = d3
-            .forceSimulation(data || this.data)
-            .force("x", d3.forceX(xForce).strength(0.1))
-            .force("y", d3.forceY(yForce).strength(0.1))
-            .force(
-              "collide",
-              d3.forceCollide((d) => this.scale(d.revenue) + 2)
-            )
-            .on("tick", onTickFn)
-            .on("end", onEndFn || this.onEndSimulation);
-          break;
-        }
-        case "timeline": {
-        }
-      }
+      this.simulation.force(
+        "day-collide",
+        d3.forceCollide((d) => d.r + 2).iterations(16)
+      );
     },
     onEndSimulation() {
       this.adjustLabels();

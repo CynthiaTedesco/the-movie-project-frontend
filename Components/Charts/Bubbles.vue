@@ -17,16 +17,7 @@
     :attr="attr"
   />
 
-  <!-- <AxisLarge
-    v-else-if="axis && display!=='small'"
-    :movies="movies"
-    :groups="groups"
-    :hasMany="hasMany"
-    :singleKeyword="singleKeyword"
-    :attr="attr"
-  />-->
-  <!-- && display==='small'" -->
-  <AxisSmall
+  <AxisChartComponent
     ref="axisChart"
     v-else-if="axis"
     :movies="movies"
@@ -41,8 +32,7 @@
 const d3 = require("d3");
 import CategoriesSmall from "@/Components/Layouts/CategoriesSmall.vue";
 import CategoriesLarge from "@/Components/Layouts/CategoriesLarge.vue";
-import AxisSmall from "@/Components/Layouts/AxisSmall.vue";
-// import AxisLarge from "@/Components/Layouts/AxisLarge.vue";
+import AxisChartComponent from "@/Components/Layouts/AxisChartComponent.vue";
 import { isMobile } from "@/assets/js/helpers.js";
 
 export default {
@@ -50,8 +40,7 @@ export default {
   components: {
     CategoriesSmall,
     CategoriesLarge,
-    AxisSmall
-    // AxisLarge
+    AxisChartComponent
   },
   data() {
     return {

@@ -12,7 +12,7 @@
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          attr="story_origin"
+          :attr="keyword"
         />
       </section>
     </template>
@@ -40,7 +40,7 @@ export default {
     return {
       movies: [],
       groups: {},
-      keyword: 'story_origin'
+      keyword: 'story_origin',
     }
   },
   props: {

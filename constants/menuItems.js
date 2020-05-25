@@ -32,7 +32,7 @@ export default [
   {
     // order: 2,
     key: 'LeadActorGenderPage',
-    component: 'Genders',
+    component: 'LeadActorGenders',
     question: 'Who should your story resolve around?',
   },
   {
@@ -47,12 +47,12 @@ export default [
     component: 'Budgets',
     question: 'How much will you have to invest?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'DirectorGenderPage',
-  //   component: 'Genders',
-  //   question: 'Who should direct youre movie?',
-  // },
+  {
+    // order: 2,
+    key: 'DirectorGenderPage',
+    component: 'DirectorGenders',
+    question: 'Who should direct youre movie?',
+  },
   // {
   //   // order: 2,
   //   key: 'DirectorAgePage',

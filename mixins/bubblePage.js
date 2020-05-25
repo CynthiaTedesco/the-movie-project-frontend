@@ -13,7 +13,6 @@ export default {
       groups: {},
       svg: null,
       nodes: null,
-      winner: String
     };
   },
   async beforeMount() {
@@ -52,7 +51,6 @@ export default {
         }
       }
     } else {
-      //TODO SORT BY GROUP TOTAL REVENUE!
       this.groups = Object.entries(temp).sort(
         (a, b) => b[1].length - a[1].length
       );
@@ -63,12 +61,14 @@ export default {
 
   methods: {
     setWinner(){
-      this.winner = [...this.groups].sort((group1, group2)=>{
+      const winner = [...this.groups].sort((group1, group2)=>{
         const total1 = group1[1].map(a=>parseFloat(a.revenue)).reduce((a, b) => a + b, 0);
         const total2 = group2[1].map(a=>parseFloat(a.revenue)).reduce((a, b) => a + b, 0);
 
         return total2 - total1
       })[0][0];
+
+      this.$store.dispatch('addWinner', [this.keyword, winner.toLowerCase()])
     },
     groupBy(xs, key) {
       return xs.reduce((rv, x) => {

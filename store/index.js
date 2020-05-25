@@ -7,10 +7,14 @@ const createStore = () => {
       movies: [],
       randomMovies: null,
       isMobile: false,
+      winners: {},
     },
     mutations: {
       setMovies(state, movies) {
         state.movies = movies;
+      },
+      addWinner(state, winner) {
+        state.winners[winner[0]] = winner[1];
       },
       setRandomMovies(state, movies) {
         state.randomMovies = movies;
@@ -21,6 +25,9 @@ const createStore = () => {
       },
     },
     actions: {
+      addWinner(vuexContext, winner) {
+        vuexContext.commit("addWinner", winner);
+      },
       checkMovies(vuexContext) {
         if (vuexContext.getters.movies().length === 0) {
           console.log("checking movies!!");
@@ -226,6 +233,9 @@ const createStore = () => {
       },
       onMobile(state) {
         return state.isMobile;
+      },
+      winners(state) {
+        return state.winners;
       },
     },
   });

@@ -12,9 +12,8 @@
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          attr="characters"
+          :attr="keyword"
           :hasMany="hasMany"
-          :winner="winner"
           :singleKeyword="singleKeyword"
           :axis="true"
         />

@@ -12,7 +12,7 @@
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          attr="universe"
+          :attr="keyword"
         />
       </section>
     </template>

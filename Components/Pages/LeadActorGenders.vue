@@ -12,7 +12,7 @@
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          attr="characters"
+          :attr="keyword"
           :hasMany="hasMany"
           :singleKeyword="singleKeyword"
         />

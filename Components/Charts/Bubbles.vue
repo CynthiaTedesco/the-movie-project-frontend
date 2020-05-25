@@ -23,7 +23,6 @@
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
-    :winner="winner"
     :singleKeyword="singleKeyword"
     :attr="attr"
   />
@@ -55,7 +54,6 @@ export default {
     attr: String,
     hasMany: Boolean,
     singleKeyword: String,
-    winner: String,
     axis: {
       type: Boolean,
       default: false

@@ -28,9 +28,10 @@ import Origins from '@/Components/Pages/Origins.vue'
 
 import Series from '@/Components/Pages/Series.vue'
 import Languages from '@/Components/Pages/Languages.vue'
-import Genders from '@/Components/Pages/Genders.vue'
+import LeadActorGenders from '@/Components/Pages/LeadActorGenders.vue'
 import Budgets from '@/Components/Pages/Budgets.vue'
 import LeadActorAges from '@/Components/Pages/LeadActorAges.vue'
+import DirectorGenders from '@/Components/Pages/DirectorGenders.vue'
 // import Restrictions from '@/Components/Pages/Restrictions.vue'
 // import Posters from '@/Components/Pages/Posters.vue'
 // import Countries from '@/Components/Pages/Countries.vue'
@@ -51,7 +52,7 @@ export default {
     Universes,
     Origins,
     Budgets,
-    Series, Languages, Genders,
+    Series, Languages, LeadActorGenders, DirectorGenders,
     // Restrictions,Posters,Countries,Cinematographies,
 
     Results

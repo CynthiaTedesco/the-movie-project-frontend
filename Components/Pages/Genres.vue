@@ -12,7 +12,7 @@
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          attr="genres"
+          :attr="keyword"
           :hasMany="hasMany"
         />
       </section>

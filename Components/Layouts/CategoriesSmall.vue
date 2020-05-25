@@ -22,35 +22,35 @@
 </template>
 
 <script>
-import BubbleCloud from '@/Components/Charts/BubbleCloud.vue';
-import bubbleChartContainer from '@/mixins/bubbleChartContainer.js';
+import BubbleCloud from "@/Components/Charts/BubbleCloud.vue";
+import bubbleChartContainer from "@/mixins/bubbleChartContainer.js";
 
 export default {
   components: { BubbleCloud },
   mixins: [bubbleChartContainer],
-  data () {
+  data() {
     return {
       small: true,
       activeCase: 0,
-      renderDone: {},
-    }
+      renderDone: {}
+    };
   },
   props: {
-    singleKeyword: String
+    singleKeyword: String,
   },
-  mounted () {
-    this.groups.map((b, i) => this.renderDone[i] = false);
+  mounted() {
+    this.groups.map((b, i) => (this.renderDone[i] = false));
   },
   methods: {
-    onRenderDone (ranking) {
+    onRenderDone(ranking) {
       this.renderDone[ranking] = true;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import "~/assets/styles/common.scss";
 
 .chart-container {
   padding: 1rem 10%;
@@ -71,7 +71,7 @@ export default {
     .carousel-control-next-icon {
       width: 30px;
       height: 30px;
-      background-image: url('/right-arrow.png');
+      background-image: url("/right-arrow.png");
       // background-image: url('data:image/svg+xml,%3csvg xmlns=http://www.w3.org/2000/svg fill=%23fff width=8 height=8 viewBox=0 0 8 8%3e%3cpath stroke="#000" d=M2.75 0l-1.5 1.5L3.75 4l-2.5 2.5L2.75 8l4-4-4-4z/%3e%3c/svg%3e');
     }
   }
@@ -79,7 +79,7 @@ export default {
     .carousel-control-prev-icon {
       width: 30px;
       height: 30px;
-      background-image: url('/left-arrow.png');
+      background-image: url("/left-arrow.png");
       // background-image: url(data:image/svg+xml,%3csvg xmlns=http://www.w3.org/2000/svg fill=%23fff width=8 height=8 viewBox=0 0 8 8%3e%3cpath d=M2.75 0l-1.5 1.5L3.75 4l-2.5 2.5L2.75 8l4-4-4-4z/%3e%3c/svg%3e);
     }
   }

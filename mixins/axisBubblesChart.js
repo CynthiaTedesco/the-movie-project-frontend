@@ -99,7 +99,8 @@ export default {
         .selectAll(".tick text")
         .attr("class", (d) => {
           const classes = ["tick-label"];
-          if (this.winner === d) {
+
+          if (self.$store.getters["winners"][self.attr] === d.toLowerCase()) {
             classes.push("winner");
           }
           return classes.join(" ");
@@ -107,12 +108,13 @@ export default {
         .attr("fill", "gray")
         .style("font-size", "14px");
 
-      const distance = this.xScale(this.groups[1][0]) - this.xScale(this.groups[0][0]);
+      const distance =
+        this.xScale(this.groups[1][0]) - this.xScale(this.groups[0][0]);
 
       xAxisG
         .selectAll(".tick line")
         .attr("stroke", "gray")
-        .attr("transform", `translate(${distance/2}, 35)`)
+        .attr("transform", `translate(${distance / 2}, 35)`)
         .attr("y2", (d, i, a) => {
           if (i + 1 === a.length) {
             return "0";

@@ -11,8 +11,6 @@ export default {
     movies: Array,
     groups: Array,
     attr: String,
-    winner: String,
-    // hasMany: Boolean,
     singleKeyword: String,
   },
   mounted() {

@@ -100,7 +100,9 @@ export default {
         .attr("class", (d) => {
           const classes = ["tick-label"];
 
-          if (self.$store.getters["winners"][self.attr] === d.toLowerCase()) {
+          const key =
+            self.attr + (self.singleKeyword ? `-${self.singleKeyword}` : "");
+          if (self.$store.getters["winners"][key] === d.toLowerCase()) {
             classes.push("winner");
           }
           return classes.join(" ");

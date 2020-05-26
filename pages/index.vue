@@ -16,33 +16,34 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
-import Vue from 'vue'
-import Intro from '@/Components/Pages/Intro.vue'
-import WeGetYou from '@/pages/we-get-you.vue'
-import TopMovies from '@/pages/movies/top-movies.vue'
-import Genres from '@/Components/Pages/Genres.vue'
-import Universes from '@/Components/Pages/Universes.vue'
-import Origins from '@/Components/Pages/Origins.vue'
+import Vue from "vue";
+import Intro from "@/Components/Pages/Intro.vue";
+import WeGetYou from "@/pages/we-get-you.vue";
+import TopMovies from "@/pages/movies/top-movies.vue";
+import Genres from "@/Components/Pages/Genres.vue";
+import Universes from "@/Components/Pages/Universes.vue";
+import Origins from "@/Components/Pages/Origins.vue";
 
-import Series from '@/Components/Pages/Series.vue'
-import Languages from '@/Components/Pages/Languages.vue'
-import LeadActorGenders from '@/Components/Pages/LeadActorGenders.vue'
-import Budgets from '@/Components/Pages/Budgets.vue'
-import LeadActorAges from '@/Components/Pages/LeadActorAges.vue'
-import DirectorGenders from '@/Components/Pages/DirectorGenders.vue'
+import Series from "@/Components/Pages/Series.vue";
+import Languages from "@/Components/Pages/Languages.vue";
+import LeadActorGenders from "@/Components/Pages/LeadActorGenders.vue";
+import Budgets from "@/Components/Pages/Budgets.vue";
+import LeadActorAges from "@/Components/Pages/LeadActorAges.vue";
+import DirectorGenders from "@/Components/Pages/DirectorGenders.vue";
+import DirectorAges from "@/Components/Pages/DirectorAges.vue";
 // import Restrictions from '@/Components/Pages/Restrictions.vue'
 // import Posters from '@/Components/Pages/Posters.vue'
 // import Countries from '@/Components/Pages/Countries.vue'
 // import Cinematographies from '@/Components/Pages/Cinematographies.vue'
 
-import Results from '@/Components/Pages/Results.vue'
-import EventBus from '@/assets/js/eventBus.js'
-import MENUITEMS from '@/constants/menuItems.js'
+import Results from "@/Components/Pages/Results.vue";
+import EventBus from "@/assets/js/eventBus.js";
+import MENUITEMS from "@/constants/menuItems.js";
 
 export default {
-  name: 'index',
+  name: "index",
   components: {
     Intro,
     WeGetYou,
@@ -52,16 +53,19 @@ export default {
     Universes,
     Origins,
     Budgets,
-    Series, Languages, LeadActorGenders, DirectorGenders,
+    Series,
+    Languages,
+    LeadActorGenders,
+    DirectorGenders,
+    DirectorAges,
     // Restrictions,Posters,Countries,Cinematographies,
 
     Results
   },
   watch: {
-    pages (o, n) {
+    pages(o, n) {
       this.$nextTick(() => {
         if (this.$refs.pages) {
-
           //add observer to the new ones
           this.$refs.pages.forEach(page => {
             this.observer.observe(page.$el);
@@ -70,48 +74,50 @@ export default {
       });
     }
   },
-  data () {
+  data() {
     return {
       randomMovie: null,
       observer: null,
       pages: [],
       pendingPages: [...MENUITEMS]
-    }
+    };
   },
   computed: {
-    ...mapGetters(['randomMovies'])
+    ...mapGetters(["randomMovies"])
   },
-  created () {
+  created() {
     const fn = (i, randomMovies = this.randomMovies) => {
       if (i > 2) {
-        i = 0
+        i = 0;
       }
-      this.randomMovie = randomMovies[i++]
-      setTimeout(function () { fn(i, randomMovies) }, 1500)
-    }
+      this.randomMovie = randomMovies[i++];
+      setTimeout(function() {
+        fn(i, randomMovies);
+      }, 1500);
+    };
 
     if (!this.randomMovies) {
-      this.$store.dispatch('checkMovies').then(({ randomMovies }) => {
-        fn(0, randomMovies)
-      })
+      this.$store.dispatch("checkMovies").then(({ randomMovies }) => {
+        fn(0, randomMovies);
+      });
     } else {
-      fn(0)
+      fn(0);
     }
 
-    EventBus.$on('scrollToTarget', this.scrollToTarget);
+    EventBus.$on("scrollToTarget", this.scrollToTarget);
   },
-  mounted () {
+  mounted() {
     this.scrollTrigger();
     this.loadNewPage();
   },
   methods: {
-    scrollToTarget (targetKey) {
+    scrollToTarget(targetKey) {
       const targetElement = this.getTargetElement(targetKey);
       if (targetElement) {
         targetElement.$el.scrollIntoView();
       }
     },
-    getTargetElement (targetKey) {
+    getTargetElement(targetKey) {
       if (this.$refs[targetKey]) {
         return this.$refs[targetKey];
       }
@@ -123,30 +129,30 @@ export default {
 
       return null;
     },
-    loadNewPage () {
+    loadNewPage() {
       const nextPending = this.pendingPages.shift();
       if (nextPending) {
         Vue.set(this.pages, this.pages.length, nextPending);
       }
     },
-    scrollTrigger () {
+    scrollTrigger() {
       const options = {
         threshold: 0.6
-      }
+      };
       this.observer = new IntersectionObserver(this.scrollAndLoad, options);
     },
-    scrollAndLoad (entries) {
+    scrollAndLoad(entries) {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           //TODO check if I need to use this index
-          const currentIndex = entry.target.getAttribute('data-index');
-          entry.target.scrollIntoView()
-          this.loadNewPage()
+          const currentIndex = entry.target.getAttribute("data-index");
+          entry.target.scrollIntoView();
+          this.loadNewPage();
         }
       });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

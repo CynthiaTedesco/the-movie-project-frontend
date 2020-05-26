@@ -60,15 +60,20 @@ export default {
   },
 
   methods: {
-    setWinner(){
-      const winner = [...this.groups].sort((group1, group2)=>{
-        const total1 = group1[1].map(a=>parseFloat(a.revenue)).reduce((a, b) => a + b, 0);
-        const total2 = group2[1].map(a=>parseFloat(a.revenue)).reduce((a, b) => a + b, 0);
+    setWinner() {
+      const winner = [...this.groups].sort((group1, group2) => {
+        const total1 = group1[1]
+          .map((a) => parseFloat(a.revenue))
+          .reduce((a, b) => a + b, 0);
+        const total2 = group2[1]
+          .map((a) => parseFloat(a.revenue))
+          .reduce((a, b) => a + b, 0);
 
-        return total2 - total1
+        return total2 - total1;
       })[0][0];
-
-      this.$store.dispatch('addWinner', [this.keyword, winner.toLowerCase()])
+      const key =
+        this.keyword + (this.singleKeyword ? `-${this.singleKeyword}` : "");
+      this.$store.dispatch("addWinner", [key, winner.toLowerCase()]);
     },
     groupBy(xs, key) {
       return xs.reduce((rv, x) => {
@@ -84,8 +89,8 @@ export default {
             this.singleKeyword
           ];
         } else {
-          if(this.plain){
-            innerKey = x[key]
+          if (this.plain) {
+            innerKey = x[key];
           } else {
             innerKey = x[key] ? x[key].name : "";
           }
@@ -204,7 +209,7 @@ export default {
         return [budgetLabel, []];
       });
       Object.entries(base).map((entry) => {
-        const budget = entry[0]/10e5;
+        const budget = entry[0] / 10e5;
         const movies = entry[1];
         if (budget < 100) {
           temp[0][1] = temp[0][1].concat(movies);

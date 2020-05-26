@@ -22,7 +22,7 @@ export default {
           let lead;
           let tooltip = "";
           if (this.singleKeyword === "age") {
-            lead = m[this.attr].find((a) => a.main);
+            lead = m[this.attr].find((a) => a.main || a.primary);
             tooltip = lead ? `${lead.name} (${lead.age})` : "";
           } else {
             switch (this.attr) {

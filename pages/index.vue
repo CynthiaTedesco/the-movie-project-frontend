@@ -35,7 +35,7 @@ import DirectorGenders from "@/Components/Pages/DirectorGenders.vue";
 import DirectorAges from "@/Components/Pages/DirectorAges.vue";
 // import Restrictions from '@/Components/Pages/Restrictions.vue'
 // import Posters from '@/Components/Pages/Posters.vue'
-// import Countries from '@/Components/Pages/Countries.vue'
+import Countries from '@/Components/Pages/Countries.vue'
 // import Cinematographies from '@/Components/Pages/Cinematographies.vue'
 
 import Results from "@/Components/Pages/Results.vue";
@@ -58,7 +58,8 @@ export default {
     LeadActorGenders,
     DirectorGenders,
     DirectorAges,
-    // Restrictions,Posters,Countries,Cinematographies,
+    Countries,
+    // Restrictions,Posters,,Cinematographies,
 
     Results
   },

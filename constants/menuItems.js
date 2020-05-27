@@ -59,12 +59,12 @@ export default [
     component: 'DirectorAges',
     question: 'Who should direct youre movie?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'CountryPage',
-  //   component: 'Countries',
-  //   question: 'Where should you produce the movie?',
-  // },
+  {
+    // order: 2,
+    key: 'CountryPage',
+    component: 'Countries',
+    question: 'Where should you produce the movie?',
+  },
   // {
   //   // order: 2,
   //   key: 'CinematographyPage',

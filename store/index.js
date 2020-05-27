@@ -81,6 +81,15 @@ const createStore = () => {
           return vuexContext.dispatch("updateMoviesWithGenres", results);
         });
       },
+      checkProducers(vuexContext) {
+        console.log("checking producers!");
+        const associations = this.$axios.get("/movies-producers");
+        const producers = this.$axios.get("/producers");
+
+        return Promise.all([associations, producers]).then((results) => {
+          return vuexContext.dispatch("updateMoviesWithProducers", results);
+        });
+      },
       checkLanguages(vuexContext) {
         console.log("checking languages!");
         const associations = this.$axios.get("/movies-languages");
@@ -198,6 +207,30 @@ const createStore = () => {
                 primary: a2.primary,
                 genre_name: genres.find((g) => g.id == a2.genre_id).name,
               };
+            });
+          return movie;
+        });
+        vuexContext.commit("setMovies", updatedMovies);
+      },
+      updateMoviesWithProducers(vuexContext, params) {
+        const producers = params[1].data;
+        const associations = params[0].data;
+
+        const updatedMovies = vuexContext.getters.movies().map((movie) => {
+          movie.producers = associations
+            .filter((a) => a.movie_id == movie.id)
+            .map((a2) => {
+              const toReturn = {
+                producer_id: a2.producer_id,
+                primary: a2.primary,
+              };
+              const producer = producers.find((g) => g.id == a2.producer_id);
+              if (producer) {
+                toReturn.name = producer.name;
+                toReturn.country = producer.country;
+              }
+
+              return toReturn;
             });
           return movie;
         });

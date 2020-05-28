@@ -1,17 +1,19 @@
 <template>
-  <PageComponent next="LengthPage"  class="cinematography">
-    <template v-slot:menu>
-      Production /
-      <br />Cinematographies
-    </template>
+  <PageComponent next="ResultsPage" class="length">
+    <template v-slot:menu>Production /<br/> Length</template>
     <template v-slot>
-      <section id="cinematography" class="page-container page">
-        <InnerPageDescription :question="question" pageKey="CinematographyPage" :text="text" />
+      <section id="length" class="page-container page">
+        <InnerPageDescription
+          :question="question"
+          pageKey="LengthPage"
+          :text="text"
+        />
         <Bubbles
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
           :attr="keyword"
+          :axis="true"
         />
       </section>
     </template>
@@ -27,7 +29,7 @@ import InnerPageDescription from "@/Components/InnerPageDescription";
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
-  name: 'CinematographyPage',
+  name: 'LengthPage',
   mixins: [bubblePage],
   components: {
     PageComponent,
@@ -39,7 +41,9 @@ export default {
     return {
       movies: [],
       groups: {},
-      keyword: 'cinematography', //used in mixin
+      keyword: 'length', //used in mixin,
+      axis: true,
+      plain: true,
     }
   },
   props: {

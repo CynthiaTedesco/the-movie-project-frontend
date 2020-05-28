@@ -71,12 +71,12 @@ export default [
     component: 'Cinematographies',
     question: 'Should your movie be live action or an animation?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'LengthPage',
-  //   component: 'Lengths',
-  //   question: 'How long should your movie be?',
-  // },
+  {
+    // order: 2,
+    key: 'LengthPage',
+    component: 'Lengths',
+    question: 'How long should your movie be?',
+  },
   // {
   //   // order: 2,
   //   key: 'WordPage',

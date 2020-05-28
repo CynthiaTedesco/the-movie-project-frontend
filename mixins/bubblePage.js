@@ -41,7 +41,7 @@ export default {
             break;
           }
           case "length": {
-            this.groups = this.getLenghtsGroups(temp);
+            this.groups = this.getLengthsGroups(temp);
             break;
           }
           case "word_count": {
@@ -171,35 +171,31 @@ export default {
 
       return temp;
     },
-    getLenghtsGroups(base) {
+    getLengthsGroups(base) {
       const temp = LENGTHS.map((lengthLabel) => {
         return [lengthLabel, []];
       });
       Object.entries(base).map((entry) => {
         const length = entry[0];
         const movies = entry[1];
-        if (length <= 15) {
+        if (length <= 100) {
           temp[0][1] = temp[0][1].concat(movies);
-        } else if (length <= 20) {
+        } else if (length <= 110) {
           temp[1][1] = temp[1][1].concat(movies);
-        } else if (length <= 25) {
+        } else if (length <= 120) {
           temp[2][1] = temp[2][1].concat(movies);
-        } else if (length <= 30) {
+        } else if (length <= 130) {
           temp[3][1] = temp[3][1].concat(movies);
-        } else if (length <= 35) {
+        } else if (length <= 140) {
           temp[4][1] = temp[4][1].concat(movies);
-        } else if (length <= 40) {
+        } else if (length <= 150) {
           temp[5][1] = temp[5][1].concat(movies);
-        } else if (length <= 45) {
+        } else if (length <= 160) {
           temp[6][1] = temp[6][1].concat(movies);
-        } else if (length <= 50) {
+        } else if (length <= 170) {
           temp[7][1] = temp[7][1].concat(movies);
-        } else if (length <= 55) {
+        } else if (length > 170) {
           temp[8][1] = temp[8][1].concat(movies);
-        } else if (length <= 60) {
-          temp[9][1] = temp[9][1].concat(movies);
-        } else if (length >= 60) {
-          temp[10][1] = temp[10][1].concat(movies);
         }
       });
 

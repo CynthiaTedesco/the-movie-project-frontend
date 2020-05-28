@@ -23,7 +23,7 @@ export default {
     },
     script: {
       language: 'Language',
-      length: 'Lenght',
+      length: 'Length',
       wordCount: 'Word count'
     },
     production: {

@@ -7,5 +7,5 @@ export default [
   "150 minutes",
   "160 minutes",
   "170 minutes",
-  "180 minutes"
+  "> 180 minutes"
 ];

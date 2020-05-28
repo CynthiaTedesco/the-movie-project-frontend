@@ -29,6 +29,9 @@ export default {
               case "budget": {
                 tooltip = beautifyCashValue(m[this.attr]);
               }
+              case 'length':{
+                tooltip = `${m[this.attr]}min`;
+              }
             }
           }
 

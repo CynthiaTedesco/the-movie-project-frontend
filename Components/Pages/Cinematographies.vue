@@ -1,19 +1,17 @@
 <template>
-  <PageComponent next="CinematographiesPage" class="producers">
+  <PageComponent next="ResultsPage"  class="cinematography">
     <template v-slot:menu>
       Production /
-      <br />Country
+      <br />Cinematographies
     </template>
     <template v-slot>
-      <section id="producers" class="page-container page">
-        <InnerPageDescription :question="question" pageKey="CountryPage" :text="text" />
+      <section id="cinematography" class="page-container page">
+        <InnerPageDescription :question="question" pageKey="CinematographyPage" :text="text" />
         <Bubbles
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          :hasMany="hasMany"
           :attr="keyword"
-          :singleKeyword="singleKeyword"
         />
       </section>
     </template>
@@ -21,15 +19,15 @@
 </template>
 
 <script>
-import PageComponent from "@/Components/Pages/PageComponent";
+import PageComponent from '@/Components/Pages/PageComponent'
 import Bubbles from "@/Components/Charts/Bubbles";
-import bubblePage from "@/mixins/bubblePage.js";
+import bubblePage from '@/mixins/bubblePage.js';
 import InnerPageDescription from "@/Components/InnerPageDescription";
 
-import NextPageArrow from "@/Components/Arrows/NextPageArrow.vue";
+import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
-  name: "CountryPage",
+  name: 'CinematographyPage',
   mixins: [bubblePage],
   components: {
     PageComponent,
@@ -37,14 +35,12 @@ export default {
     NextPageArrow,
     Bubbles
   },
-  data() {
+  data () {
     return {
       movies: [],
       groups: {},
-      keyword: "producers", //used in mixin
-      singleKeyword: "country",
-      hasMany: true
-    };
+      keyword: 'cinematography', //used in mixin
+    }
   },
   props: {
     question: {
@@ -53,16 +49,16 @@ export default {
     }
   },
   computed: {
-    text() {
+    text () {
       if (this.groups.length) {
         const name = this.groups[0][0];
         return `You cannot go wrong with a good old ${name.toLowerCase()} movie`;
       }
 
-      return "";
+      return '';
     }
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>

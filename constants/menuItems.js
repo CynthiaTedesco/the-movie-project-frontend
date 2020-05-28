@@ -65,12 +65,12 @@ export default [
     component: 'Countries',
     question: 'Where should you produce the movie?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'CinematographyPage',
-  //   component: 'Cinematographies',
-  //   question: 'Should your movie be live action or an animation?',
-  // },
+  {
+    // order: 2,
+    key: 'CinematographyPage',
+    component: 'Cinematographies',
+    question: 'Should your movie be live action or an animation?',
+  },
   // {
   //   // order: 2,
   //   key: 'LengthPage',

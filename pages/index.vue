@@ -36,7 +36,7 @@ import DirectorAges from "@/Components/Pages/DirectorAges.vue";
 // import Restrictions from '@/Components/Pages/Restrictions.vue'
 // import Posters from '@/Components/Pages/Posters.vue'
 import Countries from '@/Components/Pages/Countries.vue'
-// import Cinematographies from '@/Components/Pages/Cinematographies.vue'
+import Cinematographies from '@/Components/Pages/Cinematographies.vue'
 
 import Results from "@/Components/Pages/Results.vue";
 import EventBus from "@/assets/js/eventBus.js";
@@ -59,8 +59,8 @@ export default {
     DirectorGenders,
     DirectorAges,
     Countries,
-    // Restrictions,Posters,,Cinematographies,
-
+    // Restrictions,Posters,,
+    Cinematographies,
     Results
   },
   watch: {

@@ -85,9 +85,10 @@ export default {
               singleKeyword === "character" ? "actor" : singleKeyword;
             this.singleKeyword = `${singleKeyword}_name`;
           }
-          innerKey = x[key].find((a) => a.primary || a.main)[
+          const primary = x[key].find((a) => a.primary || a.main);
+          innerKey = primary ? primary[
             this.singleKeyword
-          ];
+          ]: '';
         } else {
           if (this.plain) {
             innerKey = x[key];

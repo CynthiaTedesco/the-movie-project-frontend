@@ -48,7 +48,7 @@ export default {
           subTooltip = d.axisGroups[this.attr].tooltip;
         }
       } else {
-        subTooltip = d.category[this.attr].name;
+        subTooltip = d.category[this.attr].tooltip || d.category[this.attr].name;
       }
       const html = `<strong>${d.title}</strong><br/>${subTooltip}`;
 

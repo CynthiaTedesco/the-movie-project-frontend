@@ -19,17 +19,16 @@ export default {
         group[1] = group[1].map((m) => {
           m.axisGroups = m.axisGroups || {};
 
-          let lead;
           let tooltip = "";
           if (this.singleKeyword === "age") {
-            lead = m[this.attr].find((a) => a.main || a.primary);
+            const lead = m[this.attr].find((a) => a.main || a.primary);
             tooltip = lead ? `${lead.name} (${lead.age})` : "";
           } else {
             switch (this.attr) {
               case "budget": {
                 tooltip = beautifyCashValue(m[this.attr]);
               }
-              case 'length':{
+              case "length": {
                 tooltip = `${m[this.attr]}min`;
               }
             }

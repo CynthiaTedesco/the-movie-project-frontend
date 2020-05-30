@@ -29,6 +29,11 @@ export default {
                 ) + 1,
             };
           }
+          if (this.attr === "producers") {
+            m.category[
+              this.attr
+            ].tooltip = `${primary.name} (${primary.country})`;
+          }
         } else {
           m.category[this.attr] = {
             name: m[this.attr][this.singleKeyword || this.innerNameKey],

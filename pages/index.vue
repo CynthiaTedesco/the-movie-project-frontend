@@ -36,6 +36,8 @@ import DirectorAges from "@/Components/Pages/DirectorAges.vue";
 // import Restrictions from '@/Components/Pages/Restrictions.vue'
 // import Posters from '@/Components/Pages/Posters.vue'
 import Lengths from '@/Components/Pages/Lengths.vue'
+import Words from '@/Components/Pages/Words.vue'
+import Months from '@/Components/Pages/Months.vue'
 import Countries from '@/Components/Pages/Countries.vue'
 import Cinematographies from '@/Components/Pages/Cinematographies.vue'
 
@@ -60,6 +62,8 @@ export default {
     DirectorGenders,
     DirectorAges,
     Countries,
+    Words,
+    Months,
     // Restrictions,Posters,
     Lengths,
     Cinematographies,

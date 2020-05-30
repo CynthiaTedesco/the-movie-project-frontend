@@ -77,18 +77,18 @@ export default [
     component: 'Lengths',
     question: 'How long should your movie be?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'WordPage',
-  //   component: 'Words',
-  //   question: 'How much dialogue should there be?',
-  // },
-  // {
-  //   // order: 15,
-  //   key: 'ReleaseMonthPage',
-  //   component: 'Months',
-  //   question: 'When should you release your movie?',
-  // },
+  {
+    // order: 2,
+    key: 'WordCountPage',
+    component: 'Words',
+    question: 'How much dialogue should there be?',
+  },
+  {
+    // order: 15,
+    key: 'ReleaseMonthPage',
+    component: 'Months',
+    question: 'When should you release your movie?',
+  },
   // // {
   // //   // order: 2,
   // //   key: 'DistributionCompaniesPage',

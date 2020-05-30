@@ -26,7 +26,7 @@ export default {
     this.movies = JSON.parse(
       JSON.stringify(await this.$store.getters.movies(slices()))
     );
-    const temp = this.groupBy(this.movies, this.keyword, this.hasMany);
+    const temp = this.groupBy(this.movies, this.keyword);
     if (this.axis) {
       if (this.singleKeyword && this.singleKeyword === "age") {
         this.groups = this.getAgesGroups(temp);
@@ -78,22 +78,26 @@ export default {
     groupBy(xs, key) {
       return xs.reduce((rv, x) => {
         let innerKey;
-        if (this.hasMany) {
-          if (!this.singleKeyword) {
-            let singleKeyword = this.keyword.slice(0, -1);
-            singleKeyword =
-              singleKeyword === "character" ? "actor" : singleKeyword;
-            this.singleKeyword = `${singleKeyword}_name`;
-          }
-          const primary = x[key].find((a) => a.primary || a.main);
-          innerKey = primary ? primary[
-            this.singleKeyword
-          ]: '';
+        if (key === "word_count") {
+          innerKey = this.keywordFn(x);
+        } else if (key === "release_date") {
+          innerKey = this.keywordFn(x[key]);
         } else {
-          if (this.plain) {
-            innerKey = x[key];
+          if (this.hasMany) {
+            if (!this.singleKeyword) {
+              let singleKeyword = this.keyword.slice(0, -1);
+              singleKeyword =
+                singleKeyword === "character" ? "actor" : singleKeyword;
+              this.singleKeyword = `${singleKeyword}_name`;
+            }
+            const primary = x[key].find((a) => a.primary || a.main);
+            innerKey = primary ? primary[this.singleKeyword] : "";
           } else {
-            innerKey = x[key] ? x[key].name : "";
+            if (this.plain) {
+              innerKey = x[key];
+            } else {
+              innerKey = x[key] ? x[key].name : "";
+            }
           }
         }
         if (innerKey) {
@@ -144,28 +148,20 @@ export default {
       Object.entries(base).map((entry) => {
         const count = entry[0];
         const movies = entry[1];
-        if (count <= 15) {
+        if (count <= 40) {
           temp[0][1] = temp[0][1].concat(movies);
-        } else if (count <= 20) {
-          temp[1][1] = temp[1][1].concat(movies);
-        } else if (count <= 25) {
-          temp[2][1] = temp[2][1].concat(movies);
-        } else if (count <= 30) {
-          temp[3][1] = temp[3][1].concat(movies);
-        } else if (count <= 35) {
-          temp[4][1] = temp[4][1].concat(movies);
-        } else if (count <= 40) {
-          temp[5][1] = temp[5][1].concat(movies);
-        } else if (count <= 45) {
-          temp[6][1] = temp[6][1].concat(movies);
         } else if (count <= 50) {
-          temp[7][1] = temp[7][1].concat(movies);
-        } else if (count <= 55) {
-          temp[8][1] = temp[8][1].concat(movies);
+          temp[1][1] = temp[1][1].concat(movies);
         } else if (count <= 60) {
-          temp[9][1] = temp[9][1].concat(movies);
-        } else if (count >= 60) {
-          temp[10][1] = temp[10][1].concat(movies);
+          temp[2][1] = temp[2][1].concat(movies);
+        } else if (count <= 70) {
+          temp[3][1] = temp[3][1].concat(movies);
+        } else if (count <= 80) {
+          temp[4][1] = temp[4][1].concat(movies);
+        } else if (count <= 90) {
+          temp[5][1] = temp[5][1].concat(movies);
+        } else if (count > 91) {
+          temp[6][1] = temp[6][1].concat(movies);
         }
       });
 
@@ -231,31 +227,34 @@ export default {
       const temp = MONTHS.map((monthLabel) => {
         return [monthLabel, []];
       });
+
       Object.entries(base).map((entry) => {
         const month = entry[0];
         const movies = entry[1];
-        if (month <= 15) {
+        if (month === '01') {
           temp[0][1] = temp[0][1].concat(movies);
-        } else if (month <= 20) {
+        } else if (month === '02') {
           temp[1][1] = temp[1][1].concat(movies);
-        } else if (month <= 25) {
+        } else if (month === '03') {
           temp[2][1] = temp[2][1].concat(movies);
-        } else if (month <= 30) {
+        } else if (month === '04') {
           temp[3][1] = temp[3][1].concat(movies);
-        } else if (month <= 35) {
+        } else if (month === '05') {
           temp[4][1] = temp[4][1].concat(movies);
-        } else if (month <= 40) {
+        } else if (month === '06') {
           temp[5][1] = temp[5][1].concat(movies);
-        } else if (month <= 45) {
+        } else if (month === '07') {
           temp[6][1] = temp[6][1].concat(movies);
-        } else if (month <= 50) {
+        } else if (month === '08') {
           temp[7][1] = temp[7][1].concat(movies);
-        } else if (month <= 55) {
+        } else if (month === '09') {
           temp[8][1] = temp[8][1].concat(movies);
-        } else if (month <= 60) {
+        } else if (month === '10') {
           temp[9][1] = temp[9][1].concat(movies);
-        } else if (month >= 60) {
+        } else if (month === '11') {
           temp[10][1] = temp[10][1].concat(movies);
+        } else if (month === '12') {
+          temp[11][1] = temp[11][1].concat(movies);
         }
       });
 

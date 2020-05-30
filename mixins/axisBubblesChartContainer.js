@@ -31,6 +31,9 @@ export default {
               case "length": {
                 tooltip = `${m[this.attr]}min`;
               }
+              case 'word_count': {
+                tooltip = `${m[this.attr]} words in ${m.length}min`;
+              }
             }
           }
 

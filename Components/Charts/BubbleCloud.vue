@@ -120,9 +120,6 @@ export default {
         .style("position", "relative")
         .text(label);
 
-      if (this.attr === "producers" || this.attr === "languages") {
-        debugger;
-      }
       const key = winnerKey(this.attr, this.singleKeyword);
       if (label === this.$store.getters["winners"][key]) {
         this.labelText

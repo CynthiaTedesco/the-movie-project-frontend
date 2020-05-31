@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import AppLogo from '@/Components/AppLogo'
-import TheMenuToggle from '@/Components/Navigation/TheMenuToggle'
+import AppLogo from "@/Components/AppLogo";
+import TheMenuToggle from "@/Components/Navigation/TheMenuToggle";
 
 export default {
-  name: 'TheHeader',
+  name: "TheHeader",
   components: {
     TheMenuToggle,
     AppLogo
@@ -43,11 +43,11 @@ export default {
       default: null
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import "~/assets/styles/common.scss";
 
 .header-container > .row {
   flex-wrap: unset;
@@ -65,6 +65,35 @@ export default {
 
   @include media-breakpoint-up(sm) {
     padding: 1rem 4rem;
+  }
+
+  &.negative {
+    padding: 1rem 4rem;
+    position: absolute;
+    z-index: 2;
+    margin-left: auto;
+    margin-right: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    background-image: radial-gradient(#d0d0d0 0%, #2b4ab7 5%);
+    background-position: 0 0;
+    background-size: 40px 40px;
+    // position: fixed;
+    color: #dad8d8;
+    @include max-sized;
+
+    @include media-breakpoint-down(l) {
+      .location {
+        position: relative;
+        padding: 0;
+      }
+    }
+
+    .how-to-make {
+      color: white;
+    }
   }
 }
 .header-logo {

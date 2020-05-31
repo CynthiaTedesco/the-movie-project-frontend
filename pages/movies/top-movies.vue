@@ -1,6 +1,7 @@
 <template>
   <div class="top-movies page" id="top-movies">
     <TheHeader
+      class="negative"
       @menuToggle="displayMenu =!displayMenu"
       :hide-logo="true"
       :hide-menu-toggle="true"
@@ -27,91 +28,62 @@
 </template>
 
 <script>
-import TheHeader from '@/Components/Navigation/TheHeader';
-import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue';
-import { beautifyCashValue, slices } from '@/assets/js/helpers.js';
-import { mapGetters } from 'vuex'
-import filter from '@/mixins/filter.js';
+import TheHeader from "@/Components/Navigation/TheHeader";
+import NextPageArrow from "@/Components/Arrows/NextPageArrow.vue";
+import { beautifyCashValue, slices } from "@/assets/js/helpers.js";
+import { mapGetters } from "vuex";
+import filter from "@/mixins/filter.js";
 
 export default {
   // layout: 'innerPage',
   components: { TheHeader, NextPageArrow },
   mixins: [filter],
-  data () {
+  data() {
     return {
       movies: [],
       displayMenu: false
     };
   },
-  async beforeMount(){
+  async beforeMount() {
     const sli = slices();
     this.movies = await this.$store.getters.movies(sli);
   },
   computed: {
-    bubblesClasses () {
-      return 'top-' + this.movies.length + '-movies';
+    bubblesClasses() {
+      return "top-" + this.movies.length + "-movies";
     },
-    title () {
+    title() {
       return `The top ${this.movies.length} highest grossing movies`;
-    },
+    }
   },
   methods: {
-    revenue (movie) {
+    revenue(movie) {
       return beautifyCashValue(movie.revenue);
     },
-    bubbleStyle (movie) {
+    bubbleStyle(movie) {
       const size = this.scale(movie.revenue);
       return {
-        width: size + 'px',
-        height: size + 'px'
+        width: size + "px",
+        height: size + "px"
       };
     },
-    scale (revenue) {
+    scale(revenue) {
       const domain = this.movies.map(m => m.revenue);
       const maxRevenue = this.movies[0].revenue;
       const maxWidth = 60;
 
-      return revenue * maxWidth / maxRevenue;
-
-
+      return (revenue * maxWidth) / maxRevenue;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import "~/assets/styles/common.scss";
 
 .top-movies {
   position: relative;
 
-  /deep/ .how-to-make {
-    color: white;
-  }
-  /deep/ .the-header {
-    padding: 1rem 4rem;
-    position: absolute;
-    z-index: 2;
-    margin-left: auto;
-    margin-right: auto;
-    top: 0;
-    left: 0;
-    right: 0;
-
-    background-image: radial-gradient(#d0d0d0 0%, #2b4ab7 5%);
-    background-position: 0 0;
-    background-size: 40px 40px;
-    // position: fixed;
-    color: #dad8d8;
-    @include max-sized;
-
-    @include media-breakpoint-down(l) {
-      .location {
-        position: relative;
-        padding: 0;
-      }
-    }
-  }
   .presentation {
     padding: 100px 0;
     padding-top: 150px;
@@ -174,7 +146,7 @@ export default {
         }
       }
 
-      @include media-breakpoint-down(l){
+      @include media-breakpoint-down(l) {
         padding: 0 2rem;
       }
     }

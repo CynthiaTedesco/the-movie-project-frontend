@@ -81,6 +81,15 @@ const createStore = () => {
           return vuexContext.dispatch("updateMoviesWithGenres", results);
         });
       },
+      checkRestrictions(vuexContext) {
+        console.log("checking restrictions!");
+        const associations = this.$axios.get("/movies-restrictions");
+        const restrictions = this.$axios.get("/restrictions");
+
+        return Promise.all([associations, restrictions]).then((results) => {
+          return vuexContext.dispatch("updateMoviesWithRestrictions", results);
+        });
+      },
       checkProducers(vuexContext) {
         console.log("checking producers!");
         const associations = this.$axios.get("/movies-producers");
@@ -206,6 +215,24 @@ const createStore = () => {
                 genre_id: a2.genre_id,
                 primary: a2.primary,
                 genre_name: genres.find((g) => g.id == a2.genre_id).name,
+              };
+            });
+          return movie;
+        });
+        vuexContext.commit("setMovies", updatedMovies);
+      },
+      updateMoviesWithRestrictions(vuexContext, params) {
+        const restrictions = params[1].data;
+        const associations = params[0].data;
+
+        const updatedMovies = vuexContext.getters.movies().map((movie) => {
+          movie.restrictions = associations
+            .filter((a) => a.movie_id == movie.id)
+            .map((a2) => {
+              return {
+                restriction_id: a2.restriction_id,
+                primary: a2.primary,
+                restriction_name: restrictions.find((g) => g.id == a2.restriction_id).name,
               };
             });
           return movie;

@@ -79,7 +79,7 @@ export default {
         let innerKey;
         if (key === "word_count") {
           innerKey = this.keywordFn(x);
-        } else if (key === "release_date") {
+        } else if (key === "release_date" || key === "poster") {
           innerKey = this.keywordFn(x[key]);
         } else {
           if (this.hasMany) {

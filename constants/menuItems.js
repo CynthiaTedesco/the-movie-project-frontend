@@ -95,19 +95,18 @@ export default [
     component: 'DistributionCompanies',
     question: 'Who should be responsible for the distribution?',
   },
-  // {
-  //   // order: 2,
-  //   key: 'RestrictionPage',
-  //   component: 'Restrictions',
-  //   question: 'Who is your audience?',
-  // },
-  // {
-  //   // order: 2,
-  //   key: 'PostePage',
-  //   component: 'Posters',
-  //   question: 'How should the poster of the movie look?',
-  // },
-
+  {
+    // order: 2,
+    key: 'RestrictionPage',
+    component: 'Restrictions',
+    question: 'Who is your audience?',
+  },
+  {
+    // order: 2,
+    key: 'PosterPage',
+    component: 'Posters',
+    question: 'How should the poster of the movie look?',
+  },
   {
     // order: 19,
     key: 'ResultsPage',

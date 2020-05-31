@@ -1,11 +1,11 @@
 <template>
-  <PageComponent next="RestrictionPage" class="distribution_company">
-    <template v-slot:menu>Release /<br/> Distribution Company</template>
+  <PageComponent next="ResultsPage" class="poster">
+    <template v-slot:menu>Release /<br/> Poster</template>
     <template v-slot>
-      <section id="distribution_company" class="page-container page">
+      <section id="poster" class="page-container page">
         <InnerPageDescription
           :question="question"
-          pageKey="DistributionCompaniesPage"
+          pageKey="PosterPage"
           :text="text"
         />
         <Bubbles
@@ -13,6 +13,7 @@
           :movies="movies"
           :groups="groups"
           :attr="keyword"
+          :keywordFn="keywordFn"
         />
       </section>
     </template>
@@ -28,7 +29,7 @@ import InnerPageDescription from "@/Components/InnerPageDescription";
 import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
-  name: 'DistributionCompaniesPage',
+  name: 'PosterPage',
   mixins: [bubblePage],
   components: {
     PageComponent,
@@ -40,7 +41,8 @@ export default {
     return {
       movies: [],
       groups: {},
-      keyword: 'distribution_company', //used in mixin
+      keyword: 'poster', //used in mixin
+      keywordFn: poster => poster.poster_type ? poster.poster_type.name : '',
     }
   },
   props: {

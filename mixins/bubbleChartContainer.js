@@ -12,6 +12,7 @@ export default {
     attr: String,
     hasMany: Boolean,
     singleKeyword: String,
+    keywordFn: Function,
   },
   mounted() {
     if (this.movies) {
@@ -35,13 +36,15 @@ export default {
             ].tooltip = `${primary.name} (${primary.country})`;
           }
         } else {
+          let name;
+          if (this.attr === "poster") {
+            name = this.keywordFn(m[this.attr]);
+          } else {
+            name = m[this.attr][this.singleKeyword || this.innerNameKey];
+          }
           m.category[this.attr] = {
-            name: m[this.attr][this.singleKeyword || this.innerNameKey],
-            position:
-              this.groups.findIndex(
-                (s) =>
-                  s[0] === m[this.attr][this.singleKeyword || this.innerNameKey]
-              ) + 1,
+            name,
+            position: this.groups.findIndex((s) => s[0] === name) + 1,
           };
         }
         return m;

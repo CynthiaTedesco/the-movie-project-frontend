@@ -4,6 +4,7 @@
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
+    :keywordFn="keywordFn"
     :singleKeyword="singleKeyword"
     :attr="attr"
   />
@@ -13,6 +14,7 @@
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
+    :keywordFn="keywordFn"
     :singleKeyword="singleKeyword"
     :attr="attr"
   />
@@ -54,6 +56,7 @@ export default {
     attr: String,
     hasMany: Boolean,
     singleKeyword: String,
+    keywordFn: Function,
     axis: {
       type: Boolean,
       default: false

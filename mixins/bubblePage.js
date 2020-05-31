@@ -1,10 +1,15 @@
 const d3 = require("d3");
-import { slices, winnerKey } from "@/assets/js/helpers.js";
-import AGES from "@/constants/ages.js";
-import BUDGETS from "@/constants/budgets.js";
-import WORD_COUNTS from "@/constants/wordCounts.js";
-import LENGTHS from "@/constants/lengths.js";
-import MONTHS from "@/constants/months.js";
+import {
+  slices,
+  winnerKey,
+  getAgesGroups,
+  getMonthsGroups,
+  getBudgetsGroups,
+  getLengthsGroups,
+  getWordCountsGroups,
+  simpleGroups,
+  calculateWinner,
+} from "@/assets/js/helpers.js";
 
 export default {
   data() {
@@ -26,34 +31,33 @@ export default {
     this.movies = JSON.parse(
       JSON.stringify(await this.$store.getters.movies(slices()))
     );
-    const temp = this.groupBy(this.movies, this.keyword);
+    const temp = this.groupBy(this.keyword);
+
     if (this.axis) {
       if (this.singleKeyword && this.singleKeyword === "age") {
-        this.groups = this.getAgesGroups(temp);
+        this.groups = getAgesGroups(temp);
       } else {
         switch (this.keyword) {
           case "release_date": {
-            this.groups = this.getMonthsGroups(temp);
+            this.groups = getMonthsGroups(temp);
             break;
           }
           case "budget": {
-            this.groups = this.getBudgetsGroups(temp);
+            this.groups = getBudgetsGroups(temp);
             break;
           }
           case "length": {
-            this.groups = this.getLengthsGroups(temp);
+            this.groups = getLengthsGroups(temp);
             break;
           }
           case "word_count": {
-            this.groups = this.getWordCountsGroups(temp);
+            this.groups = getWordCountsGroups(temp);
             break;
           }
         }
       }
     } else {
-      this.groups = Object.entries(temp).sort(
-        (a, b) => b[1].length - a[1].length
-      );
+      this.groups = simpleGroups(temp);
     }
 
     this.setWinner();
@@ -61,21 +65,13 @@ export default {
 
   methods: {
     setWinner() {
-      const winner = [...this.groups].sort((group1, group2) => {
-        const total1 = group1[1]
-          .map((a) => parseFloat(a.revenue))
-          .reduce((a, b) => a + b, 0);
-        const total2 = group2[1]
-          .map((a) => parseFloat(a.revenue))
-          .reduce((a, b) => a + b, 0);
-
-        return total2 - total1;
-      })[0][0];
+      const winner = calculateWinner(this.groups);
       const key = winnerKey(this.keyword, this.singleKeyword);
       this.$store.dispatch("addWinner", [key, winner.toLowerCase()]);
     },
-    groupBy(xs, key) {
-      return xs.reduce((rv, x) => {
+    groupBy(key) {
+      //TODO replace repeated and messy code by using helper functions
+      return this.movies.reduce((rv, x) => {
         let innerKey;
         if (key === "word_count") {
           innerKey = this.keywordFn(x);
@@ -104,160 +100,6 @@ export default {
         }
         return rv;
       }, {});
-    },
-    getAgesGroups(base) {
-      const temp = AGES.map((ageLabel) => {
-        return [ageLabel, []];
-      });
-
-      Object.entries(base).map((entry) => {
-        const age = entry[0];
-        const movies = entry[1];
-        if (age <= 15) {
-          temp[0][1] = temp[0][1].concat(movies);
-        } else if (age <= 20) {
-          temp[1][1] = temp[1][1].concat(movies);
-        } else if (age <= 25) {
-          temp[2][1] = temp[2][1].concat(movies);
-        } else if (age <= 30) {
-          temp[3][1] = temp[3][1].concat(movies);
-        } else if (age <= 35) {
-          temp[4][1] = temp[4][1].concat(movies);
-        } else if (age <= 40) {
-          temp[5][1] = temp[5][1].concat(movies);
-        } else if (age <= 45) {
-          temp[6][1] = temp[6][1].concat(movies);
-        } else if (age <= 50) {
-          temp[7][1] = temp[7][1].concat(movies);
-        } else if (age <= 55) {
-          temp[8][1] = temp[8][1].concat(movies);
-        } else if (age <= 60) {
-          temp[9][1] = temp[9][1].concat(movies);
-        } else if (age >= 60) {
-          temp[10][1] = temp[10][1].concat(movies);
-        }
-      });
-
-      return temp;
-    },
-    getWordCountsGroups(base) {
-      const temp = WORD_COUNTS.map((wordCountLabel) => {
-        return [wordCountLabel, []];
-      });
-      Object.entries(base).map((entry) => {
-        const count = entry[0];
-        const movies = entry[1];
-        if (count <= 40) {
-          temp[0][1] = temp[0][1].concat(movies);
-        } else if (count <= 50) {
-          temp[1][1] = temp[1][1].concat(movies);
-        } else if (count <= 60) {
-          temp[2][1] = temp[2][1].concat(movies);
-        } else if (count <= 70) {
-          temp[3][1] = temp[3][1].concat(movies);
-        } else if (count <= 80) {
-          temp[4][1] = temp[4][1].concat(movies);
-        } else if (count <= 90) {
-          temp[5][1] = temp[5][1].concat(movies);
-        } else if (count > 91) {
-          temp[6][1] = temp[6][1].concat(movies);
-        }
-      });
-
-      return temp;
-    },
-    getLengthsGroups(base) {
-      const temp = LENGTHS.map((lengthLabel) => {
-        return [lengthLabel, []];
-      });
-      Object.entries(base).map((entry) => {
-        const length = entry[0];
-        const movies = entry[1];
-        if (length <= 100) {
-          temp[0][1] = temp[0][1].concat(movies);
-        } else if (length <= 110) {
-          temp[1][1] = temp[1][1].concat(movies);
-        } else if (length <= 120) {
-          temp[2][1] = temp[2][1].concat(movies);
-        } else if (length <= 130) {
-          temp[3][1] = temp[3][1].concat(movies);
-        } else if (length <= 140) {
-          temp[4][1] = temp[4][1].concat(movies);
-        } else if (length <= 150) {
-          temp[5][1] = temp[5][1].concat(movies);
-        } else if (length <= 160) {
-          temp[6][1] = temp[6][1].concat(movies);
-        } else if (length <= 170) {
-          temp[7][1] = temp[7][1].concat(movies);
-        } else if (length > 170) {
-          temp[8][1] = temp[8][1].concat(movies);
-        }
-      });
-
-      return temp;
-    },
-    getBudgetsGroups(base) {
-      const temp = BUDGETS.map((budgetLabel) => {
-        return [budgetLabel, []];
-      });
-      Object.entries(base).map((entry) => {
-        const budget = entry[0] / 10e5;
-        const movies = entry[1];
-        if (budget < 100) {
-          temp[0][1] = temp[0][1].concat(movies);
-        } else if (budget < 150) {
-          temp[1][1] = temp[1][1].concat(movies);
-        } else if (budget < 200) {
-          temp[2][1] = temp[2][1].concat(movies);
-        } else if (budget < 250) {
-          temp[3][1] = temp[3][1].concat(movies);
-        } else if (budget < 300) {
-          temp[4][1] = temp[4][1].concat(movies);
-        } else if (budget < 350) {
-          temp[5][1] = temp[5][1].concat(movies);
-        } else {
-          temp[6][1] = temp[6][1].concat(movies);
-        }
-      });
-
-      return temp;
-    },
-    getMonthsGroups(base) {
-      const temp = MONTHS.map((monthLabel) => {
-        return [monthLabel, []];
-      });
-
-      Object.entries(base).map((entry) => {
-        const month = entry[0];
-        const movies = entry[1];
-        if (month === '01') {
-          temp[0][1] = temp[0][1].concat(movies);
-        } else if (month === '02') {
-          temp[1][1] = temp[1][1].concat(movies);
-        } else if (month === '03') {
-          temp[2][1] = temp[2][1].concat(movies);
-        } else if (month === '04') {
-          temp[3][1] = temp[3][1].concat(movies);
-        } else if (month === '05') {
-          temp[4][1] = temp[4][1].concat(movies);
-        } else if (month === '06') {
-          temp[5][1] = temp[5][1].concat(movies);
-        } else if (month === '07') {
-          temp[6][1] = temp[6][1].concat(movies);
-        } else if (month === '08') {
-          temp[7][1] = temp[7][1].concat(movies);
-        } else if (month === '09') {
-          temp[8][1] = temp[8][1].concat(movies);
-        } else if (month === '10') {
-          temp[9][1] = temp[9][1].concat(movies);
-        } else if (month === '11') {
-          temp[10][1] = temp[10][1].concat(movies);
-        } else if (month === '12') {
-          temp[11][1] = temp[11][1].concat(movies);
-        }
-      });
-
-      return temp;
     },
   },
 };

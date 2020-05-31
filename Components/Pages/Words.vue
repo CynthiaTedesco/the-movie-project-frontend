@@ -1,6 +1,5 @@
 <template>
-  <PageComponent next="ResultsPage" class="word_count">
-    <!-- ReleaseMonthPage -->
+  <PageComponent next="ReleaseMonthPage" class="word_count">
     <template v-slot:menu>
       Production/
       <br />Word count

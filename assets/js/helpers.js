@@ -32,3 +32,11 @@ export function calculateAge (birthdate, releaseDate) {
 
   return Math.abs(age_dt.getUTCFullYear() - 1970);
 }
+
+export function winnerKey(keyword, singleKeyword){
+  return keyword + (singleKeyword ? `-${singleKeyword}` : "");
+}
+
+export function sanitizedId(attr, category){
+  return attr + category.split(' ').join('-').split('.').join('--')
+}

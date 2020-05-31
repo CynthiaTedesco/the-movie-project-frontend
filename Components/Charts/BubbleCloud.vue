@@ -3,17 +3,18 @@
 </template>
 
 <script>
-import bubbleChart from '@/mixins/bubbleChart.js';
-import dimensionable from '@/mixins/dimensionable.js';
+import bubbleChart from "@/mixins/bubbleChart.js";
+import dimensionable from "@/mixins/dimensionable.js";
+import { winnerKey, sanitizedId } from "@/assets/js/helpers.js";
 
-const d3 = require('d3');
+const d3 = require("d3");
 
 export default {
   mixins: [dimensionable, bubbleChart],
-  data () {
+  data() {
     return {
-      calculated: [],
-    }
+      calculated: []
+    };
   },
   props: {
     category: {
@@ -39,45 +40,49 @@ export default {
     attr: {
       type: String,
       required: true
+    },
+    singleKeyword: {
+      type: String,
+      required: false
     }
   },
   watch: {
-    calculated () {
+    calculated() {
       //first and soft calculation of forces to manage spacing (it will continue slightly adjusting though)
       if (this.calculated.length === this.category[1].length) {
-        this.$emit('done', this.ranking)
+        this.$emit("done", this.ranking);
       }
     }
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
       this.setDimensions();
       this.draw();
     });
   },
   computed: {
-    id () {
-      return this.attr + this.category[0].split(' ').join('-');
+    id() {
+      return sanitizedId(this.attr, this.category[0]);
     },
-    selector () {
+    selector() {
       return `#${this.id}`;
     },
-    xForce () {
+    xForce() {
       return this.width / 2;
     },
-    yForce () {
+    yForce() {
       return this.height / 2;
     }
   },
   methods: {
-    ticked () {
+    ticked() {
       this.nodes.attr("cx", d => d.x);
-      this.nodes.attr("cy", (d) => {
+      this.nodes.attr("cy", d => {
         this.calculated.push(d.y);
         return d.y;
       });
     },
-    draw () {
+    draw() {
       const data = this.category[1];
 
       const props = {
@@ -87,12 +92,12 @@ export default {
         onTickFn: this.ticked,
         onEndFn: this.onEndSimulation
       };
-      this.createSimulation('category', props);
+      this.createSimulation("category", props);
       this.appendSvg();
       this.appendDefinitions(data);
       this.appendCircles(data);
     },
-    setLabels () {
+    setLabels() {
       const label = this.category[0].toLowerCase();
       const textWidth = this.textWidth(label);
 
@@ -101,39 +106,43 @@ export default {
 
       this.label = d3
         .select(this.$el)
-        .append('div')
-        .attr('class', 'cloud-label')
-        .style('position', 'absolute')
-        .style('color', '#aa9d9c')
-        .style('font-size', '14')
-        .style('right', '30px')
-        .style('bottom', 0)
+        .append("div")
+        .attr("class", "cloud-label")
+        .style("position", "absolute")
+        .style("color", "#aa9d9c")
+        .style("font-size", "14")
+        .style("right", "30px")
+        .style("bottom", 0);
 
       this.labelText = this.label
-        .append('div')
-        .attr('class', 'text')
-        .style('position', 'relative')
+        .append("div")
+        .attr("class", "text")
+        .style("position", "relative")
         .text(label);
 
-      if (d3.select(`#${this.attr} .bubble-cloud:first-child`).node() === this.$el) {
+      if (this.attr === "producers" || this.attr === "languages") {
+        debugger;
+      }
+      const key = winnerKey(this.attr, this.singleKeyword);
+      if (label === this.$store.getters["winners"][key]) {
         this.labelText
-          .append('img')
-          .attr('src', '/handmade-circle.gif')
-          .attr('width', textWidth + 20)
-          .attr('height', 34)
-          .style('position', 'absolute')
-          .style('right', '-10px')
-          .style('top', '-5px')
+          .append("img")
+          .attr("src", "/handmade-circle.gif")
+          .attr("width", textWidth + 20)
+          .attr("preserveAspectRatio", "none")
+          .attr("height", 34)
+          .style("position", "absolute")
+          .style("right", "-10px")
+          .style("top", "-5px");
       }
     },
-    adjustLabels () {
-    },
-  },
+    adjustLabels() {}
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import "~/assets/styles/common.scss";
 
 .bubble-cloud {
   min-height: 150px;

@@ -1,19 +1,18 @@
 <template>
-  <PageComponent next="CinematographyPage" class="producers">
-    <template v-slot:menu>
-      Production /
-      <br />Country
-    </template>
+  <PageComponent next="ResultsPage" class="distribution_company">
+    <template v-slot:menu>Release /<br/> Distribution Company</template>
     <template v-slot>
-      <section id="producers" class="page-container page">
-        <InnerPageDescription :question="question" pageKey="CountryPage" :text="text" />
+      <section id="distribution_company" class="page-container page">
+        <InnerPageDescription
+          :question="question"
+          pageKey="DistributionCompaniesPage"
+          :text="text"
+        />
         <Bubbles
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
-          :hasMany="hasMany"
           :attr="keyword"
-          :singleKeyword="singleKeyword"
         />
       </section>
     </template>
@@ -21,15 +20,15 @@
 </template>
 
 <script>
-import PageComponent from "@/Components/Pages/PageComponent";
+import PageComponent from '@/Components/Pages/PageComponent'
 import Bubbles from "@/Components/Charts/Bubbles";
-import bubblePage from "@/mixins/bubblePage.js";
+import bubblePage from '@/mixins/bubblePage.js';
 import InnerPageDescription from "@/Components/InnerPageDescription";
 
-import NextPageArrow from "@/Components/Arrows/NextPageArrow.vue";
+import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
 
 export default {
-  name: "CountryPage",
+  name: 'DistributionCompaniesPage',
   mixins: [bubblePage],
   components: {
     PageComponent,
@@ -37,14 +36,12 @@ export default {
     NextPageArrow,
     Bubbles
   },
-  data() {
+  data () {
     return {
       movies: [],
       groups: {},
-      keyword: "producers", //used in mixin
-      singleKeyword: "country",
-      hasMany: true
-    };
+      keyword: 'distribution_company', //used in mixin
+    }
   },
   props: {
     question: {
@@ -53,16 +50,16 @@ export default {
     }
   },
   computed: {
-    text() {
+    text () {
       if (this.groups.length) {
         const name = this.groups[0][0];
         return `You cannot go wrong with a good old ${name.toLowerCase()} movie`;
       }
 
-      return "";
+      return '';
     }
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>

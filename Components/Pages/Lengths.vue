@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="ResultsPage" class="length">
+  <PageComponent next="WordCountPage" class="length">
     <template v-slot:menu>Production /<br/> Length</template>
     <template v-slot>
       <section id="length" class="page-container page">

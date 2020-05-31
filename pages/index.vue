@@ -33,13 +33,14 @@ import Budgets from "@/Components/Pages/Budgets.vue";
 import LeadActorAges from "@/Components/Pages/LeadActorAges.vue";
 import DirectorGenders from "@/Components/Pages/DirectorGenders.vue";
 import DirectorAges from "@/Components/Pages/DirectorAges.vue";
+import DistributionCompanies from "@/Components/Pages/DistributionCompanies.vue";
 // import Restrictions from '@/Components/Pages/Restrictions.vue'
 // import Posters from '@/Components/Pages/Posters.vue'
-import Lengths from '@/Components/Pages/Lengths.vue'
-import Words from '@/Components/Pages/Words.vue'
-import Months from '@/Components/Pages/Months.vue'
-import Countries from '@/Components/Pages/Countries.vue'
-import Cinematographies from '@/Components/Pages/Cinematographies.vue'
+import Lengths from "@/Components/Pages/Lengths.vue";
+import Words from "@/Components/Pages/Words.vue";
+import Months from "@/Components/Pages/Months.vue";
+import Countries from "@/Components/Pages/Countries.vue";
+import Cinematographies from "@/Components/Pages/Cinematographies.vue";
 
 import Results from "@/Components/Pages/Results.vue";
 import EventBus from "@/assets/js/eventBus.js";
@@ -64,6 +65,7 @@ export default {
     Countries,
     Words,
     Months,
+    DistributionCompanies,
     // Restrictions,Posters,
     Lengths,
     Cinematographies,

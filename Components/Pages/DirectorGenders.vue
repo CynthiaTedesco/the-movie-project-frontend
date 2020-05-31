@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="DirectorAges" class="directors">
+  <PageComponent next="DirectorAgePage" class="directors">
     <template v-slot:menu>Production /<br/> Director gender</template>
     <template v-slot>
       <section id="directors" class="page-container page">

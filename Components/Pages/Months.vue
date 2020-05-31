@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="ResultsPage" class="release_date">
+  <PageComponent next="DistributionCompaniesPage" class="release_date">
     <template v-slot:menu>
       Release/
       <br />Release Month

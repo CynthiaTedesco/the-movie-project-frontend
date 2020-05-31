@@ -1,6 +1,7 @@
 const d3 = require("d3");
 import { isMobile } from "@/assets/js/helpers.js";
 import tooltip from "@/mixins/tooltip.js";
+import { winnerKey } from "../assets/js/helpers";
 
 export default {
   mixins: [tooltip],
@@ -100,8 +101,7 @@ export default {
         .attr("class", (d) => {
           const classes = ["tick-label"];
 
-          const key =
-            self.attr + (self.singleKeyword ? `-${self.singleKeyword}` : "");
+          const key = winnerKey(self.attr, self.singleKeyword);
           if (self.$store.getters["winners"][key] === d.toLowerCase()) {
             classes.push("winner");
           }
@@ -142,6 +142,7 @@ export default {
         .attr("href", "/handmade-circle.gif")
         .attr("width", this.textWidth(winner.text()) + 20)
         .attr("height", 34)
+        .attr("preserveAspectRatio", "none")
         .attr("x", (-1 * this.textWidth(winner.text())) / 2 - 10)
         .attr("y", 22);
     },

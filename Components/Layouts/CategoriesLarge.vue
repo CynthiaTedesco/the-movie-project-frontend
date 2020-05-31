@@ -6,6 +6,7 @@
 import dimensionable from "@/mixins/dimensionable.js";
 import bubbleChartContainer from "@/mixins/bubbleChartContainer.js";
 import bubbleChart from "@/mixins/bubbleChart.js";
+import { winnerKey } from "@/assets/js/helpers.js";
 const d3 = require("d3");
 
 export default {
@@ -174,13 +175,15 @@ export default {
           .attr("font-size", "14")
           .text(label);
 
-        if (label === this.$store.getters['winners'][this.attr]) {
+        const key = winnerKey(this.attr, this.singleKeyword);
+        if (label === this.$store.getters["winners"][key]) {
           this.labels
             .append("image")
             .attr("href", "/handmade-circle.gif")
-            .attr("width", textWidth + 20)
+            .attr("width", textWidth + 30)
             .attr("height", 34)
-            .attr("x", xx - 15)
+            .attr("preserveAspectRatio", "none")
+            .attr("x", xx - (textWidth > 150 ? 25 : 15))
             .attr("y", yy - 22);
         }
       }

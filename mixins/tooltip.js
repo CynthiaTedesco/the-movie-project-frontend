@@ -1,3 +1,5 @@
+import { sanitizedId } from "../assets/js/helpers";
+
 const d3 = require("d3");
 
 export default {
@@ -9,8 +11,7 @@ export default {
   mounted() {
     const container = this.axis
       ? this.container
-      : d3.select(
-          `#${this.attr} ${this.selector ? this.selector : ".chart-container"}`
+      : d3.select(sanitizedId(this.attr, this.selector || ".chart-container")
         );
 
     this.tooltip = container

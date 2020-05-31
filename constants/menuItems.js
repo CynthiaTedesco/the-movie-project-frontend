@@ -89,12 +89,12 @@ export default [
     component: 'Months',
     question: 'When should you release your movie?',
   },
-  // // {
-  // //   // order: 2,
-  // //   key: 'DistributionCompaniesPage',
-  // //   component: 'DistributionCompanies',
-  // //   question: 'Who should be responsible for the distribution?',
-  // // },
+  {
+    // order: 2,
+    key: 'DistributionCompaniesPage',
+    component: 'DistributionCompanies',
+    question: 'Who should be responsible for the distribution?',
+  },
   // {
   //   // order: 2,
   //   key: 'RestrictionPage',

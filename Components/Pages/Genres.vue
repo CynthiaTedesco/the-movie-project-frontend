@@ -13,6 +13,7 @@
           :movies="movies"
           :groups="groups"
           :attr="keyword"
+          :singleKeyword="singleKeyword"
           :hasMany="hasMany"
         />
       </section>
@@ -39,6 +40,7 @@ export default {
       movies: [],
       groups: {},
       keyword: 'genres',
+      singleKeyword: 'genre_name',
       hasMany: true
     }
   },

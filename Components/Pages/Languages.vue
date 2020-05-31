@@ -12,6 +12,7 @@
           :movies="movies"
           :groups="groups"
           :attr="keyword"
+          :singleKeyword="singleKeyword"
           :hasMany="hasMany"
         />
       </section>
@@ -41,6 +42,7 @@ export default {
       movies: [],
       groups: {},
       keyword: 'languages', //used in mixin
+      singleKeyword: 'language_name', //to set winner image
       hasMany: true
     }
   },

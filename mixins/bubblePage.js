@@ -1,5 +1,5 @@
 const d3 = require("d3");
-import { slices } from "@/assets/js/helpers.js";
+import { slices, winnerKey } from "@/assets/js/helpers.js";
 import AGES from "@/constants/ages.js";
 import BUDGETS from "@/constants/budgets.js";
 import WORD_COUNTS from "@/constants/wordCounts.js";
@@ -71,8 +71,7 @@ export default {
 
         return total2 - total1;
       })[0][0];
-      const key =
-        this.keyword + (this.singleKeyword ? `-${this.singleKeyword}` : "");
+      const key = winnerKey(this.keyword, this.singleKeyword);
       this.$store.dispatch("addWinner", [key, winner.toLowerCase()]);
     },
     groupBy(xs, key) {

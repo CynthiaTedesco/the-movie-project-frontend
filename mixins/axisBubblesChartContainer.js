@@ -24,15 +24,19 @@ export default {
             const lead = m[this.attr].find((a) => a.main || a.primary);
             tooltip = lead ? `${lead.name} (${lead.age})` : "";
           } else {
+            debugger;
             switch (this.attr) {
               case "budget": {
                 tooltip = beautifyCashValue(m[this.attr]);
+                break;
               }
               case "length": {
                 tooltip = `${m[this.attr]}min`;
+                break;
               }
               case 'word_count': {
                 tooltip = `${m[this.attr]} words in ${m.length}min`;
+                break;
               }
             }
           }

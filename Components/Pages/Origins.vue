@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="SeriePage" class="story_origin">
+  <PageComponent next="SeriePage" class="story_origin" :navigate="navigate">
     <template v-slot:menu>Story /<br/> Origin</template>
     <template v-slot>
       <section id="story_origin" class="page-container page">
@@ -47,7 +47,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

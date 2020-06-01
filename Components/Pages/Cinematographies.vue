@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="LengthPage"  class="cinematography">
+  <PageComponent next="LengthPage"  class="cinematography" :navigate="navigate">
     <template v-slot:menu>
       Production /
       <br />Cinematographies
@@ -46,7 +46,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

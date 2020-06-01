@@ -46,11 +46,24 @@ export function winnerKey(keyword, singleKeyword) {
 }
 
 export function sanitizedId(attr, category) {
-  return `#${attr} .${category
-    .split(" ")
-    .join("-")
-    .split(".")
-    .join("--")}`;
+  let sanitizedCategory;
+  if (category[0] === ".") {
+    sanitizedCategory = category
+      .substr(1)
+      .split(" ")
+      .join("-")
+      .split(".")
+      .join("--");
+
+    sanitizedCategory = `.${sanitizedCategory}`;
+  } else {
+    sanitizedCategory = category
+      .split(" ")
+      .join("-")
+      .split(".")
+      .join("--");
+  }
+  return `#${attr} ${sanitizedCategory}`;
 }
 
 export function getAgesGroups(base) {

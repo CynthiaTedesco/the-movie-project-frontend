@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="DirectorGenderPage" class="budget">
+  <PageComponent next="DirectorGenderPage" class="budget" :navigate="navigate">
     <template v-slot:menu>Production/<br/> Budget</template>
     <template v-slot>
       <section id="budget" class="page-container page">
@@ -50,7 +50,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

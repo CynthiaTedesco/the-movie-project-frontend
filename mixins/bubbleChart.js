@@ -1,6 +1,7 @@
 const d3 = require("d3");
 import { isMobile } from "@/assets/js/helpers.js";
 import tooltip from "@/mixins/tooltip.js";
+import { sanitizedId } from "../assets/js/helpers";
 
 export default {
   mixins: [tooltip],
@@ -30,9 +31,8 @@ export default {
   computed: {
     scale() {
       const maxRadius = isMobile()
-        ?
-        (Math.min(this.width, this.height) * 0.30) / 2
-        : (Math.min(this.width, this.height) * 0.1);
+        ? (Math.min(this.width, this.height) * 0.3) / 2
+        : Math.min(this.width, this.height) * 0.1;
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()
@@ -55,7 +55,7 @@ export default {
   methods: {
     appendSvg() {
       this.svg = d3
-        .select(`#${this.attr} ${this.selector || ".chart-container"}`)
+        .select(sanitizedId(this.attr, this.selector || ".chart-container"))
         .append("svg")
         .attr("width", "100%")
         .attr("height", "100%")

@@ -1,13 +1,9 @@
 <template>
-  <PageComponent next="OriginPage" class="genres">
+  <PageComponent next="OriginPage" class="genres" :navigate="navigate">
     <template v-slot:menu>Story / Genre</template>
     <template v-slot>
       <section id="genres" class="page-container page">
-        <InnerPageDescription
-          :text="text"
-          page-key="GenrePage"
-          :question="question"
-        />
+        <InnerPageDescription :text="text" page-key="GenrePage" :question="question" />
         <Bubbles
           v-if="groups.length"
           :movies="movies"
@@ -22,45 +18,46 @@
 </template>
 
 <script>
-import PageComponent from '@/Components/Pages/PageComponent'
+import PageComponent from "@/Components/Pages/PageComponent";
 import Bubbles from "@/Components/Charts/Bubbles";
-import bubblePage from '@/mixins/bubblePage.js';
+import bubblePage from "@/mixins/bubblePage.js";
 import InnerPageDescription from "@/Components/InnerPageDescription";
 
 export default {
-  name: 'GenrePage',
+  name: "GenrePage",
   mixins: [bubblePage],
   components: {
     PageComponent,
     InnerPageDescription,
     Bubbles
   },
-  data () {
+  data() {
     return {
       movies: [],
       groups: {},
-      keyword: 'genres',
-      singleKeyword: 'genre_name',
+      keyword: "genres",
+      singleKeyword: "genre_name",
       hasMany: true
-    }
+    };
   },
-  props:{
+  props: {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
-    text () {
+    text() {
       if (this.groups.length) {
         const name = this.groups[0][0];
         return `You cannot go wrong with a good old ${name.toLowerCase()} movie`;
       }
 
-      return '';
+      return "";
     }
-  },
-}
+  }
+};
 </script>
 
 <style lang="scss" scoped>

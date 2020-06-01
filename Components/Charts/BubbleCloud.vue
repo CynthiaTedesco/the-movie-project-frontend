@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     id() {
-      return sanitizedId(this.attr, this.category[0]);
+      return this.category[0].replace(" ", "-");
     },
     selector() {
       return `#${this.id}`;

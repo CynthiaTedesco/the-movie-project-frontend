@@ -5,33 +5,36 @@
     </TheHeader>
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
     <slot></slot>
-    <NextPageArrow class="blue-ferdio" :target="next" />
+    <NextPageArrow class="blue-ferdio" :target="next" :navigate="navigate" />
   </div>
 </template>
 
 <script>
-import TheHeader from '@/Components/Navigation/TheHeader';
-import TheMenu from '@/Components/Navigation/TheMenu';
-import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
+import TheHeader from "@/Components/Navigation/TheHeader";
+import TheMenu from "@/Components/Navigation/TheMenu";
+import NextPageArrow from "@/Components/Arrows/NextPageArrow.vue";
 
 export default {
   components: { TheHeader, TheMenu, NextPageArrow },
-  data () {
+  data() {
     return {
-      displayMenu: false,
+      displayMenu: false
     };
   },
   props: {
     next: {
       type: String,
       required: true
+    },
+    navigate: {
+      type: String,
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import "~/assets/styles/common.scss";
 .inner-page {
   min-height: 100vh;
   max-height: 100vh;
@@ -80,17 +83,17 @@ export default {
 
     .counter {
       margin-bottom: 0.5em;
-      font-family: 'niveau-grotesk-light';
+      font-family: "niveau-grotesk-light";
     }
 
     .title {
-      font-family: 'niveau-grotesk-bold';
+      font-family: "niveau-grotesk-bold";
       font-size: 1.1rem;
       line-height: 1.1em;
     }
 
     .text {
-      font-family: 'jeff-script-regular';
+      font-family: "jeff-script-regular";
       color: #aa9d9c;
       line-height: 1em;
       font-size: 1.1rem;

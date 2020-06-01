@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="WordCountPage" class="length">
+  <PageComponent next="WordCountPage" class="length" :navigate="navigate">
     <template v-slot:menu>Production /<br/> Length</template>
     <template v-slot>
       <section id="length" class="page-container page">
@@ -50,7 +50,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import EventBus from '@/assets/js/eventBus.js';
+import EventBus from "@/assets/js/eventBus.js";
 
 export default {
   props: {
@@ -16,20 +16,25 @@ export default {
     render: {
       type: Boolean,
       required: false
-    }
+    },
+    navigate: String
   },
   methods: {
-    onClick () {
-      this.$nextTick(() => {
-        EventBus.$emit('scrollToTarget', this.target);
-      });
+    onClick() {
+      if (this.navigate) {
+        this.$router.push(this.navigate);
+      } else {
+        this.$nextTick(() => {
+          EventBus.$emit("scrollToTarget", this.target);
+        });
+      }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import "~/assets/styles/common.scss";
 
 div,
 .arrow {

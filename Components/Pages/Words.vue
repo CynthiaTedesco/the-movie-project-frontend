@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="ReleaseMonthPage" class="word_count">
+  <PageComponent next="ReleaseMonthPage" class="word_count" :navigate="navigate">
     <template v-slot:menu>
       Production/
       <br />Word count
@@ -50,7 +50,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text() {

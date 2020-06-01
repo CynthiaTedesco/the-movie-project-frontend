@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="ResultsPage" class="poster">
+  <PageComponent next="ResultsPage" class="poster" :navigate="navigate">
     <template v-slot:menu>Release /<br/> Poster</template>
     <template v-slot>
       <section id="poster" class="page-container page">
@@ -49,7 +49,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

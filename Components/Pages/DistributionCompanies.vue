@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="RestrictionPage" class="distribution_company">
+  <PageComponent next="RestrictionPage" class="distribution_company" :navigate="navigate">
     <template v-slot:menu>Release /<br/> Distribution Company</template>
     <template v-slot>
       <section id="distribution_company" class="page-container page">
@@ -47,7 +47,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

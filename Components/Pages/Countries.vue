@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="CinematographyPage" class="producers">
+  <PageComponent next="CinematographyPage" class="producers" :navigate="navigate">
     <template v-slot:menu>
       Production /
       <br />Country
@@ -50,7 +50,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text() {

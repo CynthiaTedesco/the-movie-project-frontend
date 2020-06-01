@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="LeadActorGenderPage" class="languages">
+  <PageComponent next="LeadActorGenderPage" class="languages" :navigate="navigate">
     <template v-slot:menu>
       Story /
       <br />Language
@@ -50,7 +50,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

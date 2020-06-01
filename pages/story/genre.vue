@@ -1,5 +1,5 @@
 <template>
-  <Genres :data-index="page.order" :question="page.question" />
+  <Genres :data-index="page.order" :question="page.question" navigate="/story/origin" />
 </template>
 
 <script>

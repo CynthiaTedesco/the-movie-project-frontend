@@ -1,10 +1,19 @@
 <template>
-  <div>origin</div>
+  <Origins :data-index="page.order" :question="page.question" navigate="/story/serie" />
 </template>
 
 <script>
+import Origins from "@/Components/Pages/Origins";
+import MENUITEMS from "@/constants/menuItems";
+
 export default {
-  layout: 'innerPage'
+  name: "OriginPage",
+  components: { Origins },
+  computed: {
+    page() {
+      return MENUITEMS[2];
+    }
+  }
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="DistributionCompaniesPage" class="release_date">
+  <PageComponent next="DistributionCompaniesPage" class="release_date" :navigate="navigate">
     <template v-slot:menu>
       Release/
       <br />Release Month
@@ -50,7 +50,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text() {

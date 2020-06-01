@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="PostersPage" class="restrictions">
+  <PageComponent next="PostersPage" class="restrictions" :navigate="navigate">
     <template v-slot:menu>Release /<br/> Age restriction</template>
     <template v-slot>
       <section id="restrictions" class="page-container page">
@@ -51,7 +51,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

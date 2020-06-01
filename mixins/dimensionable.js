@@ -1,5 +1,6 @@
 const d3 = require("d3");
 import { isMobile } from "@/assets/js/helpers.js";
+import { sanitizedId } from "../assets/js/helpers";
 
 export default {
   data() {
@@ -17,7 +18,7 @@ export default {
         const container = this.$refs.chartContainer
           ? this.$refs.chartContainer.getBoundingClientRect()
           : d3
-              .select(this.selector)
+              .select(sanitizedId(this.attr, this.selector))
               .node()
               .getBoundingClientRect();
 

@@ -11,7 +11,7 @@ export default {
   mounted() {
     const container = this.axis
       ? this.container
-      : d3.select(sanitizedId(this.attr, this.selector || "chart-container"));
+      : d3.select(sanitizedId(this.attr, this.selector || ".chart-container"));
     this.tooltip = container
       .append("div")
       .style("opacity", 0)

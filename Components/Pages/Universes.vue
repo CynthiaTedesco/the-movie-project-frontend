@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="GenrePage" class="universe">
+  <PageComponent next="GenrePage" class="universe" :navigate="navigate">
     <template v-slot:menu>Story /<br/> Universes</template>
     <template v-slot>
       <section id="universe" class="page-container page">
@@ -47,7 +47,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

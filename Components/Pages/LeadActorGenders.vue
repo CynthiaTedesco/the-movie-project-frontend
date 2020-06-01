@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="LeadActorAgePage" class="characters">
+  <PageComponent next="LeadActorAgePage" class="characters" :navigate="navigate">
     <template v-slot:menu>Story /<br/> Lead actor gender</template>
     <template v-slot>
       <section id="characters" class="page-container page">
@@ -51,7 +51,8 @@ export default {
     question: {
       type: String,
       required: true
-    }
+    },
+    navigate: String
   },
   computed: {
     text () {

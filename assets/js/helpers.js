@@ -46,14 +46,11 @@ export function winnerKey(keyword, singleKeyword) {
 }
 
 export function sanitizedId(attr, category) {
-  return (
-    attr +
-    category
-      .split(" ")
-      .join("-")
-      .split(".")
-      .join("--")
-  );
+  return `#${attr} .${category
+    .split(" ")
+    .join("-")
+    .split(".")
+    .join("--")}`;
 }
 
 export function getAgesGroups(base) {

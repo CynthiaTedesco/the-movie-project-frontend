@@ -11,9 +11,7 @@ export default {
   mounted() {
     const container = this.axis
       ? this.container
-      : d3.select(sanitizedId(this.attr, this.selector || ".chart-container")
-        );
-
+      : d3.select(sanitizedId(this.attr, this.selector || "chart-container"));
     this.tooltip = container
       .append("div")
       .style("opacity", 0)
@@ -49,7 +47,8 @@ export default {
           subTooltip = d.axisGroups[this.attr].tooltip;
         }
       } else {
-        subTooltip = d.category[this.attr].tooltip || d.category[this.attr].name;
+        subTooltip =
+          d.category[this.attr].tooltip || d.category[this.attr].name;
       }
       const html = `<strong>${d.title}</strong><br/>${subTooltip}`;
 

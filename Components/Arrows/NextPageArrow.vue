@@ -22,8 +22,13 @@ export default {
   methods: {
     onClick() {
       if (this.navigate) {
+        console.log('--------------------------------------');
+        console.log('navigate defined!!!', this.navigate);
         this.$router.push(this.navigate);
       } else {
+        console.log('--------------------------------------');
+        console.log('not navigate defined :)');
+        console.log('---> scrolling to', this.target);
         this.$nextTick(() => {
           EventBus.$emit("scrollToTarget", this.target);
         });

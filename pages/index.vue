@@ -122,7 +122,11 @@ export default {
   },
   methods: {
     scrollToTarget(targetKey) {
+      console.log('--------------------------------------');
+      console.log('scrollToTarget received in index!!!');
+      console.log('---> looking for ', targetKey);
       const targetElement = this.getTargetElement(targetKey);
+      console.log('--------> founded?--->', targetElement);
       if (targetElement) {
         targetElement.$el.scrollIntoView();
       }

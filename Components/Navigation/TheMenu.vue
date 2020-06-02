@@ -38,13 +38,10 @@ export default {
             { route: '/story/universe', title: 'menu.story.universe' },
             { route: '/story/genre', title: 'menu.story.genre' },
             { route: '/story/origin', title: 'menu.story.origin' },
-            { route: '/story/series', title: 'menu.story.series' },
+            { route: '/story/serie', title: 'menu.story.series' },
             { route: '/script/language', title: 'menu.script.language' },
-            { route: '/story/leadGender', title: 'menu.story.leadGender' },
-            { route: '/story/leadAge', title: 'menu.story.leadAge' },
-            // { route: '/story/settingTime', title: 'menu.story.time' },
-            // { route: '/story/settingPlace', title: 'menu.story.place' },
-            // { route: '/story/plot', title: 'menu.story.plot' }
+            { route: '/story/lead_actor_gender', title: 'menu.story.leadGender' },
+            { route: '/story/lead_actor_age', title: 'menu.story.leadAge' },
           ]
         },
         {
@@ -52,12 +49,12 @@ export default {
           title: 'Production',
           subItems: [
             { route: '/production/budget', title: 'menu.production.budget' },
-            { route: '/production/directorGender', title: 'menu.production.directorGender' },
-            { route: '/production/directorAge', title: 'menu.production.directorAge' },
+            { route: '/production/director_gender', title: 'menu.production.directorGender' },
+            { route: '/production/director_age', title: 'menu.production.directorAge' },
             { route: '/production/country', title: 'menu.production.country' },
             { route: '/production/cinematography', title: 'menu.production.cinematography' },
             { route: '/script/length', title: 'menu.script.length' },
-            { route: '/script/wordCount', title: 'menu.script.wordCount' },
+            { route: '/script/word_count', title: 'menu.script.wordCount' },
           ]
         },
         {
@@ -65,8 +62,8 @@ export default {
           title: 'Release',
           subItems: [
             { route: '/release/month', title: 'menu.release.month' },
-            { route: '/release/distributionCompany', title: 'menu.release.distribution' },
-            { route: '/release/restrictions', title: 'menu.release.restrictions' },
+            { route: '/release/distribution_company', title: 'menu.release.distribution' },
+            { route: '/release/restriction', title: 'menu.release.restrictions' },
             { route: '/release/poster', title: 'menu.release.poster' },
           ]
         },

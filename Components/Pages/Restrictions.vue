@@ -1,5 +1,5 @@
 <template>
-  <PageComponent next="PostersPage" class="restrictions" :navigate="navigate">
+  <PageComponent next="PosterPage" class="restrictions" :navigate="navigate">
     <template v-slot:menu>Release /<br/> Age restriction</template>
     <template v-slot>
       <section id="restrictions" class="page-container page">

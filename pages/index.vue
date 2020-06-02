@@ -141,9 +141,9 @@ console.log('this.$refs[targetKey]', this.$refs[targetKey], this.$refs);
       const index = this.pages.findIndex(page => page.key === targetKey);
       console.log('index', index);
       if (index > -1) {
-        const name = `<${this.pages[index].key}>`;
+        const name = `${this.pages[index].key}`;
         console.log('looking for a page with the name', name);
-        return this.$refs.pages.find(page => page._name === name);
+        return this.$refs.pages.find(page => page.$vnode.key === name);
       }
 
       return null;

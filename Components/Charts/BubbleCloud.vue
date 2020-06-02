@@ -62,7 +62,16 @@ export default {
   },
   computed: {
     id() {
-      return this.category[0].replace(" ", "-");
+      const name = this.category[0]
+        .split(" ")
+        .join("-")
+        .split(".")
+        .join("--");
+      if (!isNaN(name[0])) {
+        return `a_${name}`;
+      } else {
+        return name;
+      }
     },
     selector() {
       return `#${this.id}`;

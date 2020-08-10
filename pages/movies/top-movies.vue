@@ -18,7 +18,7 @@
               :style="bubbleStyle(movie)"
             />
           </div>
-          <div class="title">{{movie.title}}</div>
+          <div class="title" :title="movie.title">{{movie.title}}</div>
           <div class="revenue">{{revenue(movie)}}</div>
         </div>
       </div>
@@ -126,6 +126,22 @@ export default {
 
           &.title {
             font-weight: bold;
+            height: 20px;
+            width: 40vw;
+            white-space: nowrap;
+            overflow: hidden;
+            margin: auto;
+            text-overflow: ellipsis;
+
+            @include media-breakpoint-up(sm){
+              width: 23vw;
+            }
+            @include media-breakpoint-up(md){
+              width: 17vw;
+            }
+            @include media-breakpoint-up(lg){
+              width: 8vw;
+            }
           }
         }
       }

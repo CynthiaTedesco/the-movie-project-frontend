@@ -83,7 +83,7 @@ export default {
       }
     },
     randomProperty (obj) {
-      const k = ['budget', 'imdb_rating', 'length', 'release_date'];//'plot_line', 
+      const k = ['budget', 'imdb_rating', 'length', 'release_date'];//'plot_line',
       // const keys = Object.keys(obj);
       let key = k[k.length * Math.random() << 0];
       while (!obj[key]) {
@@ -157,8 +157,8 @@ div.grid {
     justify-content: center;
 
     img {
-      width: 200%;
-      height: 200%;
+      width: 150%;
+      height: 150%;
       border-radius: 50%;
     }
   }

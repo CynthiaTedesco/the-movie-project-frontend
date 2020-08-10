@@ -81,7 +81,7 @@ export default {
     background-position: 0 0;
     background-size: 40px 40px;
     // position: fixed;
-    color: #dad8d8;
+    color: $white;
     @include max-sized;
 
     @include media-breakpoint-down(l) {

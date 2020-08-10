@@ -24,7 +24,6 @@ export default {
             const lead = m[this.attr].find((a) => a.main || a.primary);
             tooltip = lead ? `${lead.name} (${lead.age})` : "";
           } else {
-            debugger;
             switch (this.attr) {
               case "budget": {
                 tooltip = beautifyCashValue(m[this.attr]);

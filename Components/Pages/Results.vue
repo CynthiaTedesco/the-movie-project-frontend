@@ -62,7 +62,7 @@ import Winner from "@/Components/Winner";
 import MENUITEMS from "@/constants/menuItems.js";
 import {
   slices,
-  winnerKey,
+  customKey,
   getAgesGroups,
   getMonthsGroups,
   getBudgetsGroups,
@@ -111,7 +111,7 @@ export default {
   methods: {
     setWinner(groups, keyword, singleKeyword) {
       const winner = calculateWinner(groups);
-      const key = winnerKey(keyword, singleKeyword);
+      const key = customKey(keyword, singleKeyword);
       return this.$store.dispatch("addWinner", [key, winner.toLowerCase()]);
     },
     setSimpleWinner(key) {

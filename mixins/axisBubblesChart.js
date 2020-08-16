@@ -1,7 +1,7 @@
 const d3 = require("d3");
 import { isMobile } from "@/assets/js/helpers.js";
 import tooltip from "@/mixins/tooltip.js";
-import { winnerKey } from "../assets/js/helpers";
+import { customKey } from "../assets/js/helpers";
 
 export default {
   mixins: [tooltip],
@@ -101,7 +101,7 @@ export default {
         .attr("class", (d) => {
           const classes = ["tick-label"];
 
-          const key = winnerKey(self.attr, self.singleKeyword);
+          const key = customKey(self.attr, self.singleKeyword);
           if (self.$store.getters["winners"][key] === d.toLowerCase()) {
             classes.push("winner");
           }

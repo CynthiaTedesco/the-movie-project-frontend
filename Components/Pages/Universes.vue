@@ -1,66 +1,100 @@
 <template>
   <PageComponent next="GenrePage" class="universe" :navigate="navigate">
-    <template v-slot:menu>Story /<br/> Universes</template>
+    <template v-slot:menu>
+      Story /
+      <br />Universes
+    </template>
     <template v-slot>
       <section id="universe" class="page-container page">
-        <InnerPageDescription
-          :question="question"
-          page-key="UniversePage"
-          :text="text"
-        />
+        <InnerPageDescription :question="question" page-key="UniversePage" :text="text" />
         <Bubbles
+          ref="bubbles"
           v-if="groups.length"
           :movies="movies"
           :groups="groups"
           :attr="keyword"
+          :singleKeyword="singleKeyword"
+          :hasMany="hasMany"
         />
+        <button style="z-index:9999" @click="loadGenres">click at me!</button>
       </section>
     </template>
   </PageComponent>
 </template>
 
 <script>
-import PageComponent from '@/Components/Pages/PageComponent'
+import PageComponent from "@/Components/Pages/PageComponent";
 import Bubbles from "@/Components/Charts/Bubbles";
-import bubblePage from '@/mixins/bubblePage.js';
+import bubblePage from "@/mixins/bubblePage.js";
 import InnerPageDescription from "@/Components/InnerPageDescription";
+import { mapGetters } from "vuex";
 
-import NextPageArrow from '@/Components/Arrows/NextPageArrow.vue'
+import NextPageArrow from "@/Components/Arrows/NextPageArrow.vue";
 
 export default {
-  name: 'UniversePage',
+  name: "UniversePage",
   mixins: [bubblePage],
   components: {
     PageComponent,
     InnerPageDescription,
     NextPageArrow,
-    Bubbles
+    Bubbles,
   },
-  data () {
+  data() {
     return {
       movies: [],
       groups: {},
-      keyword: 'universe', //used in mixin
-    }
+      keyword: "universe", //used in mixin,
+      singleKeyword: "",
+      hasMany: false,
+      nextPage: {
+        keyword: "genres",
+        singleKeyword: "genre_name",
+        hasMany: true,
+      },
+    };
   },
   props: {
     question: {
       type: String,
-      required: true
+      required: true,
     },
-    navigate: String
+    navigate: String,
   },
   computed: {
-    text () {
+    ...mapGetters(["allGroups"]),
+    text() {
       if (this.groups.length) {
         const name = this.groups[0][0];
         return `You cannot go wrong with a good old ${name.toLowerCase()} movie`;
       }
 
-      return '';
-    }
+      return "";
+    },
   },
-}
+  mounted() {
+    this.$store.dispatch("checkGenres");
+  },
+  methods: {
+    async loadGenres() {
+      // const groupsAlreadyCalculated = this.$store.getters["allGroups"][this.keyword];
+      // console.log("groupsAlreadyCalculated", !!groupsAlreadyCalculated);
+
+      // const key = customKey(this.keyword, this.singleKeyword);
+      // const winnerAlreadyCalculated = this.$store.getters["winners"][key];
+      // console.log("winnerAlreadyCalculated", !!winnerAlreadyCalculated);
+
+      const allGroups = this.$store.getters["allGroups"];
+      debugger;
+      this.keyword = this.nextPage.keyword;
+      this.singleKeyword = this.nextPage.singleKeyword;
+      this.hasMany = this.nextPage.hasMany;
+      await this.preProcess(); //set in bubblePage mixin!
+      //   this.simulation.alpha(1);
+      // this.simulation.restart();
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

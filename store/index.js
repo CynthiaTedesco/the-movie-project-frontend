@@ -1,13 +1,18 @@
-import { calculateAge } from "@/assets/js/helpers.js";
+import { calculateAge, getUniverseGroups, getGenresGroups } from "@/assets/js/helpers.js";
 import Vuex from "vuex";
 
 export const state = () => ({
   movies: [],
+  allGroups: {},
   randomMovies: null,
   isMobile: false,
   winners: {},
 });
 export const mutations = {
+  addGroups(state, {groups, keyword}){
+    state.allGroups[keyword] = groups;
+    console.log(`added! Current: ${JSON.stringify(Object.keys(state.allGroups))}`);
+  },
   setMovies(state, movies) {
     state.movies = movies;
   },
@@ -64,6 +69,12 @@ export const actions = {
           moviesWithPoster[index3],
         ];
         vuexContext.commit("setRandomMovies", randomMovies);
+
+        // -------------- GROUPS
+        const universe = getUniverseGroups(vuexContext.getters.movies());
+        vuexContext.commit("addGroups", {groups: universe, 'keyword': 'universe'});
+
+        // -------------- end of GROUPS
         return { movies: moviesToCommit, randomMovies };
       });
     }
@@ -215,6 +226,8 @@ export const actions = {
       return movie;
     });
     vuexContext.commit("setMovies", updatedMovies);
+
+    vuexContext.commit("addGroups", {groups: getGenresGroups(updatedMovies), 'keyword': 'genres-genre_name'});
   },
   updateMoviesWithRestrictions(vuexContext, params) {
     const restrictions = params[1].data;
@@ -267,6 +280,9 @@ export const actions = {
   },
 };
 export const getters = {
+  allGroups(state){
+    return state.allGroups;
+  },
   movies(state) {
     return (limit) => {
       if (limit) {

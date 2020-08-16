@@ -11,25 +11,29 @@ export default {
   props: {
     target: {
       type: String,
-      required: true
     },
     render: {
       type: Boolean,
-      required: false
+      required: false,
     },
-    navigate: String
+    navigate: String,
+    goTo: Object, //TODO remove this prop when its time
   },
   methods: {
     onClick() {
-      if (this.navigate) {
-        this.$router.push(this.navigate);
+      if (this.goTo) {
+        this.$emit('loadNext');
       } else {
-        this.$nextTick(() => {
-          EventBus.$emit("scrollToTarget", this.target);
-        });
+        if (this.navigate) {
+          this.$router.push(this.navigate);
+        } else {
+          this.$nextTick(() => {
+            EventBus.$emit("scrollToTarget", this.target);
+          });
+        }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

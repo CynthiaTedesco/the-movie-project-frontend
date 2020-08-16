@@ -4,12 +4,20 @@ export default [
     key: 'UniversePage',
     component: 'Universes',
     question: 'In what universe is your movie played?',
+
+    header: 'Story /<br /> Universes',
+    keyword: 'universe',
   },
   {
     order: 1,
     key: 'GenrePage',
     component: 'Genres',
     question: 'What is the genre of your movie?',
+
+    header: 'Story / <br/> Genres',
+    keyword: 'genres',
+    singleKeyword: 'genre_name',
+    hasMany: true
   },
   {
     order: 2,

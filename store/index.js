@@ -7,8 +7,13 @@ export const state = () => ({
   randomMovies: null,
   isMobile: false,
   winners: {},
+  simulation: null,
 });
 export const mutations = {
+  setSimulation(state, simulation){
+    //TODO decide if its needed
+    state.simulation = simulation;
+  },
   addGroups(state, {groups, keyword}){
     state.allGroups[keyword] = groups;
     console.log(`added! Current: ${JSON.stringify(Object.keys(state.allGroups))}`);
@@ -28,6 +33,14 @@ export const mutations = {
   },
 };
 export const actions = {
+  setGroups(vuexContext){
+    //TODO set also winners!
+    vuexContext.commit("addGroups", {
+      groups: getUniverseGroups(vuexContext.getters.movies()),
+      'keyword': 'universe'
+    });
+    vuexContext.dispatch('checkGenres');
+  },
   addWinner(vuexContext, winner) {
     vuexContext.commit("addWinner", winner);
   },
@@ -70,11 +83,6 @@ export const actions = {
         ];
         vuexContext.commit("setRandomMovies", randomMovies);
 
-        // -------------- GROUPS
-        const universe = getUniverseGroups(vuexContext.getters.movies());
-        vuexContext.commit("addGroups", {groups: universe, 'keyword': 'universe'});
-
-        // -------------- end of GROUPS
         return { movies: moviesToCommit, randomMovies };
       });
     }
@@ -280,6 +288,9 @@ export const actions = {
   },
 };
 export const getters = {
+  simulation(state){
+    return state.simulation;
+  },
   allGroups(state){
     return state.allGroups;
   },

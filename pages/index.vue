@@ -3,15 +3,36 @@
     <Intro :random-movie="randomMovie" />
     <WeGetYou ref="we-get-you" />
     <TopMovies ref="top-movies" />
-    <component
+
+    <PageComponent
+      :params="currentPage"
+      @loadNext="loadNext">
+
+          <template v-slot>
+            <section id="universe" class="page-container page">
+              <InnerPageDescription :question="currentPage.question" page-key="UniversePage" text="un texto" />
+              <Bubbles
+                ref="bubbles"
+                v-if="groups.length"
+                :movies="movies"
+                :groups="groups"
+                :attr="keyword"
+                :singleKeyword="singleKeyword"
+                :hasMany="hasMany"
+              />
+            </section>
+          </template>
+
+    </PageComponent>
+
+    <!-- <component
       ref="pages"
       v-for="(page, i) in pages"
       :key="page.key"
       :data-index="i"
       :question="page.question"
       v-bind:is="page.component"
-    />
-    <!-- :order="page.order" -->
+    /> -->
   </div>
 </template>
 
@@ -34,13 +55,19 @@ import LeadActorAges from "@/Components/Pages/LeadActorAges.vue";
 import DirectorGenders from "@/Components/Pages/DirectorGenders.vue";
 import DirectorAges from "@/Components/Pages/DirectorAges.vue";
 import DistributionCompanies from "@/Components/Pages/DistributionCompanies.vue";
-import Restrictions from '@/Components/Pages/Restrictions.vue'
-import Posters from '@/Components/Pages/Posters.vue'
+import Restrictions from "@/Components/Pages/Restrictions.vue";
+import Posters from "@/Components/Pages/Posters.vue";
 import Lengths from "@/Components/Pages/Lengths.vue";
 import Words from "@/Components/Pages/Words.vue";
 import Months from "@/Components/Pages/Months.vue";
 import Countries from "@/Components/Pages/Countries.vue";
 import Cinematographies from "@/Components/Pages/Cinematographies.vue";
+
+import {customKey} from '@/assets/js/helpers.js';
+import PageComponent from "@/Components/Pages/PageComponent2";
+import InnerPageDescription from "@/Components/InnerPageDescription";
+import Bubbles from "@/Components/Charts/Bubbles";
+import bubblePage from "@/mixins/bubblePage.js";
 
 import Results from "@/Components/Pages/Results.vue";
 import EventBus from "@/assets/js/eventBus.js";
@@ -48,7 +75,12 @@ import MENUITEMS from "@/constants/menuItems.js";
 
 export default {
   name: "index",
+  mixins: [bubblePage],
   components: {
+    PageComponent,
+    InnerPageDescription,
+    Bubbles,
+
     Intro,
     WeGetYou,
     TopMovies,
@@ -70,30 +102,42 @@ export default {
     Posters,
     Lengths,
     Cinematographies,
-    Results
+    Results,
   },
   watch: {
     pages(o, n) {
       this.$nextTick(() => {
         if (this.$refs.pages) {
           //add observer to the new ones
-          this.$refs.pages.forEach(page => {
+          this.$refs.pages.forEach((page) => {
             this.observer.observe(page.$el);
           });
         }
       });
-    }
+    },
   },
   data() {
     return {
+      currentPageKey: "UniversePage",
+      movies: [],
+      groups: {},
+      keyword: "universe", //used in mixin,
+      singleKeyword: "",
+      hasMany: false,
+
+
       randomMovie: null,
       observer: null,
       pages: [],
-      pendingPages: [...MENUITEMS]
+      pendingPages: [...MENUITEMS],
     };
   },
-  computed: {
-    ...mapGetters(["randomMovies"])
+   computed: {
+    currentPage() {
+      return MENUITEMS.find((mi) => mi.key === this.currentPageKey);
+    },
+    ...mapGetters(["randomMovies"]),
+    ...mapGetters(["allGroups"]),
   },
   created() {
     const fn = (i, randomMovies = this.randomMovies) => {
@@ -101,7 +145,7 @@ export default {
         i = 0;
       }
       this.randomMovie = randomMovies[i++];
-      setTimeout(function() {
+      setTimeout(function () {
         fn(i, randomMovies);
       }, 1500);
     };
@@ -117,10 +161,20 @@ export default {
     EventBus.$on("scrollToTarget", this.scrollToTarget);
   },
   mounted() {
-    this.scrollTrigger();
-    this.loadNewPage();
+    this.$store.dispatch("checkGenres");
+    // this.scrollTrigger();
+    // this.loadNewPage();
   },
   methods: {
+    loadNext(target) {
+      this.keyword = target.keyword;
+      this.singleKeyword = target.singleKeyword;
+      this.hasMany = target.hasMany;
+      this.movies = this.$store.getters.movies();
+      this.groups = this.allGroups[customKey(target.keyword, target.singleKeyword)];
+
+      // await this.preProcess();
+    },
     scrollToTarget(targetKey) {
       const targetElement = this.getTargetElement(targetKey);
       if (targetElement) {
@@ -131,10 +185,10 @@ export default {
       if (this.$refs[targetKey]) {
         return this.$refs[targetKey];
       }
-      const index = this.pages.findIndex(page => page.key === targetKey);
+      const index = this.pages.findIndex((page) => page.key === targetKey);
       if (index > -1) {
         const name = `${this.pages[index].key}`;
-        return this.$refs.pages.find(page => page.$vnode.key === name);
+        return this.$refs.pages.find((page) => page.$vnode.key === name);
       }
 
       return null;
@@ -147,12 +201,12 @@ export default {
     },
     scrollTrigger() {
       const options = {
-        threshold: 0.6
+        threshold: 0.6,
       };
       this.observer = new IntersectionObserver(this.scrollAndLoad, options);
     },
     scrollAndLoad(entries) {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           //TODO check if I need to use this index
           const currentIndex = entry.target.getAttribute("data-index");
@@ -160,8 +214,8 @@ export default {
           this.loadNewPage();
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,5 +1,6 @@
 <template>
   <CategoriesSmall
+    ref="chart"
     v-if="!axis && display==='small'"
     :movies="movies"
     :groups="groups"
@@ -10,6 +11,7 @@
   />
 
   <CategoriesLarge
+    ref="chart"
     v-else-if="!axis && display!=='small'"
     :movies="movies"
     :groups="groups"
@@ -20,7 +22,7 @@
   />
 
   <AxisChartComponent
-    ref="axisChart"
+    ref="chart"
     v-else-if="axis"
     :movies="movies"
     :groups="groups"
@@ -35,6 +37,7 @@ const d3 = require("d3");
 import CategoriesSmall from "@/Components/Layouts/CategoriesSmall.vue";
 import CategoriesLarge from "@/Components/Layouts/CategoriesLarge.vue";
 import AxisChartComponent from "@/Components/Layouts/AxisChartComponent.vue";
+import EventBus from "@/assets/js/eventBus.js";
 import { isMobile } from "@/assets/js/helpers.js";
 
 export default {
@@ -42,12 +45,12 @@ export default {
   components: {
     CategoriesSmall,
     CategoriesLarge,
-    AxisChartComponent
+    AxisChartComponent,
   },
   data() {
     return {
       display: "large",
-      doit: false
+      doit: false,
     };
   },
   props: {
@@ -59,7 +62,14 @@ export default {
     keywordFn: Function,
     axis: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+  },
+  watch:{
+    groups(){
+      this.$nextTick(()=>{
+        this.$refs.chart.restartSimulation();
+      });
     }
   },
   beforeMount() {
@@ -67,11 +77,16 @@ export default {
   },
   mounted() {
     window.addEventListener("resize", this.eventListenerFn);
+    EventBus.$on("restartSimulation", this.restartSimulation);
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.resized);
   },
   methods: {
+    // restartSimulation(params){
+    //   debugger;
+    //   this.$refs.chart.restartSimulation(params);
+    // },
     eventListenerFn() {
       clearTimeout(this.doit);
       this.doit = setTimeout(this.resized, 300);
@@ -87,7 +102,7 @@ export default {
     async resized() {
       if (this.axis) {
         this.$nextTick(() => {
-          this.$refs.axisChart.setDimensions();
+          this.$refs.chart.setDimensions();
         });
       } else {
         //TODO decide if we need a different visualizacion for axis on mobile
@@ -96,8 +111,8 @@ export default {
           this.$store.dispatch("setIsMobile", isMobile());
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

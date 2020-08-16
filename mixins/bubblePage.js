@@ -78,10 +78,6 @@ export default {
         } else {
           this.groups = simpleGroups(temp);
         }
-        this.$store.commit("addGroups", {
-          groups: this.groups,
-          keyword: customKey(this.keyword,this.singleKeyword)
-        });
       // } else {
         // this.groups = this.$store.getters["allGroups"][
         //     this.keyword

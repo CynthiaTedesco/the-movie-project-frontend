@@ -145,6 +145,9 @@ export default {
             )
             .on("tick", onTickFn)
             .on("end", onEndFn || this.onEndSimulation);
+
+            //TODO decide if its needed
+            this.$store.commit('setSimulation', this.simulation);
           break;
         }
         case "timeline": {

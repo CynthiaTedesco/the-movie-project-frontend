@@ -5,7 +5,7 @@
     <TopMovies ref="top-movies" />
 
     <PageComponent :params="currentPage" @reload="reload">
-      <template v-slot>
+      <!-- <template v-slot>
         <section id="universe" class="page-container page">
           <InnerPageDescription
             :question="currentPage.question"
@@ -22,7 +22,7 @@
             :hasMany="hasMany"
           />
         </section>
-      </template>
+      </template> -->
     </PageComponent>
 
     <!-- <component

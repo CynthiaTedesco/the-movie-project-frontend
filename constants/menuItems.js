@@ -5,6 +5,7 @@ export default [
     component: 'Universes',
     question: 'In what universe is your movie played?',
 
+    answer: 'You cannot go wrong with a good old {winner} movie',
     header: 'Story /<br /> Universes',
     keyword: 'universe',
   },
@@ -14,6 +15,7 @@ export default [
     component: 'Genres',
     question: 'What is the genre of your movie?',
 
+    answer: 'You cannot go wrong with a good old {winner} movie',
     header: 'Story / <br/> Genres',
     keyword: 'genres',
     singleKeyword: 'genre_name',

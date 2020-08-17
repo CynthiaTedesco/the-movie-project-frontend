@@ -5,7 +5,24 @@
       <span v-html="current.header"></span>
     </TheHeader>
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
-    <slot></slot>
+    <slot>
+      <section :id="current.keyword" class="page-container page">
+        <InnerPageDescription
+          :question="current.question || '-'"
+          :page-key="current.key || '-'"
+          :text="theAnswer"
+        />
+        <!-- <Bubbles
+            ref="bubbles"
+            v-if="groups.length"
+            :movies="movies"
+            :groups="groups"
+            :attr="keyword"
+            :singleKeyword="singleKeyword"
+            :hasMany="hasMany"
+        />-->
+      </section>
+    </slot>
     <NavigationArrow class="blue-ferdio" :to-next-page="true" @loadNext="loadNext" />
   </div>
 </template>
@@ -13,13 +30,15 @@
 <script>
 import TheHeader from "@/Components/Navigation/TheHeader";
 import TheMenu from "@/Components/Navigation/TheMenu";
-import NavigationArrow from '@/Components/Arrows/NavigationArrow.vue';
+import NavigationArrow from "@/Components/Arrows/NavigationArrow.vue";
+import InnerPageDescription from "@/Components/InnerPageDescription";
 import MENUITEMS from "@/constants/menuItems.js";
 import EventBus from "@/assets/js/eventBus.js";
+import { customKey } from "@/assets/js/helpers.js";
 import { mapGetters } from "vuex";
 
 export default {
-  components: { TheHeader, TheMenu, NavigationArrow },
+  components: { TheHeader, TheMenu, NavigationArrow, InnerPageDescription },
   data() {
     return {
       displayMenu: false,
@@ -43,12 +62,25 @@ export default {
     this.current = this.params;
   },
   computed: {
-    ...mapGetters(["simulation"]),
+    ...mapGetters(["simulation"]), //TODO check if I still need this
+    ...mapGetters(["winners"]),
     nextPage() {
       return MENUITEMS.find((mi) => mi.order === this.current.order + 1);
     },
     previousPage() {
       return MENUITEMS.find((mi) => mi.order === this.current.order - 1);
+    },
+    theAnswer() {
+      if (this.current.answer) {
+        const winnerKey = customKey(
+          this.current.keyword,
+          this.current.singleKeyword
+        );
+        const winner = this.winners[winnerKey].toLowerCase();
+        return this.current.answer.replace("{winner}", winner);
+      }
+
+      return '...';
     },
   },
   methods: {

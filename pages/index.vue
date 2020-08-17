@@ -4,25 +4,25 @@
     <WeGetYou ref="we-get-you" />
     <TopMovies ref="top-movies" />
 
-    <PageComponent
-      :params="currentPage"
-      @loadNext="loadNext">
-
-          <template v-slot>
-            <section id="universe" class="page-container page">
-              <InnerPageDescription :question="currentPage.question" page-key="UniversePage" text="un texto" />
-              <Bubbles
-                ref="bubbles"
-                v-if="groups.length"
-                :movies="movies"
-                :groups="groups"
-                :attr="keyword"
-                :singleKeyword="singleKeyword"
-                :hasMany="hasMany"
-              />
-            </section>
-          </template>
-
+    <PageComponent :params="currentPage" @reload="reload">
+      <template v-slot>
+        <section id="universe" class="page-container page">
+          <InnerPageDescription
+            :question="currentPage.question"
+            page-key="UniversePage"
+            text="un texto"
+          />
+          <Bubbles
+            ref="bubbles"
+            v-if="groups.length"
+            :movies="movies"
+            :groups="groups"
+            :attr="keyword"
+            :singleKeyword="singleKeyword"
+            :hasMany="hasMany"
+          />
+        </section>
+      </template>
     </PageComponent>
 
     <!-- <component
@@ -32,7 +32,7 @@
       :data-index="i"
       :question="page.question"
       v-bind:is="page.component"
-    /> -->
+    />-->
   </div>
 </template>
 
@@ -63,7 +63,7 @@ import Months from "@/Components/Pages/Months.vue";
 import Countries from "@/Components/Pages/Countries.vue";
 import Cinematographies from "@/Components/Pages/Cinematographies.vue";
 
-import {customKey} from '@/assets/js/helpers.js';
+import { customKey } from "@/assets/js/helpers.js";
 import PageComponent from "@/Components/Pages/PageComponent2";
 import InnerPageDescription from "@/Components/InnerPageDescription";
 import Bubbles from "@/Components/Charts/Bubbles";
@@ -125,14 +125,13 @@ export default {
       singleKeyword: "",
       hasMany: false,
 
-
       randomMovie: null,
       observer: null,
       pages: [],
       pendingPages: [...MENUITEMS],
     };
   },
-   computed: {
+  computed: {
     currentPage() {
       return MENUITEMS.find((mi) => mi.key === this.currentPageKey);
     },
@@ -166,13 +165,14 @@ export default {
     // this.loadNewPage();
   },
   methods: {
-    loadNext(target) {
+    reload(target) {
       this.keyword = target.keyword;
       this.singleKeyword = target.singleKeyword;
       this.hasMany = target.hasMany;
       this.movies = this.$store.getters.movies();
-      this.groups = this.allGroups[customKey(target.keyword, target.singleKeyword)];
-
+      this.groups = this.allGroups[
+        customKey(target.keyword, target.singleKeyword)
+      ];
       // await this.preProcess();
     },
     scrollToTarget(targetKey) {

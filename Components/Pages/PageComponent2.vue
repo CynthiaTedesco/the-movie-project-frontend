@@ -1,24 +1,25 @@
 <template>
   <div class="inner-page">
+    <NavigationArrow class="blue-ferdio" @loadPrevious="loadPrevious" />
     <TheHeader @menuToggle="displayMenu =!displayMenu">
       <span v-html="current.header"></span>
     </TheHeader>
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
     <slot></slot>
-    <NextPageArrow class="blue-ferdio" :navigate="navigate" :go-to="nextPage" @loadNext="loadNext" />
+    <NavigationArrow class="blue-ferdio" :to-next-page="true" @loadNext="loadNext" />
   </div>
 </template>
 
 <script>
 import TheHeader from "@/Components/Navigation/TheHeader";
 import TheMenu from "@/Components/Navigation/TheMenu";
-import NextPageArrow from "@/Components/Arrows/NextPageArrow.vue";
+import NavigationArrow from '@/Components/Arrows/NavigationArrow.vue';
 import MENUITEMS from "@/constants/menuItems.js";
 import EventBus from "@/assets/js/eventBus.js";
 import { mapGetters } from "vuex";
 
 export default {
-  components: { TheHeader, TheMenu, NextPageArrow },
+  components: { TheHeader, TheMenu, NavigationArrow },
   data() {
     return {
       displayMenu: false,
@@ -51,8 +52,12 @@ export default {
     },
   },
   methods: {
+    loadPrevious() {
+      const target = Object.assign({}, this.previousPage);
+      this.current = this.previousPage;
+      this.$emit("reload", target);
+    },
     loadNext() {
-      debugger;
       const target = Object.assign({}, this.nextPage);
       this.current = this.nextPage;
 
@@ -62,7 +67,7 @@ export default {
       // await this.preProcess()
       // EventBus.$emit("restartSimulation", target);
 
-      this.$emit('loadNext', target);
+      this.$emit("reload", target);
     },
   },
 };

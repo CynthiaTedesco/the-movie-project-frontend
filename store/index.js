@@ -1,8 +1,14 @@
 import {
   calculateAge,
+  getBudgetsGroups,
+  getLengthsGroups,
   getSimpleResults,
   getPeopleResults,
   getListResults,
+  getSpecialPlainResults,
+  getWordCountResults,
+  getReleaseMonthResults,
+  getPosterResults,
 } from "@/assets/js/helpers.js";
 
 export const state = () => ({
@@ -20,9 +26,11 @@ export const mutations = {
   },
   addGroups(state, groups) {
     state.allGroups[groups[0]] = groups[1];
-    console.log(
-      `groups list added! Current: ${JSON.stringify(Object.keys(state.allGroups))}`
-    );
+    // console.log(
+    //   `groups list added! Current: ${JSON.stringify(
+    //     Object.keys(state.allGroups)
+    //   )}`
+    // );
   },
   setMovies(state, movies) {
     state.movies = movies;
@@ -44,63 +52,102 @@ export const actions = {
 
     const universeResults = getSimpleResults(movies, "universe");
     vuexContext.commit("addGroups", universeResults.groups);
-    vuexContext.commit('addWinner', universeResults.winner);
+    vuexContext.commit("addWinner", universeResults.winner);
 
-    vuexContext.dispatch("checkGenres").then(()=>{
+    vuexContext.dispatch("checkGenres").then(() => {
       const genreResults = getListResults(movies, "genres", "genre_name");
       vuexContext.commit("addGroups", genreResults.groups);
-      vuexContext.commit('addWinner', genreResults.winner);
+      vuexContext.commit("addWinner", genreResults.winner);
     });
 
-    const originResults = getSimpleResults(movies, 'story_origin');
+    const originResults = getSimpleResults(movies, "story_origin");
     vuexContext.commit("addGroups", originResults.groups);
-    vuexContext.commit('addWinner', originResults.winner);
+    vuexContext.commit("addWinner", originResults.winner);
 
-    const serieResults = getSimpleResults(movies, 'serie');
+    const serieResults = getSimpleResults(movies, "serie");
     vuexContext.commit("addGroups", serieResults.groups);
-    vuexContext.commit('addWinner', serieResults.winner);
+    vuexContext.commit("addWinner", serieResults.winner);
 
-    const distributionCompanyResults = getSimpleResults(movies, 'distribution_company');
+    const distributionCompanyResults = getSimpleResults(
+      movies,
+      "distribution_company"
+    );
     vuexContext.commit("addGroups", distributionCompanyResults.groups);
-    vuexContext.commit('addWinner', distributionCompanyResults.winner);
+    vuexContext.commit("addWinner", distributionCompanyResults.winner);
 
-    const cinematographyResults = getSimpleResults(movies, 'cinematography');
+    const cinematographyResults = getSimpleResults(movies, "cinematography");
     vuexContext.commit("addGroups", cinematographyResults.groups);
-    vuexContext.commit('addWinner', cinematographyResults.winner);
+    vuexContext.commit("addWinner", cinematographyResults.winner);
 
-    vuexContext.dispatch("checkLanguages").then(()=>{
-      const languagesResults = getListResults(movies, "languages", "language_name");
+    vuexContext.dispatch("checkLanguages").then(() => {
+      const languagesResults = getListResults(
+        movies,
+        "languages",
+        "language_name"
+      );
       vuexContext.commit("addGroups", languagesResults.groups);
-      vuexContext.commit('addWinner', languagesResults.winner);
+      vuexContext.commit("addWinner", languagesResults.winner);
     });
 
-    vuexContext.dispatch("checkProducers").then(()=>{
+    vuexContext.dispatch("checkProducers").then(() => {
       const producerResults = getListResults(movies, "producers", "country");
       vuexContext.commit("addGroups", producerResults.groups);
-      vuexContext.commit('addWinner', producerResults.winner);
+      vuexContext.commit("addWinner", producerResults.winner);
     });
 
-    vuexContext.dispatch("checkRestrictions").then(()=>{
-      const restrictionResults = getListResults(movies, "restrictions", "restriction_name");
+    vuexContext.dispatch("checkRestrictions").then(() => {
+      const restrictionResults = getListResults(
+        movies,
+        "restrictions",
+        "restriction_name"
+      );
       vuexContext.commit("addGroups", restrictionResults.groups);
-      vuexContext.commit('addWinner', restrictionResults.winner);
+      vuexContext.commit("addWinner", restrictionResults.winner);
     });
 
-    vuexContext.dispatch("checkCharacters").then(()=>{
+    vuexContext.dispatch("checkCharacters").then(() => {
       const charactersResults = getPeopleResults(movies, "characters", "main");
       vuexContext.commit("addGroups", charactersResults.age.groups);
-      vuexContext.commit('addWinner', charactersResults.age.winner);
+      vuexContext.commit("addWinner", charactersResults.age.winner);
       vuexContext.commit("addGroups", charactersResults.gender.groups);
-      vuexContext.commit('addWinner', charactersResults.gender.winner);
+      vuexContext.commit("addWinner", charactersResults.gender.winner);
     });
 
-    vuexContext.dispatch("checkDirectors").then(()=>{
+    vuexContext.dispatch("checkDirectors").then(() => {
       const directorsResults = getPeopleResults(movies, "directors");
       vuexContext.commit("addGroups", directorsResults.age.groups);
-      vuexContext.commit('addWinner', directorsResults.age.winner);
+      vuexContext.commit("addWinner", directorsResults.age.winner);
       vuexContext.commit("addGroups", directorsResults.gender.groups);
-      vuexContext.commit('addWinner', directorsResults.gender.winner);
+      vuexContext.commit("addWinner", directorsResults.gender.winner);
     });
+
+    const budgetResults = getSpecialPlainResults(
+      movies,
+      "budget",
+      getBudgetsGroups
+    );
+    vuexContext.commit("addGroups", budgetResults.groups);
+    vuexContext.commit("addWinner", budgetResults.winner);
+
+    const lengthResults = getSpecialPlainResults(
+      movies,
+      "length",
+      getLengthsGroups
+    );
+    vuexContext.commit("addGroups", lengthResults.groups);
+    vuexContext.commit("addWinner", lengthResults.winner);
+
+    const wordCountshResults = getWordCountResults(movies);
+    vuexContext.commit("addGroups", wordCountshResults.groups);
+    vuexContext.commit("addWinner", wordCountshResults.winner);
+
+    const releaseMonthResults = getReleaseMonthResults(movies);
+    vuexContext.commit("addGroups", releaseMonthResults.groups);
+    vuexContext.commit("addWinner", releaseMonthResults.winner);
+
+    const posterResults = getPosterResults(movies);
+    vuexContext.commit("addGroups", posterResults.groups);
+    vuexContext.commit("addWinner", posterResults.winner);
   },
   addWinner(vuexContext, winner) {
     vuexContext.commit("addWinner", winner);

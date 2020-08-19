@@ -314,11 +314,6 @@ export function groupBy(movies, key, keyword, hasMany, singleKeyword) {
   }, {});
 }
 
-export function getGenresGroups(movies) {
-  const pre_groups = groupBy(movies, "genres", "genres", true, "genre_name");
-  return simpleGroups(pre_groups);
-}
-
 export function getSimpleResults(movies, keyword) {
   const temp = groupByObject(movies, keyword);
   const groups = simpleGroups(temp);
@@ -330,9 +325,17 @@ export function getSimpleResults(movies, keyword) {
     winner: [key, winner.toLowerCase()],
   };
 }
-export function getSpecialPlainResults() {} //"budget", getBudgetsGroups),
-// this.setSpecialPlainWinner("length", getLengthsGroups),
+export function getSpecialPlainResults(movies, keyword, fn) {
+  const temp = groupByPlain(movies, keyword, fn);
+  const groups = fn(temp);
+  const winner = calculateWinner(groups);
+  const key = customKey(keyword, "");
 
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
 export function getPeopleResults(movies, keyword, primaryKey = "primary") {
   const temp1 = groupByManyWithInnerKey(movies, keyword, {
     singleKeyword: "age",
@@ -360,9 +363,8 @@ export function getPeopleResults(movies, keyword, primaryKey = "primary") {
     winner: [key2, winner2.toLowerCase()],
   };
 
-  return {age, gender}
+  return { age, gender };
 }
-
 export function getListResults(movies, keyword, singleKeyword) {
   const temp = groupByManyWithInnerKey(movies, keyword, { singleKeyword });
   const groups = simpleGroups(temp);
@@ -375,6 +377,43 @@ export function getListResults(movies, keyword, singleKeyword) {
   };
 }
 
-export function getPosterResults() {}
-export function getReleaseMonthResults() {}
-export function getWordCountResults() {}
+export function getPosterResults(movies) {
+  const temp = groupByKeywordFn(movies, (movie) =>
+    movie.poster.poster_type ? movie.poster.poster_type.name : ""
+  );
+  const key = "poster";
+  const groups = simpleGroups(temp);
+  const winner = calculateWinner(groups);
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
+export function getReleaseMonthResults(movies) {
+  const temp = groupByKeywordFn(
+    movies,
+    (movie) => movie.release_date.split("-")[1]
+  );
+  const key = "release_date";
+  const groups = getMonthsGroups(temp);
+  const winner = calculateWinner(groups);
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
+export function getWordCountResults(movies) {
+  const temp = groupByKeywordFn(movies, (movie) =>
+    Math.round(movie.word_count / movie.length)
+  );
+  const key = "word_count";
+  const groups = getWordCountsGroups(temp);
+  const winner = calculateWinner(groups);
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}

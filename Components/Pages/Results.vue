@@ -202,6 +202,7 @@ export default {
   position: relative;
   .presentation {
     padding: 130px 60px 50px;
+    height: 100%;
 
     .results {
       display: grid;

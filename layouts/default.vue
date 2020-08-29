@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { isMobile } from "@/assets/js/helpers.js";
+import { isMobile, isTablet } from "@/assets/js/helpers.js";
 
 export default {
   middleware: ["movies"],
@@ -16,6 +16,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("setIsMobile", isMobile());
+    this.$store.dispatch("setIsTablet", isTablet());
   }
 };
 </script>

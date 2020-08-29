@@ -1,14 +1,19 @@
 <template>
   <div class="everything">
-    <Intro :random-movie="randomMovie" />
-    <WeGetYou ref="we-get-you" />
-    <TopMovies ref="top-movies" />
+    <Intro name="intro" :random-movie="randomMovie" :class="{'current': current === 'intro'}" />
+    <WeGetYou name="we-get-you" ref="we-get-you" :class="{'current': current === 'we-get-you'}" />
+    <TopMovies name="top-movies" ref="top-movies" :class="{'current': current === 'top-movies'}" />
 
-    <PageComponent :params="currentPage" @reload="reload">
+    <PageComponent
+      name="inner-page"
+      :params="currentInnerPage"
+      @reload="reload"
+      :class="{'current': current === 'inner-page'}"
+    >
       <!-- <template v-slot>
         <section id="universe" class="page-container page">
           <InnerPageDescription
-            :question="currentPage.question"
+            :question="currentInnerPage.question"
             page-key="UniversePage"
             text="un texto"
           />
@@ -22,8 +27,9 @@
             :hasMany="hasMany"
           />
         </section>
-      </template> -->
+      </template>-->
     </PageComponent>
+    <Results name="results" :class="{'current': current === 'results'}" />
 
     <!-- <component
       ref="pages"
@@ -63,7 +69,7 @@ import Months from "@/Components/Pages/Months.vue";
 import Countries from "@/Components/Pages/Countries.vue";
 import Cinematographies from "@/Components/Pages/Cinematographies.vue";
 
-import { customKey } from "@/assets/js/helpers.js";
+import { customKey, clientHeight, scrollY } from "@/assets/js/helpers.js";
 import PageComponent from "@/Components/Pages/PageComponent2";
 import InnerPageDescription from "@/Components/InnerPageDescription";
 import Bubbles from "@/Components/Charts/Bubbles";
@@ -80,7 +86,6 @@ export default {
     PageComponent,
     InnerPageDescription,
     Bubbles,
-
     Intro,
     WeGetYou,
     TopMovies,
@@ -104,21 +109,12 @@ export default {
     Cinematographies,
     Results,
   },
-  watch: {
-    pages(o, n) {
-      this.$nextTick(() => {
-        if (this.$refs.pages) {
-          //add observer to the new ones
-          this.$refs.pages.forEach((page) => {
-            this.observer.observe(page.$el);
-          });
-        }
-      });
-    },
-  },
+  watch: {},
   data() {
     return {
-      currentPageKey: "UniversePage",
+      doing: false,
+      current: "intro",
+      currentInnerPageKey: "UniversePage",
       movies: [],
       groups: {},
       keyword: "universe", //used in mixin,
@@ -132,8 +128,8 @@ export default {
     };
   },
   computed: {
-    currentPage() {
-      return MENUITEMS.find((mi) => mi.key === this.currentPageKey);
+    currentInnerPage() {
+      return MENUITEMS.find((mi) => mi.key === this.currentInnerPageKey);
     },
     ...mapGetters(["randomMovies"]),
     ...mapGetters(["allGroups"]),
@@ -160,11 +156,87 @@ export default {
     EventBus.$on("scrollToTarget", this.scrollToTarget);
   },
   mounted() {
-    this.$store.dispatch("checkGenres");
+    window.addEventListener("wheel", this.onWheel, { passive: false });
+    const withinViewport = Array.from(
+      document.getElementsByClassName("page")
+    ).filter((page) => page.getBoundingClientRect().top >= 0)[0];
+    if (withinViewport) {
+      const name = withinViewport.getAttribute("name");
+      if (name !== this.current) {
+        const rect = withinViewport.getBoundingClientRect();
+        this.current = name;
+        if (rect.y !== 0) {
+          window.scrollTo({
+            top: rect.y,
+            behavior: "smooth",
+          });
+        }
+      }
+    }
+    // this.$store.dispatch("checkGenres");
     // this.scrollTrigger();
     // this.loadNewPage();
   },
   methods: {
+    getNewTop(direction) {
+      // const current = document.getElementsByClassName("current")[0];
+      // if (current) {
+      //   const target =
+      //     e.deltaY > 0
+      //       ? current.nextElementSibling
+      //       : current.previousElementSibling;
+      //   console.log("moving from", current, "to", target);
+      //   if (target) {
+      //     this.current = target.getAttribute("name");
+      //     return target.getBoundingClientRect().y;
+      //   }
+      // }
+
+      // const height = document.documentElement.clientHeight; //window.innerHeight
+      // const scrollTop = document.documentElement.scrollTop; //window.scrollY
+      console.log("scrollY", scrollY(), "clientHeight", clientHeight());
+      console.log("newTop", scrollY() + clientHeight() * direction);
+      return scrollY() + clientHeight() * direction;
+    },
+    setNewCurrent(direction) {
+      console.log("setting new current");
+
+      const current = document.getElementsByClassName("current")[0];
+      if (current) {
+        const target =
+          direction > 0
+            ? current.nextElementSibling
+            : current.previousElementSibling;
+        console.log("moving from", current, "to", target);
+        if (target) {
+          this.current = target.getAttribute("name");
+        }
+
+        setTimeout(() => {
+          console.log("setting doing to false");
+          this.doing = false;
+        }, 350);
+      }
+    },
+    onWheel(e) {
+      //TODO check if it is first level scrolling!!
+      e.preventDefault();
+      if (!this.doing) {
+        console.log("ON WHEEL");
+        this.doing = true;
+        const self = this;
+        window.requestAnimationFrame(function () {
+          const direction = e.deltaY > 0 ? 1 : -1;
+          console.log("about to scroll to direction", direction);
+          window.scrollTo({
+            top: self.getNewTop(direction),
+            behavior: "smooth",
+          });
+
+          self.setNewCurrent(direction);
+        });
+      }
+    },
     reload(target) {
       this.keyword = target.keyword;
       this.singleKeyword = target.singleKeyword;
@@ -178,42 +250,16 @@ export default {
     scrollToTarget(targetKey) {
       const targetElement = this.getTargetElement(targetKey);
       if (targetElement) {
-        targetElement.$el.scrollIntoView();
+        this.current = targetElement.getAttribute("name");
+        targetElement.scrollIntoView();
       }
     },
     getTargetElement(targetKey) {
       if (this.$refs[targetKey]) {
-        return this.$refs[targetKey];
-      }
-      const index = this.pages.findIndex((page) => page.key === targetKey);
-      if (index > -1) {
-        const name = `${this.pages[index].key}`;
-        return this.$refs.pages.find((page) => page.$vnode.key === name);
+        return this.$refs[targetKey].$el;
       }
 
-      return null;
-    },
-    loadNewPage() {
-      const nextPending = this.pendingPages.shift();
-      if (nextPending) {
-        Vue.set(this.pages, this.pages.length, nextPending);
-      }
-    },
-    scrollTrigger() {
-      const options = {
-        threshold: 0.6,
-      };
-      this.observer = new IntersectionObserver(this.scrollAndLoad, options);
-    },
-    scrollAndLoad(entries) {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          //TODO check if I need to use this index
-          const currentIndex = entry.target.getAttribute("data-index");
-          entry.target.scrollIntoView();
-          this.loadNewPage();
-        }
-      });
+      return document.getElementsByName(targetKey)[0];
     },
   },
 };

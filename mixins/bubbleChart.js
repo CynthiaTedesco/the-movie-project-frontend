@@ -1,7 +1,6 @@
 const d3 = require("d3");
-import { isMobile } from "@/assets/js/helpers.js";
 import tooltip from "@/mixins/tooltip.js";
-import { sanitizedId } from "../assets/js/helpers";
+import { isMobile, sanitizedId, isTablet } from "../assets/js/helpers";
 
 export default {
   mixins: [tooltip],
@@ -30,7 +29,7 @@ export default {
   },
   computed: {
     scale() {
-      const maxRadius = isMobile()
+      const maxRadius = isMobile() || isTablet()
         ? (Math.min(this.width, this.height) * 0.3) / 2
         : Math.min(this.width, this.height) * 0.1;
       console.log("maxRadius", maxRadius);

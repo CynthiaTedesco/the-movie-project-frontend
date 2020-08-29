@@ -1,9 +1,11 @@
 <template>
-  <PageComponent next="GenrePage" class="universe" :navigate="navigate">
-    <template v-slot:menu>
-      Story /
-      <br />Universes
-    </template>
+  <PageComponent
+    next="GenrePage"
+    class="universe"
+    :navigate="navigate"
+    :params="currentPage"
+    @loadNext="loadNext"
+  >
     <template v-slot>
       <section id="universe" class="page-container page">
         <InnerPageDescription :question="question" page-key="UniversePage" :text="text" />
@@ -23,11 +25,12 @@
 </template>
 
 <script>
-import PageComponent from "@/Components/Pages/PageComponent";
+import PageComponent from "@/Components/Pages/PageComponent2";
 import Bubbles from "@/Components/Charts/Bubbles";
 import bubblePage from "@/mixins/bubblePage.js";
 import InnerPageDescription from "@/Components/InnerPageDescription";
 import { mapGetters } from "vuex";
+import MENUITEMS from "@/constants/menuItems.js";
 
 import NextPageArrow from "@/Components/Arrows/NextPageArrow.vue";
 
@@ -42,16 +45,17 @@ export default {
   },
   data() {
     return {
+      currentPageKey: "UniversePage",
       movies: [],
       groups: {},
       keyword: "universe", //used in mixin,
       singleKeyword: "",
       hasMany: false,
-      nextPage: {
-        keyword: "genres",
-        singleKeyword: "genre_name",
-        hasMany: true,
-      },
+      // nextPage: {
+      //   keyword: "genres",
+      //   singleKeyword: "genre_name",
+      //   hasMany: true,
+      // },
     };
   },
   props: {
@@ -62,6 +66,9 @@ export default {
     navigate: String,
   },
   computed: {
+    currentPage() {
+      return MENUITEMS.find((mi) => mi.key === this.currentPageKey);
+    },
     ...mapGetters(["allGroups"]),
     text() {
       if (this.groups.length) {
@@ -76,7 +83,10 @@ export default {
     this.$store.dispatch("checkGenres");
   },
   methods: {
-    async loadGenres() {
+    loadNext(target) {
+      this.loadGenres(target);
+    },
+    async loadGenres(target) {
       // const groupsAlreadyCalculated = this.$store.getters["allGroups"][this.keyword];
       // console.log("groupsAlreadyCalculated", !!groupsAlreadyCalculated);
 
@@ -85,10 +95,9 @@ export default {
       // console.log("winnerAlreadyCalculated", !!winnerAlreadyCalculated);
 
       const allGroups = this.$store.getters["allGroups"];
-      debugger;
-      this.keyword = this.nextPage.keyword;
-      this.singleKeyword = this.nextPage.singleKeyword;
-      this.hasMany = this.nextPage.hasMany;
+      this.keyword = target.keyword;
+      this.singleKeyword = target.singleKeyword;
+      this.hasMany = target.hasMany;
       await this.preProcess(); //set in bubblePage mixin!
       //   this.simulation.alpha(1);
       // this.simulation.restart();

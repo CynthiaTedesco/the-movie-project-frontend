@@ -18,13 +18,16 @@ export function beautifyCashValue(labelValue) {
     : Math.floor(Math.abs(Number(labelValue)));
 }
 export function isMobile() {
-  return document.documentElement.clientWidth <= 860;
+  return document.documentElement.clientWidth <= 584;
+}
+export function isTablet() {
+  return document.documentElement.clientWidth <= 1024;
 }
 export function slices() {
   if (!document) {
     return 50;
   }
-  return isMobile() ? 20 : 50;
+  return isMobile() ? 10 :isTablet() ? 20 : 50;
 }
 export function calculateAge(birthdate, releaseDate) {
   if (!birthdate || !releaseDate) {
@@ -416,4 +419,19 @@ export function getWordCountResults(movies) {
     groups: [key, groups],
     winner: [key, winner.toLowerCase()],
   };
+}
+export function clientHeight() {
+  return window.innerHeight && document.documentElement.clientHeight
+    ? Math.min(window.innerHeight, document.documentElement.clientHeight)
+    : window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.getElementsByTagName("body")[0].clientHeight;
+}
+
+export function scrollY() {
+  return window.scrollY && document.documentElement.scrollTop
+    ? Math.min(window.scrollY, document.documentElement.scrollTop)
+    : window.scrollY ||
+        document.documentElement.scrollTop ||
+        document.getElementsByTagName("body")[0].scrollTop;
 }

@@ -38,7 +38,7 @@ import CategoriesSmall from "@/Components/Layouts/CategoriesSmall.vue";
 import CategoriesLarge from "@/Components/Layouts/CategoriesLarge.vue";
 import AxisChartComponent from "@/Components/Layouts/AxisChartComponent.vue";
 import EventBus from "@/assets/js/eventBus.js";
-import { isMobile } from "@/assets/js/helpers.js";
+import { isMobile, isTablet } from "@/assets/js/helpers.js";
 
 export default {
   name: "bubbles",
@@ -93,7 +93,7 @@ export default {
     },
     calculateDisplay() {
       const width = document.documentElement.clientWidth;
-      if (isMobile()) {
+      if (isMobile() || isTablet()) {
         return "small";
       }
 
@@ -107,8 +107,13 @@ export default {
       } else {
         //TODO decide if we need a different visualizacion for axis on mobile
         this.display = this.calculateDisplay();
-        if ((await this.$store.getters.onMobile) !== isMobile()) {
+        const onMobile = await this.$store.getters.onMobile;
+        const onTablet = await this.$store.getters.onTablet;
+
+        if (onMobile !== isMobile()) {
           this.$store.dispatch("setIsMobile", isMobile());
+        } else if (onTablet !== isTablet()) {
+          this.$store.dispatch("setIsTablet", isTablet());
         }
       }
     },

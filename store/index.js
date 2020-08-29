@@ -16,6 +16,7 @@ export const state = () => ({
   allGroups: {},
   randomMovies: null,
   isMobile: false,
+  isTablet: false,
   winners: {},
   simulation: null,
 });
@@ -41,6 +42,9 @@ export const mutations = {
   setRandomMovies(state, movies) {
     state.randomMovies = movies;
     console.log("random movies", movies.length);
+  },
+  setIsTablet(state, isTablet) {
+    state.isTablet = isTablet;
   },
   setIsMobile(state, isMobile) {
     state.isMobile = isMobile;
@@ -392,6 +396,9 @@ export const actions = {
   setIsMobile(vuexContext, isMobile) {
     vuexContext.commit("setIsMobile", isMobile);
   },
+  setIsTablet(vuexContext, isTablet) {
+    vuexContext.commit("setIsTablet", isTablet);
+  },
 };
 export const getters = {
   simulation(state) {
@@ -423,6 +430,9 @@ export const getters = {
   },
   onMobile(state) {
     return state.isMobile;
+  },
+  onTablet(state) {
+    return state.isTablet;
   },
   winners(state) {
     return state.winners;

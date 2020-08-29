@@ -16,21 +16,15 @@ export default {
       type: Boolean,
       required: false,
     },
-    navigate: String,
-    goTo: Object, //TODO remove this prop when its time
   },
   methods: {
     onClick() {
-      if (this.goTo) {
-        this.$emit('loadNext');
+      if (this.target) {
+        this.$nextTick(() => {
+          EventBus.$emit("scrollToTarget", this.target);
+        });
       } else {
-        if (this.navigate) {
-          this.$router.push(this.navigate);
-        } else {
-          this.$nextTick(() => {
-            EventBus.$emit("scrollToTarget", this.target);
-          });
-        }
+        EventBus.$emit("loadNext");
       }
     },
   },

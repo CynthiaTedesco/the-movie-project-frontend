@@ -1,12 +1,12 @@
 <template>
-  <div class="inner-page">
+  <div class="inner-page page">
     <NavigationArrow class="blue-ferdio" @loadPrevious="loadPrevious" />
     <TheHeader @menuToggle="displayMenu =!displayMenu">
       <span v-html="current.header"></span>
     </TheHeader>
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
     <slot>
-      <section :id="current.keyword" class="page-container page">
+      <section :id="current.keyword" class="page-container">
         <InnerPageDescription
           :question="current.question || '-'"
           :page-key="current.key || '-'"
@@ -80,14 +80,18 @@ export default {
         return this.current.answer.replace("{winner}", winner);
       }
 
-      return '...';
+      return "...";
     },
   },
   methods: {
     loadPrevious() {
-      const target = Object.assign({}, this.previousPage);
-      this.current = this.previousPage;
-      this.$emit("reload", target);
+      if (this.previousPage) {
+        const target = Object.assign({}, this.previousPage);
+        this.current = this.previousPage;
+        this.$emit("reload", target);
+      } else {
+        EventBus.$emit("scrollToTarget", "top-movies");
+      }
     },
     loadNext() {
       const target = Object.assign({}, this.nextPage);
@@ -108,8 +112,6 @@ export default {
 <style lang="scss" scoped>
 @import "~/assets/styles/common.scss";
 .inner-page {
-  min-height: 100vh;
-  max-height: 100vh;
   background-image: radial-gradient(#2b4ab7 0%, #ffffff 5%);
   background-position: 0 0;
   background-size: 40px 40px;

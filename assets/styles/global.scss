@@ -19,6 +19,7 @@
 
 body {
   overflow-x: hidden;
+  overflow: hidden;
 }
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -132,11 +133,7 @@ button:focus {
 }
 
 .page {
-  min-height: 100vh;
-  max-height: 100vh;
-}
-.top-movies {
-  max-height: none;
+  height: 100vh;
 }
 
 .presentation {
@@ -149,7 +146,6 @@ button:focus {
   background-size: 40px 40px;
   position: relative;
   color: $dirty-white;
-  min-height: 100vh;
 }
 
 .page-container {

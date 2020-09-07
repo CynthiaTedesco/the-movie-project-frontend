@@ -5,6 +5,7 @@
     <TopMovies name="top-movies" ref="top-movies" :class="{'current': current === 'top-movies'}" />
 
     <PageComponent
+      ref="inner-page"
       name="inner-page"
       :params="currentInnerPage"
       @reload="reload"
@@ -125,6 +126,7 @@ export default {
       observer: null,
       pages: [],
       pendingPages: [...MENUITEMS],
+      timer: null,
     };
   },
   computed: {
@@ -219,22 +221,36 @@ export default {
       }
     },
     onWheel(e) {
-      //TODO check if it is first level scrolling!!
       e.preventDefault();
+      const direction = e.deltaY > 0 ? 1 : -1;
+
       if (!this.doing) {
-        console.log("ON WHEEL");
         this.doing = true;
         const self = this;
-        window.requestAnimationFrame(function () {
-          const direction = e.deltaY > 0 ? 1 : -1;
-          console.log("about to scroll to direction", direction);
-          window.scrollTo({
-            top: self.getNewTop(direction),
-            behavior: "smooth",
-          });
 
-          self.setNewCurrent(direction);
-        });
+        if (self.current === "inner-page") {
+          if (self.$refs[self.current]) {
+            if (self.timer) {
+              clearTimeout(self.timer);
+            }
+            this.timer = setTimeout(function () {
+              if (direction > 0) {
+                self.$refs[self.current].loadNext();
+              } else {
+                self.$refs[self.current].loadPrevious();
+              }
+            }, 200);
+          }
+        } else {
+          window.requestAnimationFrame(function () {
+            window.scrollTo({
+              top: self.getNewTop(direction),
+              behavior: "smooth",
+            });
+
+            self.setNewCurrent(direction);
+          });
+        }
       }
     },
     reload(target) {
@@ -245,6 +261,8 @@ export default {
       this.groups = this.allGroups[
         customKey(target.keyword, target.singleKeyword)
       ];
+
+      this.doing = false;
       // await this.preProcess();
     },
     scrollToTarget(targetKey) {
@@ -253,6 +271,7 @@ export default {
         this.current = targetElement.getAttribute("name");
         targetElement.scrollIntoView();
       }
+      this.doing = false;
     },
     getTargetElement(targetKey) {
       if (this.$refs[targetKey]) {

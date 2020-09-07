@@ -94,16 +94,20 @@ export default {
       }
     },
     loadNext() {
-      const target = Object.assign({}, this.nextPage);
-      this.current = this.nextPage;
+      if (this.nextPage && this.nextPage.key !== 'ResultsPage') {
+        const target = Object.assign({}, this.nextPage);
+        this.current = this.nextPage;
 
-      // this.keyword = target.keyword;
-      // this.singleKeyword = target.singleKeyword;
-      // this.hasMany = target.hasMany;
-      // await this.preProcess()
-      // EventBus.$emit("restartSimulation", target);
+        // this.keyword = target.keyword;
+        // this.singleKeyword = target.singleKeyword;
+        // this.hasMany = target.hasMany;
+        // await this.preProcess()
+        // EventBus.$emit("restartSimulation", target);
 
-      this.$emit("reload", target);
+        this.$emit("reload", target);
+      } else {
+        EventBus.$emit('scrollToTarget', 'results');
+      }
     },
   },
 };

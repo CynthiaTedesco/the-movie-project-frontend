@@ -16,17 +16,23 @@ export default {
   data() {
     return {
       small: true,
-      axis: true
+      axis: true,
     };
   },
   props: {
-    singleKeyword: String
+    singleKeyword: String,
   },
   watch: {
     width(current, old) {
       console.log(`width has changed from ${old} to ${this.width}`);
       this.draw();
-    }
+    },
+    groups() {
+      this.$nextTick(() => {
+        //TODO DO SOMETHING!
+        // this.restartSimulation();
+      });
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -39,7 +45,7 @@ export default {
       const props = {
         xForce: this.xForce,
         yForce: this.yForce,
-        onTickFn: this.ticked
+        onTickFn: this.ticked,
       };
       this.createSimulation(props);
       this.appendSvg();
@@ -58,12 +64,12 @@ export default {
     },
     ticked() {
       const self = this;
-      this.nodes.attr("cy", d => {
+      this.nodes.attr("cy", (d) => {
         const toReturn = Math.min(d.y, self.innerHeight - 40);
         return toReturn < -1 ? self.scale(d.revenue) * 2.2 : toReturn;
       });
     },
-  }
+  },
 };
 </script>
 

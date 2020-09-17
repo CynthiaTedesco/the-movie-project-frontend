@@ -65,13 +65,6 @@ export default {
       default: false,
     },
   },
-  watch:{
-    groups(){
-      this.$nextTick(()=>{
-        this.$refs.chart.restartSimulation();
-      });
-    }
-  },
   beforeMount() {
     this.display = this.calculateDisplay();
   },

@@ -11,6 +11,13 @@ const d3 = require("d3");
 
 export default {
   mixins: [dimensionable, bubbleChartContainer, bubbleChart],
+  watch: {
+    groups() {
+      this.$nextTick(() => {
+        this.restartSimulation();
+      });
+    },
+  },
   mounted() {
     this.init();
   },
@@ -59,10 +66,10 @@ export default {
     },
   },
   methods: {
-    restartSimulation(){
+    restartSimulation() {
       this.prepareBubbleChartContainerData(); //loads category attribute!
-      this.simulation.force("x",  d3.forceX(this.xForce).strength(0.1))
-      this.simulation.force("y",  d3.forceY(this.yForce).strength(0.1))
+      this.simulation.force("x", d3.forceX(this.xForce).strength(0.1));
+      this.simulation.force("y", d3.forceY(this.yForce).strength(0.1));
       this.simulation.alpha(0.75).restart();
     },
     init() {

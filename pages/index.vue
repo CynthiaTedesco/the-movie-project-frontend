@@ -11,35 +11,21 @@
       @reload="reload"
       :class="{'current': current === 'inner-page'}"
     >
-      <!-- <template v-slot>
-        <section id="universe" class="page-container page">
-          <InnerPageDescription
-            :question="currentInnerPage.question"
-            page-key="UniversePage"
-            text="un texto"
-          />
-          <Bubbles
-            ref="bubbles"
-            v-if="groups.length"
-            :movies="movies"
-            :groups="groups"
-            :attr="keyword"
-            :singleKeyword="singleKeyword"
-            :hasMany="hasMany"
-          />
-        </section>
-      </template>-->
+      <template v-slot>
+        <Bubbles
+          ref="bubbles"
+          v-if="groups && groups.length"
+          :movies="movies"
+          :groups="groups"
+          :attr="keyword"
+          :singleKeyword="singleKeyword"
+          :hasMany="hasMany"
+        />
+        <!-- </section> -->
+      </template>
     </PageComponent>
     <Results name="results" :class="{'current': current === 'results'}" />
 
-    <!-- <component
-      ref="pages"
-      v-for="(page, i) in pages"
-      :key="page.key"
-      :data-index="i"
-      :question="page.question"
-      v-bind:is="page.component"
-    />-->
   </div>
 </template>
 
@@ -175,29 +161,11 @@ export default {
         }
       }
     }
-    // this.$store.dispatch("checkGenres");
-    // this.scrollTrigger();
-    // this.loadNewPage();
   },
   methods: {
     getNewTop(direction) {
-      // const current = document.getElementsByClassName("current")[0];
-      // if (current) {
-      //   const target =
-      //     e.deltaY > 0
-      //       ? current.nextElementSibling
-      //       : current.previousElementSibling;
-      //   console.log("moving from", current, "to", target);
-      //   if (target) {
-      //     this.current = target.getAttribute("name");
-      //     return target.getBoundingClientRect().y;
-      //   }
-      // }
-
-      // const height = document.documentElement.clientHeight; //window.innerHeight
-      // const scrollTop = document.documentElement.scrollTop; //window.scrollY
-      console.log("scrollY", scrollY(), "clientHeight", clientHeight());
-      console.log("newTop", scrollY() + clientHeight() * direction);
+      // console.log("scrollY", scrollY(), "clientHeight", clientHeight());
+      // console.log("newTop", scrollY() + clientHeight() * direction);
       return scrollY() + clientHeight() * direction;
     },
     setNewCurrent(direction) {
@@ -256,13 +224,22 @@ export default {
     reload(target) {
       this.keyword = target.keyword;
       this.singleKeyword = target.singleKeyword;
+      const key = customKey(target.keyword, target.singleKeyword);
+
+      this.currentInnerPageKey = target.key;
       this.hasMany = target.hasMany;
       this.movies = this.$store.getters.movies();
-      this.groups = this.allGroups[
-        customKey(target.keyword, target.singleKeyword)
-      ];
+      this.groups = this.allGroups[key];
+      if (!this.groups) {
+        const self = this;
+        this.$store.dispatch("setSpecificResults", key).then((groups) => {
+          self.groups = groups;
+          self.doing = false;
+        });
+      } else {
+        this.doing = false;
+      }
 
-      this.doing = false;
       // await this.preProcess();
     },
     scrollToTarget(targetKey) {

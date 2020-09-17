@@ -5,24 +5,24 @@
       <span v-html="current.header"></span>
     </TheHeader>
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
-    <slot>
       <section :id="current.keyword" class="page-container">
         <InnerPageDescription
           :question="current.question || '-'"
           :page-key="current.key || '-'"
           :text="theAnswer"
         />
+    <slot>
         <!-- <Bubbles
             ref="bubbles"
-            v-if="groups.length"
+            v-if="groups && groups.length"
             :movies="movies"
             :groups="groups"
             :attr="keyword"
             :singleKeyword="singleKeyword"
             :hasMany="hasMany"
-        />-->
-      </section>
+        /> -->
     </slot>
+      </section>
     <NavigationArrow class="blue-ferdio" :to-next-page="true" @loadNext="loadNext" />
   </div>
 </template>
@@ -94,7 +94,7 @@ export default {
       }
     },
     loadNext() {
-      if (this.nextPage && this.nextPage.key !== 'ResultsPage') {
+      if (this.nextPage && this.nextPage.key !== "ResultsPage") {
         const target = Object.assign({}, this.nextPage);
         this.current = this.nextPage;
 
@@ -106,7 +106,7 @@ export default {
 
         this.$emit("reload", target);
       } else {
-        EventBus.$emit('scrollToTarget', 'results');
+        EventBus.$emit("scrollToTarget", "results");
       }
     },
   },

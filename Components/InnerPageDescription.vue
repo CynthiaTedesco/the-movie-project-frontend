@@ -13,45 +13,44 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import MENUITEMS from '@/constants/menuItems.js'
+import Vue from "vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import MENUITEMS from "@/constants/menuItems.js";
 
-library.add(faExternalLinkAlt)
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-
+library.add(faExternalLinkAlt);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 export default {
-  name:'inner-page-description',
+  name: "inner-page-description",
   props: {
     text: {
       type: String,
-      required: false
+      required: false,
     },
     question: {
       type: String,
-      required: true
+      required: true,
     },
     pageKey: {
       type: String,
-      required: true
+      required: true,
     }
   },
   computed: {
-    counter () {
-      const index = MENUITEMS.findIndex(a=>a.key === this.pageKey);
+    counter() {
+      const index = MENUITEMS.findIndex((a) => a.key === this.pageKey);
       const ordinal = index + 1;
-      const total = MENUITEMS.length-1;
-      return `${ordinal}/${total}`
-    }
-  }
-}
+      const total = MENUITEMS.length - 1;
+      return `${ordinal}/${total}`;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~assets/styles/common.scss';
+@import "~assets/styles/common.scss";
 .description {
   background: transparent;
   z-index: 14;
@@ -65,11 +64,10 @@ export default {
       color: white;
     }
   }
-
 }
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* 1 */
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
   display: block;
   font-weight: 300;
   font-size: 10px;

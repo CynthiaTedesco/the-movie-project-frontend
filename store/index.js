@@ -10,6 +10,7 @@ import {
   getReleaseMonthResults,
   getPosterResults,
 } from "@/assets/js/helpers.js";
+import Vue from 'vue'
 
 export const state = () => ({
   movies: [],
@@ -26,12 +27,10 @@ export const mutations = {
     state.simulation = simulation;
   },
   addGroups(state, groups) {
-    state.allGroups[groups[0]] = groups[1];
-    // console.log(
-    //   `groups list added! Current: ${JSON.stringify(
-    //     Object.keys(state.allGroups)
-    //   )}`
-    // );
+    // if (groups[0].indexOf("genres") > -1) {
+    //   console.log("ADDING GROUPS", groups[0], groups[1].length);
+    // }
+    Vue.set(state.allGroups, groups[0], groups[1]);
   },
   setMovies(state, movies) {
     state.movies = movies;
@@ -58,11 +57,8 @@ export const actions = {
     vuexContext.commit("addGroups", universeResults.groups);
     vuexContext.commit("addWinner", universeResults.winner);
 
-    vuexContext.dispatch("checkGenres").then(() => {
-      const genreResults = getListResults(movies, "genres", "genre_name");
-      vuexContext.commit("addGroups", genreResults.groups);
-      vuexContext.commit("addWinner", genreResults.winner);
-    });
+    //TODO continue doing this!
+    vuexContext.dispatch("setSpecificResults", "genres-genre_name");
 
     const originResults = getSimpleResults(movies, "story_origin");
     vuexContext.commit("addGroups", originResults.groups);
@@ -152,6 +148,36 @@ export const actions = {
     const posterResults = getPosterResults(movies);
     vuexContext.commit("addGroups", posterResults.groups);
     vuexContext.commit("addWinner", posterResults.winner);
+  },
+  setSpecificResults: async (vuexContext, key) => {
+    const movies = vuexContext.getters.movies();
+
+    switch(key){
+      case "genres-genre_name": {
+        return vuexContext.dispatch("setGenresResults", movies);
+      }
+    }
+  },
+  setGenresResults: async (vuexContext, movies) => {
+    const key = "genres-genre_name";
+    if (!movies[0].genres) {
+      await vuexContext.dispatch("checkGenres");
+    }
+    if (
+      !vuexContext.getters.allGroups[key] ||
+      !vuexContext.getters.winners[key]
+    ) {
+      const genreResults = getListResults(movies, "genres", "genre_name");
+
+      if (!vuexContext.getters.allGroups[key]) {
+        vuexContext.commit("addGroups", genreResults.groups);
+      }
+      if (!vuexContext.getters.winners[key]) {
+        vuexContext.commit("addWinner", genreResults.winner);
+      }
+    }
+
+    return vuexContext.getters.allGroups[key];
   },
   addWinner(vuexContext, winner) {
     vuexContext.commit("addWinner", winner);

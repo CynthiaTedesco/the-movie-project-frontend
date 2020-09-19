@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import EventBus from "@/assets/js/eventBus.js";
-
 export default {
   props: {
     toNextPage: Boolean,

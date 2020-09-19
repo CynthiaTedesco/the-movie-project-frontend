@@ -5,13 +5,13 @@
       <span v-html="current.header"></span>
     </TheHeader>
     <TheMenu :show="displayMenu" @close="displayMenu=false" />
-      <section :id="current.keyword" class="page-container">
-        <InnerPageDescription
-          :question="current.question || '-'"
-          :page-key="current.key || '-'"
-          :text="theAnswer"
-        />
-    <slot>
+    <section :id="current.keyword" class="page-container">
+      <InnerPageDescription
+        :question="current.question || '-'"
+        :page-key="current.key || '-'"
+        :text="theAnswer"
+      />
+      <slot>
         <!-- <Bubbles
             ref="bubbles"
             v-if="groups && groups.length"
@@ -20,9 +20,9 @@
             :attr="keyword"
             :singleKeyword="singleKeyword"
             :hasMany="hasMany"
-        /> -->
-    </slot>
-      </section>
+        />-->
+      </slot>
+    </section>
     <NavigationArrow class="blue-ferdio" :to-next-page="true" @loadNext="loadNext" />
   </div>
 </template>
@@ -57,6 +57,9 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  created() {
+    EventBus.$on("loadSpecificPage", this.loadSpecificPage);
   },
   mounted() {
     this.current = this.params;
@@ -97,16 +100,22 @@ export default {
       if (this.nextPage && this.nextPage.key !== "ResultsPage") {
         const target = Object.assign({}, this.nextPage);
         this.current = this.nextPage;
-
-        // this.keyword = target.keyword;
-        // this.singleKeyword = target.singleKeyword;
-        // this.hasMany = target.hasMany;
-        // await this.preProcess()
-        // EventBus.$emit("restartSimulation", target);
-
         this.$emit("reload", target);
       } else {
         EventBus.$emit("scrollToTarget", "results");
+      }
+    },
+    loadSpecificPage({ target, innerTarget }) {
+      switch (target) {
+        case "top-movies":
+          EventBus.$emit("scrollToTarget", "top-movies");
+          break;
+        case "results":
+          EventBus.$emit("scrollToTarget", "results");
+          break;
+        case "inner-page":
+          this.current = innerTarget;
+          this.$emit("reload", innerTarget);
       }
     },
   },

@@ -11,6 +11,7 @@
 
 <script>
 import MenuGroup from '@/Components/Navigation/MenuGroup.vue';
+import MENUITEMS from "@/constants/menuItems.js";
 
 export default {
   name: 'TheMenu',
@@ -28,43 +29,50 @@ export default {
           route: '',
           title: 'Movies',
           subItems: [
-            { route: '/movies/top-movies', title: 'menu.top-movies' }
+            { title: 'menu.top-movies', target: 'top-movies' }
           ]
         },
         {
           route: '',
           title: 'Story',
           subItems: [
-            { route: '/story/universe', title: 'menu.story.universe' },
-            { route: '/story/genre', title: 'menu.story.genre' },
-            { route: '/story/origin', title: 'menu.story.origin' },
-            { route: '/story/serie', title: 'menu.story.series' },
-            { route: '/script/language', title: 'menu.script.language' },
-            { route: '/story/lead_actor_gender', title: 'menu.story.leadGender' },
-            { route: '/story/lead_actor_age', title: 'menu.story.leadAge' },
+            { title: 'menu.story.universe', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === 'UniversePage') },
+            { title: 'menu.story.genre', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === 'GenrePage') },
+            { title: 'menu.story.origin', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === 'OriginPage') },
+            { title: 'menu.story.series', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.script.language', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.story.leadGender', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.story.leadAge', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
           ]
         },
         {
           route: '',
           title: 'Production',
           subItems: [
-            { route: '/production/budget', title: 'menu.production.budget' },
-            { route: '/production/director_gender', title: 'menu.production.directorGender' },
-            { route: '/production/director_age', title: 'menu.production.directorAge' },
-            { route: '/production/country', title: 'menu.production.country' },
-            { route: '/production/cinematography', title: 'menu.production.cinematography' },
-            { route: '/script/length', title: 'menu.script.length' },
-            { route: '/script/word_count', title: 'menu.script.wordCount' },
+            { title: 'menu.production.budget', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.production.directorGender', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.production.directorAge', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.production.country', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.production.cinematography', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.script.length', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.script.wordCount', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
           ]
         },
         {
           route: '',
           title: 'Release',
           subItems: [
-            { route: '/release/month', title: 'menu.release.month' },
-            { route: '/release/distribution_company', title: 'menu.release.distribution' },
-            { route: '/release/restriction', title: 'menu.release.restrictions' },
-            { route: '/release/poster', title: 'menu.release.poster' },
+            { title: 'menu.release.month', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.release.distribution', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.release.restrictions', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+            { title: 'menu.release.poster', target: 'inner-page', innerTarget: MENUITEMS.find((a) => a.key === '') },
+          ]
+        },
+        {
+          route: '',
+          title: 'Results',
+          subItems: [
+            { title: 'menu.results', target: 'results' }
           ]
         },
       ]

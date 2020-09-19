@@ -74,7 +74,6 @@ export default {
       });
     },
     draw() {
-      debugger;
       const props = {
         xForce: this.xForce,
         yForce: this.yForce,

@@ -2,14 +2,16 @@
   <div class="menu-group">
     <div class="title">{{ item.title }}</div>
     <ul class="list">
-      <li v-for="subItem in item.subItems" :key="subItem.title">
-        <nuxt-link :to="subItem.route">{{ $t(subItem.title) }}</nuxt-link>
+      <li v-for="subItem in item.subItems" :key="subItem.title" @click="menuClick(subItem)" class="tmp-item">
+          {{ $t(subItem.title) }}
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import EventBus from "@/assets/js/eventBus.js";
+
 export default {
   props: {
     item: {
@@ -21,6 +23,11 @@ export default {
           subItems: [{ route: '#', title: 'a subitem title' }]
         };
       }
+    }
+  },
+  methods:{
+    menuClick(target){
+      EventBus.$emit("loadSpecificPage", target);
     }
   }
 };
@@ -35,7 +42,8 @@ export default {
   font-size: 90%;
   line-height: 1.8rem;
 
-  a, a:hover, a:focus {
+  li, li:hover, li:focus {
+    cursor: pointer;
     color: #989898;
   }
 }

@@ -9,6 +9,7 @@ export default {
       release: 'Release'
     },
     'top-movies': 'Top Movies',
+    'results': 'Results',
     story: {
       genre: 'Genre',
       universe: 'Universe',

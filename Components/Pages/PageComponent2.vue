@@ -11,17 +11,7 @@
         :page-key="current.key || '-'"
         :text="theAnswer"
       />
-      <slot>
-        <!-- <Bubbles
-            ref="bubbles"
-            v-if="groups && groups.length"
-            :movies="movies"
-            :groups="groups"
-            :attr="keyword"
-            :singleKeyword="singleKeyword"
-            :hasMany="hasMany"
-        />-->
-      </slot>
+      <slot></slot>
     </section>
     <NavigationArrow class="blue-ferdio" :to-next-page="true" @loadNext="loadNext" />
   </div>

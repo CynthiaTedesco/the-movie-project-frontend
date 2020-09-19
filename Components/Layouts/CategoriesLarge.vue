@@ -64,6 +64,7 @@ export default {
       this.simulation.force("x", d3.forceX(this.xForce).strength(0.1));
       this.simulation.force("y", d3.forceY(this.yForce).strength(0.1));
       this.simulation.alpha(0.75).restart();
+      this.resetLabels();
     },
     init() {
       this.$nextTick(() => {
@@ -153,6 +154,13 @@ export default {
           self.coordinates[d.category[this.attr].name].y = d.y;
         }
         return d.y;
+      });
+    },
+    resetLabels(){
+      console.log('reseting');
+      this.labels.remove();
+      this.$nextTick(() => {
+        setTimeout(this.setLabels, 700);
       });
     },
     setLabels() {

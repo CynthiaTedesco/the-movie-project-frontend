@@ -1,12 +1,12 @@
 <template>
-  <div class="results page" id="results">
+  <div class="results page" id="results" @wheel.stop>
     <TheHeader
       class="negative"
       @menuToggle="displayMenu =!displayMenu"
       :hide-logo="true"
       title="The Results"
     />
-    <TheMenu :show="displayMenu" @close="displayMenu=false" active="results"/>
+    <TheMenu :show="displayMenu" @close="displayMenu=false" active="results" />
     <div v-if="loadedWinners" class="presentation">
       <div class="results">
         <div class="section story">
@@ -35,7 +35,9 @@
             <Winner :winner="winners['story_origin']" title="Origin" />
             <Winner :winner="winners['characters-age']" title="Lead actor age" />
           </div>
-          <Winner :winner="winners['serie']" title="Series" />
+          <div>
+            <Winner :winner="winners['serie']" title="Series" />
+          </div>
         </div>
         <div class="section production">
           <div class="title">Production</div>
@@ -57,13 +59,15 @@
             <Winner :winner="winners['directors-age']" title="Director age" />
             <Winner :winner="winners['word_count']" title="Word Count" />
           </div>
-          <Winner
-            :winner="winners['producers-country'].toUpperCase()"
-            title="Country"
-            class="with-flag left"
-          >
-            <img src="~/assets/images/results/flag_right.png" alt="language flag" />
-          </Winner>
+          <div>
+            <Winner
+              :winner="winners['producers-country'].toUpperCase()"
+              title="Country"
+              class="with-flag left"
+            >
+              <img src="~/assets/images/results/flag_right.png" alt="language flag" />
+            </Winner>
+          </div>
         </div>
         <div class="section release">
           <div class="title">Release</div>
@@ -82,7 +86,7 @@
 
 <script>
 import TheHeader from "@/Components/Navigation/TheHeader";
-import TheMenu from '@/Components/Navigation/TheMenu';
+import TheMenu from "@/Components/Navigation/TheMenu";
 import Winner from "@/Components/Winner";
 import MENUITEMS from "@/constants/menuItems.js";
 import {
@@ -240,41 +244,84 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~/assets/styles/common.scss";
+
 #results {
+  overflow: auto;
+
   position: relative;
   .presentation {
     padding: 130px 60px 50px;
-    height: 100%;
+    height: auto;
 
     .results {
-      display: grid;
-      grid-template-rows: 2fr 2fr 1fr;
-      max-height: 75vh;
+      @include media-breakpoint-up(lg) {
+        display: grid;
+        grid-template-rows: 2fr 2fr 1fr;
+        max-height: 75vh;
+      }
 
       .section {
-        display: grid;
-        grid-template-columns: 150px repeat(4, 1fr);
+        display: flex;
+        flex-direction: column;
 
-        &.story,
-        &.production {
-          > div:not(:last-child):not(.title) {
-            display: grid;
-            grid-template-rows: repeat(2 1fr);
-          }
-        }
         > div {
+          display: flex;
+          margin-bottom: 1rem;
+
+          @include media-breakpoint-up(lg) {
+            display: block;
+            margin: none;
+          }
           &.title {
             font-weight: bolder;
             font-size: 18px;
+            margin-top: 2rem;
+
+            @include media-breakpoint-up(lg) {
+              margin-top: 0;
+            }
+          }
+        }
+
+        &.story,
+        &.production {
+          > div:last-child {
+            width: 50%;
+            margin-left: 0;
+            margin-right: auto;
+          }
+        }
+
+        &.release {
+          > div {
+            display: block;
+          }
+        }
+        @include media-breakpoint-up(lg) {
+          display: grid;
+          grid-template-columns: 150px repeat(4, 1fr);
+
+          &.story,
+          &.production {
+            > div:not(:last-child):not(.title) {
+              display: grid;
+              grid-template-rows: repeat(2 1fr);
+            }
           }
         }
 
         .with-gender {
           img {
             position: absolute;
-            width: 70px;
-            top: 15px;
-            left: 10px;
+            left: -10px;
+            width: 50px;
+            top: 25px;
+            @include media-breakpoint-up(lg) {
+              width: 70px;
+              top: 15px;
+              left: 20%;
+            }
           }
         }
 
@@ -282,17 +329,29 @@ export default {
           img {
             position: absolute;
             width: 35%;
-            top: 10px;
+            max-width: 60px;
+            top: 15px;
+
+            @include media-breakpoint-up(lg) {
+              max-width: 80px;
+              top: 10px;
+            }
           }
 
           &.left {
             img {
-              left: 10px;
+              left: 5%;
+              @include media-breakpoint-up(lg) {
+                left: 15%;
+              }
             }
           }
           &.right {
             img {
-              right: 10px;
+              right: 0;
+              @include media-breakpoint-up(lg) {
+                right: 20%;
+              }
             }
           }
         }

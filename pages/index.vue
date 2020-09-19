@@ -175,7 +175,9 @@ export default {
           break;
         case "inner-page":
           this.scrollToTarget('inner-page');
-          this.$refs['inner-page'].loadSpecificPage(innerTarget);
+          if(this.$refs['inner-page']){
+            this.$refs['inner-page'].loadSpecificPage(innerTarget);
+          }
       }
     },
     getNewTop(direction) {

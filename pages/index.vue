@@ -2,6 +2,7 @@
   <div class="everything">
     <Intro name="intro" :random-movie="randomMovie" :class="{'current': current === 'intro'}" />
     <WeGetYou name="we-get-you" ref="we-get-you" :class="{'current': current === 'we-get-you'}" />
+
     <TopMovies name="top-movies" ref="top-movies" :class="{'current': current === 'top-movies'}" />
 
     <PageComponent
@@ -24,6 +25,7 @@
         <!-- </section> -->
       </template>
     </PageComponent>
+
     <Results name="results" :class="{'current': current === 'results'}" />
   </div>
 </template>
@@ -141,6 +143,7 @@ export default {
     }
 
     EventBus.$on("scrollToTarget", this.scrollToTarget);
+    EventBus.$on("menuClick", this.menuClick);
   },
   mounted() {
     window.addEventListener("wheel", this.onWheel, { passive: false });
@@ -162,9 +165,20 @@ export default {
     }
   },
   methods: {
+    menuClick({ target, innerTarget }) {
+      switch (target) {
+        case "top-movies":
+          this.scrollToTarget("top-movies");
+          break;
+        case "results":
+          this.scrollToTarget('results');
+          break;
+        case "inner-page":
+          this.scrollToTarget('inner-page');
+          this.$refs['inner-page'].loadSpecificPage(innerTarget);
+      }
+    },
     getNewTop(direction) {
-      // console.log("scrollY", scrollY(), "clientHeight", clientHeight());
-      // console.log("newTop", scrollY() + clientHeight() * direction);
       return scrollY() + clientHeight() * direction;
     },
     setNewCurrent(direction) {
@@ -244,7 +258,6 @@ export default {
         this.doing = false;
       }
 
-      // await this.preProcess();
     },
     scrollToTarget(targetKey) {
       const targetElement = this.getTargetElement(targetKey);

@@ -1,11 +1,6 @@
 <template>
   <div class="the-menu-toggle" @click="$emit('toggle')">
     <slot>
-      <!-- <template v-if="this.$nuxt.$route.path!=='/'">
-      {{ category }}
-      <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>
-      {{ subcategory }}
-      </template>-->
       <span>Menu</span>
     </slot>
   </div>

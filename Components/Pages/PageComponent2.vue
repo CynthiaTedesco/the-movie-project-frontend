@@ -4,7 +4,7 @@
     <TheHeader @menuToggle="displayMenu =!displayMenu">
       <span v-html="current.header"></span>
     </TheHeader>
-    <TheMenu :show="displayMenu" @close="displayMenu=false" :active="current.key"/>
+    <TheMenu :show="displayMenu" @close="displayMenu=false" :active="current.key" />
     <section :id="current.keyword" class="page-container">
       <InnerPageDescription
         :question="current.question || '-'"
@@ -36,10 +36,6 @@ export default {
     };
   },
   props: {
-    // next: {
-    //   type: String,
-    //   required: true
-    // },
     navigate: {
       type: String,
     },
@@ -47,9 +43,6 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  created() {
-    EventBus.$on("loadSpecificPage", this.loadSpecificPage);
   },
   mounted() {
     this.current = this.params;
@@ -95,18 +88,9 @@ export default {
         EventBus.$emit("scrollToTarget", "results");
       }
     },
-    loadSpecificPage({ target, innerTarget }) {
-      switch (target) {
-        case "top-movies":
-          EventBus.$emit("scrollToTarget", "top-movies");
-          break;
-        case "results":
-          EventBus.$emit("scrollToTarget", "results");
-          break;
-        case "inner-page":
-          this.current = innerTarget;
-          this.$emit("reload", innerTarget);
-      }
+    loadSpecificPage(innerTarget) {
+      this.current = innerTarget;
+      this.$emit("reload", innerTarget);
     },
   },
 };

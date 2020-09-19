@@ -34,7 +34,7 @@ export default {
   methods: {
     menuClick(target) {
       this.$emit("close");
-      EventBus.$emit("loadSpecificPage", target);
+      EventBus.$emit("menuClick", target);
     },
     isActive(subItem) {
       if (subItem.innerTarget) {

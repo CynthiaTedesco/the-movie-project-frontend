@@ -1,5 +1,6 @@
 <template>
   <div class="result">
+    <slot></slot>
     <div class="title">{{title}}</div>
     <div class="winner">{{winner}}</div>
   </div>
@@ -18,6 +19,8 @@ export default {
 .result {
   margin: 0 auto;
   text-align: center;
+  width: 100%;
+  position: relative;
 
   .title {
     font-family: "niveau-grotesk-light";

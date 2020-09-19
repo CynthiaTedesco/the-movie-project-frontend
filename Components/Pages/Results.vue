@@ -4,20 +4,32 @@
       class="negative"
       @menuToggle="displayMenu =!displayMenu"
       :hide-logo="true"
-      :hide-menu-toggle="true"
       title="The Results"
     />
+    <TheMenu :show="displayMenu" @close="displayMenu=false" active="results"/>
     <div v-if="loadedWinners" class="presentation">
       <div class="results">
         <div class="section story">
           <div class="title">Story</div>
           <div>
             <Winner :winner="winners['universe']" title="Universe" />
-            <Winner :winner="winners['languages-language_name']" title="Language" />
+            <Winner
+              :winner="winners['languages-language_name']"
+              title="Language"
+              class="with-flag right"
+            >
+              <img src="~/assets/images/results/flag_left.png" alt="language flag" />
+            </Winner>
           </div>
           <div>
             <Winner :winner="winners['genres-genre_name']" title="Genre" />
-            <Winner :winner="winners['characters-gender']" title="Lead actor gender" />
+            <Winner
+              :winner="winners['characters-gender']"
+              title="Lead actor gender"
+              class="with-gender"
+            >
+              <img v-if="characterGenderImage" :src="characterGenderImage" alt="character sex icon" />
+            </Winner>
           </div>
           <div>
             <Winner :winner="winners['story_origin']" title="Origin" />
@@ -32,14 +44,26 @@
             <Winner :winner="winners['cinematography']" title="Cinematography" />
           </div>
           <div>
-            <Winner :winner="winners['directors-gender']" title="Director gender" />
+            <Winner
+              :winner="winners['directors-gender']"
+              title="Director gender"
+              class="with-gender"
+            >
+              <img v-if="directorGenderImage" :src="directorGenderImage" alt="director sex icon" />
+            </Winner>
             <Winner :winner="winners['length']" title="Length" />
           </div>
           <div>
             <Winner :winner="winners['directors-age']" title="Director age" />
             <Winner :winner="winners['word_count']" title="Word Count" />
           </div>
-          <Winner :winner="winners['producers-country'].toUpperCase()" title="Country" />
+          <Winner
+            :winner="winners['producers-country'].toUpperCase()"
+            title="Country"
+            class="with-flag left"
+          >
+            <img src="~/assets/images/results/flag_right.png" alt="language flag" />
+          </Winner>
         </div>
         <div class="section release">
           <div class="title">Release</div>
@@ -58,6 +82,7 @@
 
 <script>
 import TheHeader from "@/Components/Navigation/TheHeader";
+import TheMenu from '@/Components/Navigation/TheMenu';
 import Winner from "@/Components/Winner";
 import MENUITEMS from "@/constants/menuItems.js";
 import {
@@ -73,21 +98,38 @@ import {
   groupByPlain,
   groupByManyWithInnerKey,
   groupByKeywordFn,
-  groupByObject
+  groupByObject,
 } from "@/assets/js/helpers.js";
 import { mapGetters } from "vuex";
 
 export default {
   name: "ResultsPage",
-  components: { TheHeader, Winner },
+  components: { TheHeader, TheMenu, Winner },
   data() {
     return {
       loadedWinners: false,
-      movies: []
+      displayMenu: false,
+      movies: [],
     };
   },
   computed: {
-    ...mapGetters(["winners"])
+    ...mapGetters(["winners"]),
+    characterGenderImage() {
+      switch (this.winners["characters-gender"]) {
+        case "male":
+          return require(`@/assets/images/results/male.png`);
+        default:
+          return null;
+      }
+    },
+    directorGenderImage() {
+      switch (this.winners["directors-gender"]) {
+        case "male":
+          return require(`@/assets/images/results/male.png`);
+        default:
+          return null;
+      }
+    },
   },
   async beforeMount() {
     if (Object.keys(this.winners).length < MENUITEMS.length - 1) {
@@ -127,14 +169,14 @@ export default {
     setPeopleWinners(key, primaryKey = "primary") {
       const temp1 = groupByManyWithInnerKey(this.movies, key, {
         singleKeyword: "age",
-        primaryKey
+        primaryKey,
       });
       const ages_groups = getAgesGroups(temp1);
       this.setWinner(ages_groups, key, "age");
 
       const temp2 = groupByManyWithInnerKey(this.movies, key, {
         singleKeyword: "gender",
-        primaryKey
+        primaryKey,
       });
       const groups = simpleGroups(temp2);
       this.setWinner(groups, key, "gender");
@@ -146,7 +188,7 @@ export default {
     },
     setPosterWinner() {
       const key = "poster";
-      const temp = groupByKeywordFn(this.movies, movie =>
+      const temp = groupByKeywordFn(this.movies, (movie) =>
         movie.poster.poster_type ? movie.poster.poster_type.name : ""
       );
       const groups = simpleGroups(temp);
@@ -156,14 +198,14 @@ export default {
       const key = "release_date";
       const temp = groupByKeywordFn(
         this.movies,
-        movie => movie.release_date.split("-")[1]
+        (movie) => movie.release_date.split("-")[1]
       );
       const groups = getMonthsGroups(temp);
       this.setWinner(groups, key);
     },
     setWordCountWinner() {
       const key = "word_count";
-      const temp = groupByKeywordFn(this.movies, movie =>
+      const temp = groupByKeywordFn(this.movies, (movie) =>
         Math.round(movie.word_count / movie.length)
       );
       const groups = getWordCountsGroups(temp);
@@ -190,10 +232,10 @@ export default {
 
         this.setPosterWinner(),
         this.setReleaseMonthWinner(),
-        this.setWordCountWinner()
+        this.setWordCountWinner(),
       ]);
     },
-  }
+  },
 };
 </script>
 
@@ -224,6 +266,34 @@ export default {
           &.title {
             font-weight: bolder;
             font-size: 18px;
+          }
+        }
+
+        .with-gender {
+          img {
+            position: absolute;
+            width: 70px;
+            top: 15px;
+            left: 10px;
+          }
+        }
+
+        .with-flag {
+          img {
+            position: absolute;
+            width: 35%;
+            top: 10px;
+          }
+
+          &.left {
+            img {
+              left: 10px;
+            }
+          }
+          &.right {
+            img {
+              right: 10px;
+            }
           }
         }
       }

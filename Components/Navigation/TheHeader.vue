@@ -7,7 +7,7 @@
           <br />a blockbuster
         </div>
         <TheMenuToggle class="location" v-if="!hideMenuToggle" @toggle="$emit('menuToggle')">
-          <slot></slot>
+          <slot>{{title}}</slot>
         </TheMenuToggle>
         <span class="location" v-else-if="title">{{title}}</span>
       </div>
@@ -77,6 +77,7 @@ export default {
 
   &.negative {
     padding: 1rem 4rem;
+    color: $white;
     position: absolute;
     z-index: 2;
     margin-left: auto;
@@ -94,9 +95,12 @@ export default {
 
     @include media-breakpoint-down(l) {
       .location {
-        position: relative;
         padding: 0;
       }
+    }
+
+    /deep/ .the-menu-toggle {
+      color: $white;
     }
 
     .how-to-make {

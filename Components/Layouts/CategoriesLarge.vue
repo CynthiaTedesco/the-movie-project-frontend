@@ -156,9 +156,10 @@ export default {
         return d.y;
       });
     },
-    resetLabels(){
-      console.log('reseting');
-      this.labels.remove();
+    resetLabels() {
+      if (this.labels) {
+        this.labels.remove();
+      }
       this.$nextTick(() => {
         setTimeout(this.setLabels, 700);
       });

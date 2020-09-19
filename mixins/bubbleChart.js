@@ -31,7 +31,7 @@ export default {
     scale() {
       const maxRadius = isMobile() || isTablet()
         ? (Math.min(this.width, this.height) * 0.3) / 2
-        : Math.min(this.width, this.height) * 0.1;
+        : Math.min(this.width, this.height) * 0.08;
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()

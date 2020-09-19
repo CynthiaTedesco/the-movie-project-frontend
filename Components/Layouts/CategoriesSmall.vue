@@ -28,14 +28,6 @@ import bubbleChartContainer from "@/mixins/bubbleChartContainer.js";
 export default {
   components: { BubbleCloud },
   mixins: [bubbleChartContainer],
-  watch: {
-    groups() {
-      this.$nextTick(() => {
-        //TODO DO SOMETHING!
-        // this.restartSimulation();
-      });
-    },
-  },
   data() {
     return {
       small: true,
@@ -52,7 +44,10 @@ export default {
   methods: {
     onRenderDone(ranking) {
       this.renderDone[ranking] = true;
-    }
+    },
+    restartSimulation() {
+      this.prepareBubbleChartContainerData(); //loads category attribute!
+    },
   }
 };
 </script>

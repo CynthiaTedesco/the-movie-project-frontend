@@ -11,13 +11,6 @@ const d3 = require("d3");
 
 export default {
   mixins: [dimensionable, bubbleChartContainer, bubbleChart],
-  watch: {
-    groups() {
-      this.$nextTick(() => {
-        this.restartSimulation();
-      });
-    },
-  },
   mounted() {
     this.init();
   },

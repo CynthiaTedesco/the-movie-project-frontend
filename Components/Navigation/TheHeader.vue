@@ -27,22 +27,22 @@ export default {
   name: "TheHeader",
   components: {
     TheMenuToggle,
-    AppLogo
+    AppLogo,
   },
   props: {
     hideLogo: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hideMenuToggle: {
       type: Boolean,
-      default: false
+      default: false,
     },
     title: {
       type: String,
-      default: null
-    }
-  }
+      default: null,
+    },
+  },
 };
 </script>
 
@@ -60,11 +60,19 @@ export default {
   }
 }
 .the-header {
-  padding: 1rem 2rem;
+  padding-top: 40px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 1rem;
+
   height: 100px;
 
   @include media-breakpoint-up(sm) {
-    padding: 1rem 4rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+  @include media-breakpoint-up(lg) {
+    padding-top: 1rem;
   }
 
   &.negative {
@@ -92,7 +100,7 @@ export default {
     }
 
     .how-to-make {
-      color: white;
+      color: $white;
     }
   }
 }
@@ -100,7 +108,7 @@ export default {
   margin-left: auto;
 }
 .how-to-make {
-  color: $blue-ferdio;
+  color: $blue;
   line-height: 1.2em;
   font-weight: bolder;
   font-size: 20px;

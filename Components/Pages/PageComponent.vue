@@ -78,7 +78,7 @@ export default {
 
     .counter,
     .title {
-      color: $blue-ferdio;
+      color: $blue;
     }
 
     .counter {
@@ -101,7 +101,7 @@ export default {
     }
 
     .share {
-      background: $blue-ferdio;
+      background: $blue;
       width: 60px;
       text-align: center;
       color: white;

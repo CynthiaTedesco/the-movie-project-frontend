@@ -25,7 +25,6 @@
       </template>
     </PageComponent>
     <Results name="results" :class="{'current': current === 'results'}" />
-
   </div>
 </template>
 
@@ -190,6 +189,11 @@ export default {
     },
     onWheel(e) {
       e.preventDefault();
+
+      //if menu is open then ignore
+      const menuIsDisplayed = document.querySelector(".menu-content");
+      if (menuIsDisplayed) return;
+
       const direction = e.deltaY > 0 ? 1 : -1;
 
       if (!this.doing) {

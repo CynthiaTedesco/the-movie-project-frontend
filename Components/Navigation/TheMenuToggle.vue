@@ -28,7 +28,6 @@ export default {
 @import '~/assets/styles/common.scss';
 
 .the-menu-toggle {
-  z-index: 15;
   color: #9f9c9c;
   cursor: pointer;
   text-transform: capitalize;

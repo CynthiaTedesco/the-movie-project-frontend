@@ -51,15 +51,15 @@ div,
 
   &.blue-ferdio {
     .arrow {
-      border-bottom-color: $blue-ferdio;
-      border-right-color: $blue-ferdio;
+      border-bottom-color: $blue;
+      border-right-color: $blue;
     }
   }
 
   .arrow {
     border: none;
-    border-bottom: 2px solid $blue-ferdio;
-    border-right: 2px solid $blue-ferdio;
+    border-bottom: 2px solid $blue;
+    border-right: 2px solid $blue;
     width: 20px;
     height: 20px;
   }

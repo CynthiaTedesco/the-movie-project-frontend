@@ -4,7 +4,7 @@
     <TheHeader @menuToggle="displayMenu =!displayMenu">
       <span v-html="current.header"></span>
     </TheHeader>
-    <TheMenu :show="displayMenu" @close="displayMenu=false" />
+    <TheMenu :show="displayMenu" @close="displayMenu=false" :active="current.key"/>
     <section :id="current.keyword" class="page-container">
       <InnerPageDescription
         :question="current.question || '-'"
@@ -165,7 +165,7 @@ export default {
 
     .counter,
     .title {
-      color: $blue-ferdio;
+      color: $blue;
     }
 
     .counter {
@@ -188,7 +188,7 @@ export default {
     }
 
     .share {
-      background: $blue-ferdio;
+      background: $blue;
       width: 60px;
       text-align: center;
       color: white;

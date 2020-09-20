@@ -42,7 +42,7 @@ export default {
     counter() {
       const index = MENUITEMS.findIndex((a) => a.key === this.pageKey);
       const ordinal = index + 1;
-      const total = MENUITEMS.length - 1;
+      const total = MENUITEMS.length;
       return `${ordinal}/${total}`;
     },
   },

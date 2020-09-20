@@ -205,7 +205,7 @@ export const actions = {
         vuexContext.commit("addWinner", results.age.winner);
       }
 
-      return results[innerKey].groups;
+      return results[innerKey].groups[1];
     }
 
     return vuexContext.getters.allGroups[`${key}-${innerKey}`];
@@ -229,7 +229,7 @@ export const actions = {
         vuexContext.commit("addWinner", results.winner);
       }
 
-      return results.groups;
+      return results.groups[1];
     }
 
     return vuexContext.getters.allGroups[key];

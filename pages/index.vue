@@ -27,7 +27,7 @@
       </template>
     </PageComponent>
 
-    <Results name="results" :class="{'current': current === 'results'}" />
+    <Results :class="{'current': current === 'results'}" />
   </div>
 </template>
 
@@ -124,6 +124,7 @@ export default {
         key === "characters-age" ||
         key === "directors-age" ||
         key === "word_count" ||
+        key === "release_date" ||
         key === "length" ||
         key === "budget"
       );
@@ -156,8 +157,14 @@ export default {
     EventBus.$on("scrollToTarget", this.scrollToTarget);
     EventBus.$on("menuClick", this.menuClick);
   },
+  destroyed(){
+    window.removeEventListener("wheel", this.onNavigate);
+    window.removeEventListener("keyup", this.onNavigateByKeys);
+  },
   mounted() {
-    window.addEventListener("wheel", this.onWheel, { passive: false });
+    window.addEventListener("wheel", this.onNavigate, { passive: false });
+    window.addEventListener("keyup", this.onNavigateByKeys, { passive: false });
+
     const withinViewport = Array.from(
       document.getElementsByClassName("page")
     ).filter((page) => page.getBoundingClientRect().top >= 0)[0];
@@ -210,14 +217,22 @@ export default {
         }, 350);
       }
     },
-    onWheel(e) {
+    onNavigateByKeys(e){
+      if (e.keyCode === 38){
+        this.onNavigate(e, -1);
+      }
+      if (e.keyCode === 40){
+        this.onNavigate(e, 1);
+      }
+    },
+    onNavigate(e, direction) {
       e.preventDefault();
 
       //if menu is open then ignore
       const menuIsDisplayed = document.querySelector(".menu-content");
       if (menuIsDisplayed) return;
 
-      const direction = e.deltaY > 0 ? 1 : -1;
+      direction = direction || (e.deltaY > 0 ? 1 : -1);
 
       if (!this.doing) {
         this.doing = true;

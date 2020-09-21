@@ -21,10 +21,6 @@ export default {
       type: Array,
       required: true
     },
-    max: {
-      type: Number,
-      required: true
-    },
     ranking: {
       type: Number,
       required: true

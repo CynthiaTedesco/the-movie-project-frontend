@@ -36,14 +36,7 @@ export default {
     },
     scale() {
       //scale for circle radius
-      let maxRadius = 0;
-      if (this.axis) {
-        maxRadius = Math.min((this.innerWidth / this.groups.length) * 0.7, 60);
-      } else {
-        maxRadius = isMobile() || isTablet()
-          ? (Math.min(this.width, this.height) * 0.3) / 2
-          : Math.min(this.width, this.height) * 0.1;
-      }
+      const maxRadius = Math.min((this.innerWidth / this.groups.length) * 0.7, 60);
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()

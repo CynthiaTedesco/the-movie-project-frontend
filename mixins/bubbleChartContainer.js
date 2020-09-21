@@ -1,4 +1,5 @@
 const d3 = require("d3");
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -23,6 +24,7 @@ export default {
     this.prepareBubbleChartContainerData();
   },
   computed: {
+    ...mapGetters(["max"]),
     innerNameKey() {
       if (this.hasMany) {
         const singleName = this.attr.slice(0, -1);
@@ -33,12 +35,6 @@ export default {
     },
     isMultiline() {
       return this.groups.length > 3;
-    },
-    max() {
-      return Math.max.apply(
-        Math,
-        this.movies.map((d) => d.revenue)
-      );
     },
   },
   methods: {

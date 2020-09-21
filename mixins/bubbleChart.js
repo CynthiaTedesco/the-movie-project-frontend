@@ -1,6 +1,7 @@
 const d3 = require("d3");
 import tooltip from "@/mixins/tooltip.js";
 import { isMobile, sanitizedId } from "../assets/js/helpers";
+import { mapGetters } from "vuex";
 
 export default {
   mixins: [tooltip],
@@ -28,10 +29,11 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["max"]),
     scale() {
       const maxRadius = isMobile()
         ? (Math.min(this.width, this.height) * 0.3) / 2
-        : Math.min(this.width, this.height) * 0.1;
+        : Math.min(this.width, this.height) * 0.085;
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()

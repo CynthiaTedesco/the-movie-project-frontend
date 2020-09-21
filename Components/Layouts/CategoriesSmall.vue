@@ -14,14 +14,13 @@
       :category="group"
       :singleKeyword="singleKeyword"
       :attr="attr"
-      :max="max"
       :ranking="index"
       @done="onRenderDone"
     />
   </b-carousel>
 </template>
-
 <script>
+
 import BubbleCloud from "@/Components/Charts/BubbleCloud.vue";
 import bubbleChartContainer from "@/mixins/bubbleChartContainer.js";
 

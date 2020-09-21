@@ -1,6 +1,7 @@
 const d3 = require("d3");
 import tooltip from "@/mixins/tooltip.js";
 import { isMobile, customKey, isTablet } from "../assets/js/helpers";
+import { mapGetters } from "vuex";
 
 export default {
   mixins: [tooltip],
@@ -26,6 +27,7 @@ export default {
     movies: Array,
   },
   computed: {
+    ...mapGetters(["max"]),
     container() {
       const chartContainerSelector = this.selector || ".chart-container";
       const parentSelector = this.singleKeyword
@@ -35,6 +37,7 @@ export default {
       return d3.selectAll(`#${parentSelector} ${chartContainerSelector}`);
     },
     scale() {
+      //scale for circle radius
       let maxRadius = 0;
       if (this.axis) {
         maxRadius = Math.min((this.innerWidth / this.groups.length) * 0.7, 60);
@@ -207,8 +210,6 @@ export default {
     },
     defTitle(d) {
       return (
-        this.attr +
-        "-" +
         d.title
           .split(" ")
           .join("-")

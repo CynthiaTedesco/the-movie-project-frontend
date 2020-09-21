@@ -21,22 +21,10 @@ export default {
     };
   },
   async beforeMount() {
-    // this.groups = this.allGroups[this.keyword];
     this.preProcess();
   },
   methods: {
     async preProcess() {
-      // const groupsAlreadyCalculated = this.$store.getters["allGroups"][
-      //   this.keyword
-      // ];
-      // console.log("groupsAlreadyCalculated", !!groupsAlreadyCalculated, groupsAlreadyCalculated);
-
-      // const key = customKey(this.keyword, this.singleKeyword);
-      // const winnerAlreadyCalculated = this.$store.getters["winners"][key];
-      // console.log("winnerAlreadyCalculated", !!winnerAlreadyCalculated);
-
-      //TODO use helper functions!
-      // if (!groupsAlreadyCalculated) {
         if (this.hasMany) {
           const capitalized = this.keyword.replace(/^\w/, (c) =>
             c.toUpperCase()

@@ -103,7 +103,6 @@ export default {
           } else {
             this.data = updatedMovies;
           }
-          debugger;
         }
       }
     },

@@ -61,10 +61,12 @@ export default {
   methods: {
     restartSimulation() {
       this.prepareBubbleChartContainerData(); //loads category attribute!
-      this.simulation.force("x", d3.forceX(this.xForce).strength(0.1));
-      this.simulation.force("y", d3.forceY(this.yForce).strength(0.1));
-      this.simulation.alpha(0.75).restart();
-      this.resetLabels();
+      if (this.simulation) {
+        this.simulation.force("x", d3.forceX(this.xForce).strength(0.1));
+        this.simulation.force("y", d3.forceY(this.yForce).strength(0.1));
+        this.simulation.alpha(0.75).restart();
+        this.resetLabels();
+      }
     },
     init() {
       this.$nextTick(() => {

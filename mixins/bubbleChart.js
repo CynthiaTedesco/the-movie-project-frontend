@@ -1,6 +1,6 @@
 const d3 = require("d3");
 import tooltip from "@/mixins/tooltip.js";
-import { isMobile, sanitizedId, isTablet } from "../assets/js/helpers";
+import { isMobile, sanitizedId } from "../assets/js/helpers";
 
 export default {
   mixins: [tooltip],
@@ -29,9 +29,9 @@ export default {
   },
   computed: {
     scale() {
-      const maxRadius = isMobile() || isTablet()
+      const maxRadius = isMobile()
         ? (Math.min(this.width, this.height) * 0.3) / 2
-        : Math.min(this.width, this.height) * 0.08;
+        : Math.min(this.width, this.height) * 0.1;
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()
@@ -144,9 +144,6 @@ export default {
             )
             .on("tick", onTickFn)
             .on("end", onEndFn || this.onEndSimulation);
-
-            //TODO decide if its needed
-            this.$store.commit('setSimulation', this.simulation);
           break;
         }
         case "timeline": {

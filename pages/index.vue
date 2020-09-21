@@ -15,6 +15,7 @@
       <template v-slot>
         <Bubbles
           ref="bubbles"
+          :axis="isAxisChart"
           v-if="groups && groups.length"
           :movies="movies"
           :groups="groups"
@@ -117,6 +118,16 @@ export default {
     };
   },
   computed: {
+    isAxisChart() {
+      const key = customKey(this.keyword, this.singleKeyword);
+      return (
+        key === "characters-age" ||
+        key === "directors-age" ||
+        key === "word_count" ||
+        key === "length" ||
+        key === "budget"
+      );
+    },
     currentInnerPage() {
       return MENUITEMS.find((mi) => mi.key === this.currentInnerPageKey);
     },
@@ -171,12 +182,12 @@ export default {
           this.scrollToTarget("top-movies");
           break;
         case "results":
-          this.scrollToTarget('results');
+          this.scrollToTarget("results");
           break;
         case "inner-page":
-          this.scrollToTarget('inner-page');
-          if(this.$refs['inner-page']){
-            this.$refs['inner-page'].loadSpecificPage(innerTarget);
+          this.scrollToTarget("inner-page");
+          if (this.$refs["inner-page"]) {
+            this.$refs["inner-page"].loadSpecificPage(innerTarget);
           }
       }
     },
@@ -184,21 +195,17 @@ export default {
       return scrollY() + clientHeight() * direction;
     },
     setNewCurrent(direction) {
-      console.log("setting new current");
-
       const current = document.getElementsByClassName("current")[0];
       if (current) {
         const target =
           direction > 0
             ? current.nextElementSibling
             : current.previousElementSibling;
-        console.log("moving from", current, "to", target);
         if (target) {
           this.current = target.getAttribute("name");
         }
 
         setTimeout(() => {
-          console.log("setting doing to false");
           this.doing = false;
         }, 350);
       }
@@ -259,7 +266,6 @@ export default {
       } else {
         this.doing = false;
       }
-
     },
     scrollToTarget(targetKey) {
       const targetElement = this.getTargetElement(targetKey);

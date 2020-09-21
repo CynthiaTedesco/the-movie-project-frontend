@@ -68,6 +68,9 @@ export default {
   watch: {
     groups() {
       this.$nextTick(() => {
+        if (!this.$refs.chart) {
+          return;
+        }
         this.$refs.chart.restartSimulation();
       });
     },
@@ -83,10 +86,6 @@ export default {
     window.removeEventListener("resize", this.resized);
   },
   methods: {
-    // restartSimulation(params){
-    //   debugger;
-    //   this.$refs.chart.restartSimulation(params);
-    // },
     eventListenerFn() {
       clearTimeout(this.doit);
       this.doit = setTimeout(this.resized, 300);

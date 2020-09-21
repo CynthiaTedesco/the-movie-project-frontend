@@ -20,27 +20,83 @@ export const state = () => ({
   isTablet: false,
   winners: {},
   simulation: null,
+  max: 0,
 });
 export const mutations = {
+  setAxisGroup(state, { groups, attr_name, singleKeyword }) {
+    groups.map((group) => {
+      const group_name = group[0];
+      const movies = group[1];
+
+      group[1] = movies.map((m) => {
+        m.axisGroups = m.axisGroups || {};
+
+        let tooltip = "";
+        if (singleKeyword === "age") {
+          const lead = m[attr_name].find((a) => a.main || a.primary);
+          tooltip = lead ? `${lead.name} (${lead.age})` : "";
+        } else {
+          switch (attr_name) {
+            case "budget": {
+              tooltip = beautifyCashValue(m[attr_name]);
+              break;
+            }
+            case "length": {
+              tooltip = `${m[attr_name]}min`;
+              break;
+            }
+            case "word_count": {
+              tooltip = `${m[attr_name]} words in ${m.length}min`;
+              break;
+            }
+          }
+        }
+
+        m.axisGroups[attr_name] = {
+          name: group_name,
+          tooltip,
+        };
+
+        return m;
+      });
+    });
+    const newMovies = [].concat.apply(
+      [],
+      groups.map((g) => g[1])
+    );
+
+    if (state.movies.length) {
+      state.movies.map((d) => {
+        const updated = newMovies.find((um) => um.id === d.id);
+        const attr_name = Object.entries(updated.axisGroups)[0][0];
+
+        d.axisGroups = d.axisGroups || {};
+        d.axisGroups[attr_name] = Object.entries(updated.axisGroups)[0][1];
+        return d;
+      });
+    } else {
+      state.movies = newMovies;
+    }
+  },
   setSimulation(state, simulation) {
     //TODO decide if its needed
     state.simulation = simulation;
   },
   addGroups(state, groups) {
-    // if (groups[0].indexOf("genres") > -1) {
-    //   console.log("ADDING GROUPS", groups[0], groups[1].length);
-    // }
     Vue.set(state.allGroups, groups[0], groups[1]);
   },
   setMovies(state, movies) {
     state.movies = movies;
+    state.max = Math.max.apply(
+      Math,
+      movies.map((d) => d.revenue)
+    );
   },
   addWinner(state, winner) {
     state.winners[winner[0]] = winner[1];
   },
   setRandomMovies(state, movies) {
     state.randomMovies = movies;
-    console.log("random movies", movies.length);
   },
   setIsTablet(state, isTablet) {
     state.isTablet = isTablet;
@@ -103,6 +159,9 @@ export const actions = {
     const wordCountshResults = getWordCountResults(movies);
     vuexContext.commit("addGroups", wordCountshResults.groups);
     vuexContext.commit("addWinner", wordCountshResults.winner);
+    vuexContext.dispatch("updateAxisGroups", {
+      groupsArr: wordCountshResults.groups,
+    });
 
     const releaseMonthResults = getReleaseMonthResults(movies);
     vuexContext.commit("addGroups", releaseMonthResults.groups);
@@ -111,6 +170,11 @@ export const actions = {
     const posterResults = getPosterResults(movies);
     vuexContext.commit("addGroups", posterResults.groups);
     vuexContext.commit("addWinner", posterResults.winner);
+  },
+  updateAxisGroups(vuexContext, { groupsArr, singleKeyword }) {
+    const attr_name = groupsArr[0];
+    const groups = groupsArr[1];
+    vuexContext.commit("setAxisGroup", { groups, attr_name, singleKeyword });
   },
   setSpecificResults: async (vuexContext, key) => {
     const movies = vuexContext.getters.movies();
@@ -180,7 +244,7 @@ export const actions = {
     { movies, key, innerKey, primaryKey }
   ) => {
     if (!movies[0][key]) {
-      const capitalized = key.charAt(0).toUpperCase() + string.slice(1);
+      const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
       await vuexContext.dispatch(`check${capitalized}`);
     }
 
@@ -213,7 +277,7 @@ export const actions = {
   setListsResults: async (vuexContext, { movies, key, innerKey }) => {
     const composeKey = `${key}-${innerKey}`;
     if (!movies[0][key]) {
-      const capitalized = key.charAt(0).toUpperCase() + string.slice(1);
+      const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
       await vuexContext.dispatch(`check${capitalized}`);
     }
     if (
@@ -239,7 +303,6 @@ export const actions = {
   },
   checkMovies(vuexContext) {
     if (vuexContext.getters.movies().length === 0) {
-      console.log("checking movies!!");
       return this.$axios.$get("/movies").then((allTheMovies) => {
         const movies = allTheMovies
           .filter((m) => m.valid)
@@ -281,7 +344,6 @@ export const actions = {
     }
   },
   checkGenres(vuexContext) {
-    console.log("checking genres!");
     const associations = this.$axios.get("/movies-genres");
     const genres = this.$axios.get("/genres");
 
@@ -290,7 +352,6 @@ export const actions = {
     });
   },
   checkRestrictions(vuexContext) {
-    console.log("checking restrictions!");
     const associations = this.$axios.get("/movies-restrictions");
     const restrictions = this.$axios.get("/restrictions");
 
@@ -299,7 +360,6 @@ export const actions = {
     });
   },
   checkProducers(vuexContext) {
-    console.log("checking producers!");
     const associations = this.$axios.get("/movies-producers");
     const producers = this.$axios.get("/producers");
 
@@ -308,7 +368,6 @@ export const actions = {
     });
   },
   checkLanguages(vuexContext) {
-    console.log("checking languages!");
     const associations = this.$axios.get("/movies-languages");
     const languages = this.$axios.get("/languages");
 
@@ -317,7 +376,6 @@ export const actions = {
     });
   },
   checkDirectors(vuexContext) {
-    console.log("checking directors!");
     const associations = this.$axios.get("/movies-directors");
     const directors = this.$axios.get("/directors");
 
@@ -326,7 +384,6 @@ export const actions = {
     });
   },
   checkCharacters(vuexContext) {
-    console.log("checking characters!");
     const associations = this.$axios.get("/movies-characters");
     const characters = this.$axios.get("/characters");
 
@@ -482,6 +539,9 @@ export const actions = {
   },
 };
 export const getters = {
+  max(state) {
+    return state.max;
+  },
   simulation(state) {
     return state.simulation;
   },

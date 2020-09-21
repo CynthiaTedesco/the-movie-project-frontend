@@ -27,7 +27,7 @@ export function slices() {
   if (!document) {
     return 50;
   }
-  return isMobile() ? 10 :isTablet() ? 20 : 50;
+  return isMobile() ? 10 : isTablet() ? 20 : 50;
 }
 export function calculateAge(birthdate, releaseDate) {
   if (!birthdate || !releaseDate) {
@@ -123,7 +123,7 @@ export function getWordCountsGroups(base) {
       temp[4][1] = temp[4][1].concat(movies);
     } else if (count <= 90) {
       temp[5][1] = temp[5][1].concat(movies);
-    } else if (count > 91) {
+    } else if (count > 90) {
       temp[6][1] = temp[6][1].concat(movies);
     }
   });
@@ -252,7 +252,6 @@ export function groupByObject(movies, key) {
 export function groupByKeywordFn(movies, keywordFn) {
   return movies.reduce((rv, x) => {
     const innerKey = keywordFn(x);
-
     if (innerKey) {
       (rv[innerKey] = rv[innerKey] || []).push(x);
     }
@@ -408,9 +407,10 @@ export function getReleaseMonthResults(movies) {
   };
 }
 export function getWordCountResults(movies) {
-  const temp = groupByKeywordFn(movies, (movie) =>
-    Math.round(movie.word_count / movie.length)
-  );
+  const temp = groupByKeywordFn(movies, (movie) => {
+    const roundNumber = Math.round(movie.word_count / movie.length);
+    return roundNumber > 0 ? roundNumber : 1;
+  });
   const key = "word_count";
   const groups = getWordCountsGroups(temp);
   const winner = calculateWinner(groups);

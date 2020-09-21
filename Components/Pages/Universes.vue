@@ -87,20 +87,11 @@ export default {
       this.loadGenres(target);
     },
     async loadGenres(target) {
-      // const groupsAlreadyCalculated = this.$store.getters["allGroups"][this.keyword];
-      // console.log("groupsAlreadyCalculated", !!groupsAlreadyCalculated);
-
-      // const key = customKey(this.keyword, this.singleKeyword);
-      // const winnerAlreadyCalculated = this.$store.getters["winners"][key];
-      // console.log("winnerAlreadyCalculated", !!winnerAlreadyCalculated);
-
       const allGroups = this.$store.getters["allGroups"];
       this.keyword = target.keyword;
       this.singleKeyword = target.singleKeyword;
       this.hasMany = target.hasMany;
       await this.preProcess(); //set in bubblePage mixin!
-      //   this.simulation.alpha(1);
-      // this.simulation.restart();
     },
   },
 };

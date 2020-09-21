@@ -24,14 +24,7 @@ export default {
   },
   watch: {
     width(current, old) {
-      console.log(`width has changed from ${old} to ${this.width}`);
       this.draw();
-    },
-    groups() {
-      this.$nextTick(() => {
-        //TODO DO SOMETHING!
-        // this.restartSimulation();
-      });
     },
   },
   mounted() {
@@ -41,6 +34,14 @@ export default {
     });
   },
   methods: {
+    restartSimulation() {
+      if (this.simulation) {
+        this.prepareAxisBubbleChartContainer(); //resets chart data
+
+        this.appendAxis();
+        this.appendCircles();
+      }
+    },
     draw() {
       const props = {
         xForce: this.xForce,

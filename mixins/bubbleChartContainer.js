@@ -63,7 +63,9 @@ export default {
           } else {
             let name;
             if (this.attr === "poster") {
-              name = this.keywordFn(m[this.attr]);
+              //TODO improve. Repeated code!
+              const fn = poster => poster && poster.poster_type ? poster.poster_type.name : "";
+              name = fn(m[this.attr]);
             } else {
               name = m[this.attr][this.singleKeyword || this.innerNameKey];
             }

@@ -182,10 +182,4 @@ export default [
     keyword: 'poster',
     keywordFn: (movie) => movie.poster.poster_type ? movie.poster.poster_type.name : ""
   },
-  // {
-  //   order: 18,
-  //   key: 'ResultsPage',
-  //   component: 'Results',
-  //   question: '',
-  // },
 ]

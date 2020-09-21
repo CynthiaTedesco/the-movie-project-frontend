@@ -12,6 +12,8 @@ import {
 } from "@/assets/js/helpers.js";
 import Vue from "vue";
 
+const QUANTITY = 50;
+
 export const state = () => ({
   movies: [],
   allGroups: {},
@@ -132,14 +134,6 @@ export const actions = {
     vuexContext.commit("addGroups", cinematographyResults.groups);
     vuexContext.commit("addWinner", cinematographyResults.winner);
 
-    vuexContext.dispatch("setSpecificResults", "genres-genre_name");
-    vuexContext.dispatch("setSpecificResults", "language-language_name");
-    vuexContext.dispatch("setSpecificResults", "restrictions-restriction_name");
-    vuexContext.dispatch("setSpecificResults", "characters-gender");
-    vuexContext.dispatch("setSpecificResults", "characters-age");
-    vuexContext.dispatch("setSpecificResults", "directors-gender");
-    vuexContext.dispatch("setSpecificResults", "directors-age");
-
     const budgetResults = getSpecialPlainResults(
       movies,
       "budget",
@@ -155,6 +149,9 @@ export const actions = {
     );
     vuexContext.commit("addGroups", lengthResults.groups);
     vuexContext.commit("addWinner", lengthResults.winner);
+    vuexContext.dispatch("updateAxisGroups", {
+      groupsArr: lengthResults.groups,
+    });
 
     const wordCountshResults = getWordCountResults(movies);
     vuexContext.commit("addGroups", wordCountshResults.groups);
@@ -166,13 +163,16 @@ export const actions = {
     const releaseMonthResults = getReleaseMonthResults(movies);
     vuexContext.commit("addGroups", releaseMonthResults.groups);
     vuexContext.commit("addWinner", releaseMonthResults.winner);
+    vuexContext.dispatch("updateAxisGroups", {
+      groupsArr: releaseMonthResults.groups,
+    });
 
     const posterResults = getPosterResults(movies);
     vuexContext.commit("addGroups", posterResults.groups);
     vuexContext.commit("addWinner", posterResults.winner);
   },
   updateAxisGroups(vuexContext, { groupsArr, singleKeyword }) {
-    const attr_name = groupsArr[0];
+    const attr_name = groupsArr[0].replace('-age', '');
     const groups = groupsArr[1];
     vuexContext.commit("setAxisGroup", { groups, attr_name, singleKeyword });
   },
@@ -243,6 +243,9 @@ export const actions = {
     vuexContext,
     { movies, key, innerKey, primaryKey }
   ) => {
+
+    let toReturn;
+
     if (!movies[0][key]) {
       const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
       await vuexContext.dispatch(`check${capitalized}`);
@@ -254,27 +257,36 @@ export const actions = {
       !vuexContext.getters.winners[`${key}-age`] ||
       !vuexContext.getters.winners[`${key}-gender`]
     ) {
-      const results = getPeopleResults(movies, key, primaryKey);
+      const peopleResults = getPeopleResults(movies, key, primaryKey);
 
       if (!vuexContext.getters.allGroups[`${key}-gender`]) {
-        vuexContext.commit("addGroups", results.gender.groups);
+        vuexContext.commit("addGroups", peopleResults.gender.groups);
       }
       if (!vuexContext.getters.winners[`${key}-gender`]) {
-        vuexContext.commit("addWinner", results.gender.winner);
+        vuexContext.commit("addWinner", peopleResults.gender.winner);
       }
       if (!vuexContext.getters.allGroups[`${key}-age`]) {
-        vuexContext.commit("addGroups", results.age.groups);
+        vuexContext.commit("addGroups", peopleResults.age.groups);
       }
       if (!vuexContext.getters.winners[`${key}-age`]) {
-        vuexContext.commit("addWinner", results.age.winner);
+        vuexContext.commit("addWinner", peopleResults.age.winner);
       }
 
-      return results[innerKey].groups[1];
+      if (innerKey === "age") {
+        vuexContext.dispatch("updateAxisGroups", {
+          groupsArr: peopleResults.age.groups,
+          singleKeyword: 'age'
+        });
+      }
+
+      return peopleResults[innerKey].groups[1];
     }
 
     return vuexContext.getters.allGroups[`${key}-${innerKey}`];
   },
   setListsResults: async (vuexContext, { movies, key, innerKey }) => {
+    let toReturn;
+
     const composeKey = `${key}-${innerKey}`;
     if (!movies[0][key]) {
       const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
@@ -309,8 +321,7 @@ export const actions = {
           .sort((a, b) => b.revenue - a.revenue);
         const moviesToCommit = movies.slice(
           0,
-          50
-          //   vuexContext.getters.onMobile ? 20 : 50
+          QUANTITY
         );
 
         vuexContext.commit("setMovies", moviesToCommit);
@@ -553,7 +564,7 @@ export const getters = {
       if (limit) {
         return state.movies.slice(0, limit);
       } else {
-        return state.movies;
+        return state.movies;//.slice(0,QUANTITY);
       }
     };
   },

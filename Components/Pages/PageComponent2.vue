@@ -5,7 +5,7 @@
       <span v-html="current.header"></span>
     </TheHeader>
     <TheMenu :show="displayMenu" @close="displayMenu=false" :active="current.key" />
-    <section :id="current.keyword" class="page-container">
+    <section :id="sectionID" class="page-container">
       <InnerPageDescription
         :question="current.question || '-'"
         :page-key="current.key || '-'"
@@ -50,6 +50,9 @@ export default {
   computed: {
     ...mapGetters(["simulation"]), //TODO check if I still need this
     ...mapGetters(["winners"]),
+    sectionID(){
+      return this.current.keyword;
+    },
     nextPage() {
       return MENUITEMS.find((mi) => mi.order === this.current.order + 1);
     },

@@ -30,9 +30,7 @@ export default {
     ...mapGetters(["max"]),
     container() {
       const chartContainerSelector = this.selector || ".chart-container";
-      const parentSelector = this.singleKeyword
-        ? `${this.attr}-${this.singleKeyword}`
-        : this.attr;
+      const parentSelector = this.attr;
 
       return d3.selectAll(`#${parentSelector} ${chartContainerSelector}`);
     },

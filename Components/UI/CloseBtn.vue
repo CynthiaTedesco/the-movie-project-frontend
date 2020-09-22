@@ -1,5 +1,5 @@
 <template>
-  <div class="close">
+  <div class="close" @click="$emit('close')">
   </div>
 </template>
 

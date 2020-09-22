@@ -8,7 +8,7 @@
             <div>{{$t('howToMake')}}</div>
             <div>{{$t('aBlockbuster')}}</div>
           </div>
-          <CloseBtn />
+          <CloseBtn @close="$emit('close')"/>
         </div>
         <div class="menu-list" @wheel.stop>
           <MenuGroup
@@ -176,8 +176,9 @@ export default {
   width: 100%;
 
   .menu-backdrop {
-    width: 100%;
+    width: 100vw;
     height: 100%;
+    min-height: 100vh;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 1000;
     position: fixed;
@@ -194,9 +195,9 @@ export default {
     padding: 30px;
     right: 0;
     border: 1px solid gray;
-    height: 100vh;
-    width: 100vw;
-    max-width: 500px;
+    height: 100%;
+    width: 100%;
+    max-width: 100vw;
     margin: 0;
 
     .menu-list {
@@ -211,6 +212,7 @@ export default {
       height: calc(100vh - 100px);
       margin-right: -30px;
       overflow: auto;
+      width: 100%;
 
       @include media-breakpoint-up(lg) {
         font-size: 1rem;
@@ -244,8 +246,8 @@ export default {
 
     .menu-footer {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 5%;
+      right: 5%;
 
       img {
         width: 100px;

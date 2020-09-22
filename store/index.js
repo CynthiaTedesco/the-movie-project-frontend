@@ -1,42 +1,327 @@
-import { calculateAge } from "@/assets/js/helpers.js";
-import Vuex from "vuex";
+import {
+  calculateAge,
+  getBudgetsGroups,
+  getLengthsGroups,
+  getSimpleResults,
+  getPeopleResults,
+  getListResults,
+  getSpecialPlainResults,
+  getWordCountResults,
+  getReleaseMonthResults,
+  getPosterResults,
+} from "@/assets/js/helpers.js";
+import Vue from "vue";
+
+const QUANTITY = 20;
 
 export const state = () => ({
   movies: [],
+  allGroups: {},
   randomMovies: null,
   isMobile: false,
+  isTablet: false,
   winners: {},
+  simulation: null,
+  max: 0,
 });
 export const mutations = {
+  setAxisGroup(state, { groups, attr_name, singleKeyword }) {
+    groups.map((group) => {
+      const group_name = group[0];
+      const movies = group[1];
+
+      group[1] = movies.map((m) => {
+        m.axisGroups = m.axisGroups || {};
+
+        let tooltip = "";
+        if (singleKeyword === "age") {
+          const lead = m[attr_name].find((a) => a.main || a.primary);
+          tooltip = lead ? `${lead.name} (${lead.age})` : "";
+        } else {
+          switch (attr_name) {
+            case "budget": {
+              tooltip = beautifyCashValue(m[attr_name]);
+              break;
+            }
+            case "length": {
+              tooltip = `${m[attr_name]}min`;
+              break;
+            }
+            case "word_count": {
+              tooltip = `${m[attr_name]} words in ${m.length}min`;
+              break;
+            }
+          }
+        }
+
+        m.axisGroups[attr_name] = {
+          name: group_name,
+          tooltip,
+        };
+
+        return m;
+      });
+    });
+    const newMovies = [].concat.apply(
+      [],
+      groups.map((g) => g[1])
+    );
+
+    if (state.movies.length) {
+      state.movies.map((d) => {
+        const updated = newMovies.find((um) => um.id === d.id);
+        const attr_name = Object.entries(updated.axisGroups)[0][0];
+
+        d.axisGroups = d.axisGroups || {};
+        d.axisGroups[attr_name] = Object.entries(updated.axisGroups)[0][1];
+        return d;
+      });
+    } else {
+      state.movies = newMovies;
+    }
+  },
+  setSimulation(state, simulation) {
+    //TODO decide if its needed
+    state.simulation = simulation;
+  },
+  addGroups(state, groups) {
+    Vue.set(state.allGroups, groups[0], groups[1]);
+  },
   setMovies(state, movies) {
     state.movies = movies;
+    state.max = Math.max.apply(
+      Math,
+      movies.map((d) => d.revenue)
+    );
   },
   addWinner(state, winner) {
     state.winners[winner[0]] = winner[1];
   },
   setRandomMovies(state, movies) {
     state.randomMovies = movies;
-    console.log("random movies", movies.length);
+  },
+  setIsTablet(state, isTablet) {
+    state.isTablet = isTablet;
   },
   setIsMobile(state, isMobile) {
     state.isMobile = isMobile;
   },
 };
 export const actions = {
+  setResults(vuexContext) {
+    const movies = vuexContext.getters.movies();
+
+    const universeResults = getSimpleResults(movies, "universe");
+    vuexContext.commit("addGroups", universeResults.groups);
+    vuexContext.commit("addWinner", universeResults.winner);
+
+    const originResults = getSimpleResults(movies, "story_origin");
+    vuexContext.commit("addGroups", originResults.groups);
+    vuexContext.commit("addWinner", originResults.winner);
+
+    const serieResults = getSimpleResults(movies, "serie");
+    vuexContext.commit("addGroups", serieResults.groups);
+    vuexContext.commit("addWinner", serieResults.winner);
+
+    const distributionCompanyResults = getSimpleResults(
+      movies,
+      "distribution_company"
+    );
+    vuexContext.commit("addGroups", distributionCompanyResults.groups);
+    vuexContext.commit("addWinner", distributionCompanyResults.winner);
+
+    const cinematographyResults = getSimpleResults(movies, "cinematography");
+    vuexContext.commit("addGroups", cinematographyResults.groups);
+    vuexContext.commit("addWinner", cinematographyResults.winner);
+
+    const budgetResults = getSpecialPlainResults(
+      movies,
+      "budget",
+      getBudgetsGroups
+    );
+    vuexContext.commit("addGroups", budgetResults.groups);
+    vuexContext.commit("addWinner", budgetResults.winner);
+
+    const lengthResults = getSpecialPlainResults(
+      movies,
+      "length",
+      getLengthsGroups
+    );
+    vuexContext.commit("addGroups", lengthResults.groups);
+    vuexContext.commit("addWinner", lengthResults.winner);
+    vuexContext.dispatch("updateAxisGroups", {
+      groupsArr: lengthResults.groups,
+    });
+
+    const wordCountshResults = getWordCountResults(movies);
+    vuexContext.commit("addGroups", wordCountshResults.groups);
+    vuexContext.commit("addWinner", wordCountshResults.winner);
+    vuexContext.dispatch("updateAxisGroups", {
+      groupsArr: wordCountshResults.groups,
+    });
+
+    const releaseMonthResults = getReleaseMonthResults(movies);
+    vuexContext.commit("addGroups", releaseMonthResults.groups);
+    vuexContext.commit("addWinner", releaseMonthResults.winner);
+    vuexContext.dispatch("updateAxisGroups", {
+      groupsArr: releaseMonthResults.groups,
+    });
+
+    const posterResults = getPosterResults(movies);
+    vuexContext.commit("addGroups", posterResults.groups);
+    vuexContext.commit("addWinner", posterResults.winner);
+  },
+  updateAxisGroups(vuexContext, { groupsArr, singleKeyword }) {
+    const attr_name = groupsArr[0].replace('-age', '');
+    const groups = groupsArr[1];
+    vuexContext.commit("setAxisGroup", { groups, attr_name, singleKeyword });
+  },
+  setSpecificResults: async (vuexContext, key) => {
+    const movies = vuexContext.getters.movies();
+    switch (key) {
+      case "genres-genre_name": {
+        return vuexContext.dispatch("setListsResults", {
+          movies,
+          key: "genres",
+          innerKey: "genre_name",
+        });
+      }
+      case "languages-language_name": {
+        return vuexContext.dispatch("setListsResults", {
+          movies,
+          key: "languages",
+          innerKey: "language_name",
+        });
+      }
+      case "characters-gender": {
+        return vuexContext.dispatch("setPeopleResults", {
+          movies,
+          key: "characters",
+          innerKey: "gender",
+          primaryKey: "main",
+        });
+      }
+      case "characters-age": {
+        return vuexContext.dispatch("setPeopleResults", {
+          movies,
+          key: "characters",
+          innerKey: "age",
+          primaryKey: "main",
+        });
+      }
+      case "directors-gender": {
+        return vuexContext.dispatch("setPeopleResults", {
+          movies,
+          key: "directors",
+          innerKey: "gender",
+        });
+      }
+      case "directors-age": {
+        return vuexContext.dispatch("setPeopleResults", {
+          movies,
+          key: "directors",
+          innerKey: "age",
+        });
+      }
+      case "producers-country": {
+        return vuexContext.dispatch("setListsResults", {
+          movies,
+          key: "producers",
+          innerKey: "country",
+        });
+      }
+      case "restrictions-restriction_name": {
+        return vuexContext.dispatch("setListsResults", {
+          movies,
+          key: "restrictions",
+          innerKey: "restriction_name",
+        });
+      }
+    }
+  },
+  setPeopleResults: async (
+    vuexContext,
+    { movies, key, innerKey, primaryKey }
+  ) => {
+
+    let toReturn;
+
+    if (!movies[0][key]) {
+      const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
+      await vuexContext.dispatch(`check${capitalized}`);
+    }
+
+    if (
+      !vuexContext.getters.allGroups[`${key}-age`] ||
+      !vuexContext.getters.allGroups[`${key}-gender`] ||
+      !vuexContext.getters.winners[`${key}-age`] ||
+      !vuexContext.getters.winners[`${key}-gender`]
+    ) {
+      const peopleResults = getPeopleResults(movies, key, primaryKey);
+
+      if (!vuexContext.getters.allGroups[`${key}-gender`]) {
+        vuexContext.commit("addGroups", peopleResults.gender.groups);
+      }
+      if (!vuexContext.getters.winners[`${key}-gender`]) {
+        vuexContext.commit("addWinner", peopleResults.gender.winner);
+      }
+      if (!vuexContext.getters.allGroups[`${key}-age`]) {
+        vuexContext.commit("addGroups", peopleResults.age.groups);
+      }
+      if (!vuexContext.getters.winners[`${key}-age`]) {
+        vuexContext.commit("addWinner", peopleResults.age.winner);
+      }
+
+      if (innerKey === "age") {
+        vuexContext.dispatch("updateAxisGroups", {
+          groupsArr: peopleResults.age.groups,
+          singleKeyword: 'age'
+        });
+      }
+
+      return peopleResults[innerKey].groups[1];
+    }
+
+    return vuexContext.getters.allGroups[`${key}-${innerKey}`];
+  },
+  setListsResults: async (vuexContext, { movies, key, innerKey }) => {
+    let toReturn;
+
+    const composeKey = `${key}-${innerKey}`;
+    if (!movies[0][key]) {
+      const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
+      await vuexContext.dispatch(`check${capitalized}`);
+    }
+    if (
+      !vuexContext.getters.allGroups[composeKey] ||
+      !vuexContext.getters.winners[composeKey]
+    ) {
+      const results = getListResults(movies, key, innerKey);
+
+      if (!vuexContext.getters.allGroups[key]) {
+        vuexContext.commit("addGroups", results.groups);
+      }
+      if (!vuexContext.getters.winners[key]) {
+        vuexContext.commit("addWinner", results.winner);
+      }
+
+      return results.groups[1];
+    }
+
+    return vuexContext.getters.allGroups[key];
+  },
   addWinner(vuexContext, winner) {
     vuexContext.commit("addWinner", winner);
   },
   checkMovies(vuexContext) {
     if (vuexContext.getters.movies().length === 0) {
-      console.log("checking movies!!");
       return this.$axios.$get("/movies").then((allTheMovies) => {
         const movies = allTheMovies
           .filter((m) => m.valid)
           .sort((a, b) => b.revenue - a.revenue);
         const moviesToCommit = movies.slice(
           0,
-          50
-          //   vuexContext.getters.onMobile ? 20 : 50
+          QUANTITY
         );
 
         vuexContext.commit("setMovies", moviesToCommit);
@@ -64,12 +349,12 @@ export const actions = {
           moviesWithPoster[index3],
         ];
         vuexContext.commit("setRandomMovies", randomMovies);
+
         return { movies: moviesToCommit, randomMovies };
       });
     }
   },
   checkGenres(vuexContext) {
-    console.log("checking genres!");
     const associations = this.$axios.get("/movies-genres");
     const genres = this.$axios.get("/genres");
 
@@ -78,7 +363,6 @@ export const actions = {
     });
   },
   checkRestrictions(vuexContext) {
-    console.log("checking restrictions!");
     const associations = this.$axios.get("/movies-restrictions");
     const restrictions = this.$axios.get("/restrictions");
 
@@ -87,7 +371,6 @@ export const actions = {
     });
   },
   checkProducers(vuexContext) {
-    console.log("checking producers!");
     const associations = this.$axios.get("/movies-producers");
     const producers = this.$axios.get("/producers");
 
@@ -96,7 +379,6 @@ export const actions = {
     });
   },
   checkLanguages(vuexContext) {
-    console.log("checking languages!");
     const associations = this.$axios.get("/movies-languages");
     const languages = this.$axios.get("/languages");
 
@@ -105,7 +387,6 @@ export const actions = {
     });
   },
   checkDirectors(vuexContext) {
-    console.log("checking directors!");
     const associations = this.$axios.get("/movies-directors");
     const directors = this.$axios.get("/directors");
 
@@ -114,7 +395,6 @@ export const actions = {
     });
   },
   checkCharacters(vuexContext) {
-    console.log("checking characters!");
     const associations = this.$axios.get("/movies-characters");
     const characters = this.$axios.get("/characters");
 
@@ -265,14 +545,26 @@ export const actions = {
   setIsMobile(vuexContext, isMobile) {
     vuexContext.commit("setIsMobile", isMobile);
   },
+  setIsTablet(vuexContext, isTablet) {
+    vuexContext.commit("setIsTablet", isTablet);
+  },
 };
 export const getters = {
+  max(state) {
+    return state.max;
+  },
+  simulation(state) {
+    return state.simulation;
+  },
+  allGroups(state) {
+    return state.allGroups;
+  },
   movies(state) {
     return (limit) => {
       if (limit) {
         return state.movies.slice(0, limit);
       } else {
-        return state.movies;
+        return state.movies;//.slice(0,QUANTITY);
       }
     };
   },
@@ -290,6 +582,9 @@ export const getters = {
   },
   onMobile(state) {
     return state.isMobile;
+  },
+  onTablet(state) {
+    return state.isTablet;
   },
   winners(state) {
     return state.winners;

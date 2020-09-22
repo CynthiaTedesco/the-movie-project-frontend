@@ -1,7 +1,7 @@
 const d3 = require("d3");
 import {
   slices,
-  winnerKey,
+  customKey,
   getAgesGroups,
   getMonthsGroups,
   getBudgetsGroups,
@@ -21,52 +21,62 @@ export default {
     };
   },
   async beforeMount() {
-    if (this.hasMany) {
-      const capitalized = this.keyword.replace(/^\w/, (c) => c.toUpperCase());
-      const functionName = `check${capitalized}`;
-      await this.$store.dispatch(functionName);
-    }
-
-    //deep copy
-    this.movies = JSON.parse(
-      JSON.stringify(await this.$store.getters.movies(slices()))
-    );
-    const temp = this.groupBy(this.keyword);
-
-    if (this.axis) {
-      if (this.singleKeyword && this.singleKeyword === "age") {
-        this.groups = getAgesGroups(temp);
-      } else {
-        switch (this.keyword) {
-          case "release_date": {
-            this.groups = getMonthsGroups(temp);
-            break;
-          }
-          case "budget": {
-            this.groups = getBudgetsGroups(temp);
-            break;
-          }
-          case "length": {
-            this.groups = getLengthsGroups(temp);
-            break;
-          }
-          case "word_count": {
-            this.groups = getWordCountsGroups(temp);
-            break;
-          }
-        }
-      }
-    } else {
-      this.groups = simpleGroups(temp);
-    }
-
-    this.setWinner();
+    this.preProcess();
   },
-
   methods: {
+    async preProcess() {
+        if (this.hasMany) {
+          const capitalized = this.keyword.replace(/^\w/, (c) =>
+            c.toUpperCase()
+          );
+          const functionName = `check${capitalized}`;
+          await this.$store.dispatch(functionName);
+        }
+
+        //deep copy
+        this.movies = JSON.parse(
+          JSON.stringify(await this.$store.getters.movies(slices()))
+        );
+
+        const temp = this.groupBy(this.keyword);
+
+        if (this.axis) {
+          if (this.singleKeyword && this.singleKeyword === "age") {
+            this.groups = getAgesGroups(temp);
+          } else {
+            switch (this.keyword) {
+              case "release_date": {
+                this.groups = getMonthsGroups(temp);
+                break;
+              }
+              case "budget": {
+                this.groups = getBudgetsGroups(temp);
+                break;
+              }
+              case "length": {
+                this.groups = getLengthsGroups(temp);
+                break;
+              }
+              case "word_count": {
+                this.groups = getWordCountsGroups(temp);
+                break;
+              }
+            }
+          }
+        } else {
+          this.groups = simpleGroups(temp);
+        }
+      // } else {
+        // this.groups = this.$store.getters["allGroups"][
+        //     this.keyword
+        //   ];;
+      // }
+
+      this.setWinner();
+    },
     setWinner() {
       const winner = calculateWinner(this.groups);
-      const key = winnerKey(this.keyword, this.singleKeyword);
+      const key = customKey(this.keyword, this.singleKeyword);
       this.$store.dispatch("addWinner", [key, winner.toLowerCase()]);
     },
     groupBy(key) {

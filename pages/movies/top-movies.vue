@@ -22,7 +22,7 @@
           <div class="revenue">{{revenue(movie)}}</div>
         </div>
       </div>
-      <NextPageArrow class="white" target="UniversePage" />
+      <NextPageArrow class="white" target="inner-page" />
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       movies: [],
-      displayMenu: false
+      displayMenu: false,
     };
   },
   async beforeMount() {
@@ -54,7 +54,7 @@ export default {
     },
     title() {
       return `The top ${this.movies.length} highest grossing movies`;
-    }
+    },
   },
   methods: {
     revenue(movie) {
@@ -64,17 +64,17 @@ export default {
       const size = this.scale(movie.revenue);
       return {
         width: size + "px",
-        height: size + "px"
+        height: size + "px",
       };
     },
     scale(revenue) {
-      const domain = this.movies.map(m => m.revenue);
+      const domain = this.movies.map((m) => m.revenue);
       const maxRevenue = this.movies[0].revenue;
       const maxWidth = 60;
 
       return (revenue * maxWidth) / maxRevenue;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -87,16 +87,22 @@ export default {
   .presentation {
     padding: 100px 0;
     padding-top: 150px;
+    height: 100%;
     z-index: 1;
 
     .bubbles {
       padding: 0 6rem;
 
       width: 100%;
+      height: 100%;
       margin-bottom: -2rem;
 
       display: grid;
       font-size: 14px;
+
+      @media screen and (max-height: 720px) {
+        margin-bottom: 0;
+      }
 
       &.top-50-movies {
         grid-template-columns: repeat(10, 1fr);
@@ -107,14 +113,13 @@ export default {
           grid-template-rows: repeat(4, 1fr);
         }
       }
-      &.top-20-movies {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(10, 1fr);
 
-        @include media-breakpoint-up(sm) {
-          grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: repeat(5, 1fr);
-        }
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+
+      @include media-breakpoint-up(sm) {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(5, 1fr);
       }
 
       > div {
@@ -133,13 +138,13 @@ export default {
             margin: auto;
             text-overflow: ellipsis;
 
-            @include media-breakpoint-up(sm){
+            @include media-breakpoint-up(sm) {
               width: 23vw;
             }
-            @include media-breakpoint-up(md){
+            @include media-breakpoint-up(md) {
               width: 17vw;
             }
-            @include media-breakpoint-up(lg){
+            @include media-breakpoint-up(lg) {
               width: 8vw;
             }
           }
@@ -154,6 +159,10 @@ export default {
         justify-content: center;
         align-items: center;
         margin: auto;
+
+        @media screen and (max-height: 720px) {
+          height: 50px;
+        }
 
         img {
           width: 200%;

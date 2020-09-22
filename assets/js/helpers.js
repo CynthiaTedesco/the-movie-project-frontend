@@ -18,13 +18,16 @@ export function beautifyCashValue(labelValue) {
     : Math.floor(Math.abs(Number(labelValue)));
 }
 export function isMobile() {
-  return document.documentElement.clientWidth <= 860;
+  return document.documentElement.clientWidth <= 584;
+}
+export function isTablet() {
+  return document.documentElement.clientWidth <= 1024;
 }
 export function slices() {
   if (!document) {
     return 50;
   }
-  return isMobile() ? 20 : 50;
+  return isMobile() ? 10 : isTablet() ? 20 : 50;
 }
 export function calculateAge(birthdate, releaseDate) {
   if (!birthdate || !releaseDate) {
@@ -41,7 +44,7 @@ export function calculateAge(birthdate, releaseDate) {
   return Math.abs(age_dt.getUTCFullYear() - 1970);
 }
 
-export function winnerKey(keyword, singleKeyword) {
+export function customKey(keyword, singleKeyword) {
   return keyword + (singleKeyword ? `-${singleKeyword}` : "");
 }
 
@@ -120,7 +123,7 @@ export function getWordCountsGroups(base) {
       temp[4][1] = temp[4][1].concat(movies);
     } else if (count <= 90) {
       temp[5][1] = temp[5][1].concat(movies);
-    } else if (count > 91) {
+    } else if (count > 90) {
       temp[6][1] = temp[6][1].concat(movies);
     }
   });
@@ -249,7 +252,6 @@ export function groupByObject(movies, key) {
 export function groupByKeywordFn(movies, keywordFn) {
   return movies.reduce((rv, x) => {
     const innerKey = keywordFn(x);
-
     if (innerKey) {
       (rv[innerKey] = rv[innerKey] || []).push(x);
     }
@@ -280,4 +282,156 @@ export function groupByPlain(movies, key) {
     }
     return rv;
   }, {});
+}
+
+export function groupBy(movies, key, keyword, hasMany, singleKeyword) {
+  //TODO replace repeated and messy code by using helper functions
+  return movies.reduce((rv, x) => {
+    let innerKey;
+    // if (key === "word_count") {
+    //   innerKey = this.keywordFn(x);
+    // } else if (key === "release_date" || key === "poster") {
+    //   innerKey = this.keywordFn(x[key]);
+    // } else {
+    if (hasMany) {
+      if (!singleKeyword) {
+        let singleKeyword = keyword.slice(0, -1);
+        singleKeyword = singleKeyword === "character" ? "actor" : singleKeyword;
+        singleKeyword = `${singleKeyword}_name`;
+      }
+      const primary = x[key].find((a) => a.primary || a.main);
+      innerKey = primary ? primary[singleKeyword] : "";
+    } else {
+      // if (this.plain) {
+      //   innerKey = x[key];
+      // } else {
+      innerKey = x[key] ? x[key].name : "";
+      // }
+    }
+    // }
+    if (innerKey) {
+      (rv[innerKey] = rv[innerKey] || []).push(x);
+    }
+    return rv;
+  }, {});
+}
+
+export function getSimpleResults(movies, keyword) {
+  const temp = groupByObject(movies, keyword);
+  const groups = simpleGroups(temp);
+  const winner = calculateWinner(groups);
+  const key = customKey(keyword, "");
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
+export function getSpecialPlainResults(movies, keyword, fn) {
+  const temp = groupByPlain(movies, keyword, fn);
+  const groups = fn(temp);
+  const winner = calculateWinner(groups);
+  const key = customKey(keyword, "");
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
+export function getPeopleResults(movies, keyword, primaryKey = "primary") {
+  const temp1 = groupByManyWithInnerKey(movies, keyword, {
+    singleKeyword: "age",
+    primaryKey,
+  });
+  const ages_groups = getAgesGroups(temp1);
+  const winner1 = calculateWinner(ages_groups);
+  const key1 = customKey(keyword, "age");
+
+  const age = {
+    groups: [key1, ages_groups],
+    winner: [key1, winner1.toLowerCase()],
+  };
+
+  const temp2 = groupByManyWithInnerKey(movies, keyword, {
+    singleKeyword: "gender",
+    primaryKey,
+  });
+  const groups = simpleGroups(temp2);
+  const winner2 = calculateWinner(groups);
+  const key2 = customKey(keyword, "gender");
+
+  const gender = {
+    groups: [key2, groups],
+    winner: [key2, winner2.toLowerCase()],
+  };
+
+  return { age, gender };
+}
+export function getListResults(movies, keyword, singleKeyword) {
+  const temp = groupByManyWithInnerKey(movies, keyword, { singleKeyword });
+  const groups = simpleGroups(temp);
+  const winner = calculateWinner(groups);
+  const key = customKey(keyword, singleKeyword);
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
+
+export function getPosterResults(movies) {
+  const temp = groupByKeywordFn(movies, (movie) =>
+    movie.poster.poster_type ? movie.poster.poster_type.name : ""
+  );
+  const key = "poster";
+  const groups = simpleGroups(temp);
+  const winner = calculateWinner(groups);
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
+export function getReleaseMonthResults(movies) {
+  const temp = groupByKeywordFn(
+    movies,
+    (movie) => movie.release_date.split("-")[1]
+  );
+  const key = "release_date";
+  const groups = getMonthsGroups(temp);
+  const winner = calculateWinner(groups);
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
+export function getWordCountResults(movies) {
+  const temp = groupByKeywordFn(movies, (movie) => {
+    const roundNumber = Math.round(movie.word_count / movie.length);
+    return roundNumber > 0 ? roundNumber : 1;
+  });
+  const key = "word_count";
+  const groups = getWordCountsGroups(temp);
+  const winner = calculateWinner(groups);
+
+  return {
+    groups: [key, groups],
+    winner: [key, winner.toLowerCase()],
+  };
+}
+export function clientHeight() {
+  return window.innerHeight && document.documentElement.clientHeight
+    ? Math.min(window.innerHeight, document.documentElement.clientHeight)
+    : window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.getElementsByTagName("body")[0].clientHeight;
+}
+
+export function scrollY() {
+  return window.scrollY && document.documentElement.scrollTop
+    ? Math.min(window.scrollY, document.documentElement.scrollTop)
+    : window.scrollY ||
+        document.documentElement.scrollTop ||
+        document.getElementsByTagName("body")[0].scrollTop;
 }

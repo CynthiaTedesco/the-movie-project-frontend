@@ -5,7 +5,7 @@
 <script>
 import bubbleChart from "@/mixins/bubbleChart.js";
 import dimensionable from "@/mixins/dimensionable.js";
-import { winnerKey, sanitizedId } from "@/assets/js/helpers.js";
+import { customKey, sanitizedId } from "@/assets/js/helpers.js";
 
 const d3 = require("d3");
 
@@ -19,10 +19,6 @@ export default {
   props: {
     category: {
       type: Array,
-      required: true
-    },
-    max: {
-      type: Number,
       required: true
     },
     ranking: {
@@ -129,7 +125,7 @@ export default {
         .style("position", "relative")
         .text(label);
 
-      const key = winnerKey(this.attr, this.singleKeyword);
+      const key = customKey(this.attr, this.singleKeyword);
       if (label === this.$store.getters["winners"][key]) {
         this.labelText
           .append("img")

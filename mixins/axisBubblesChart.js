@@ -1,7 +1,7 @@
 const d3 = require("d3");
-import { isMobile } from "@/assets/js/helpers.js";
 import tooltip from "@/mixins/tooltip.js";
-import { winnerKey } from "../assets/js/helpers";
+import { isMobile, customKey, isTablet } from "../assets/js/helpers";
+import { mapGetters } from "vuex";
 
 export default {
   mixins: [tooltip],
@@ -27,23 +27,16 @@ export default {
     movies: Array,
   },
   computed: {
+    ...mapGetters(["max"]),
     container() {
       const chartContainerSelector = this.selector || ".chart-container";
-      const parentSelector = this.singleKeyword
-        ? `${this.attr}-${this.singleKeyword}`
-        : this.attr;
+      const parentSelector = this.attr;
 
       return d3.selectAll(`#${parentSelector} ${chartContainerSelector}`);
     },
     scale() {
-      let maxRadius = 0;
-      if (this.axis) {
-        maxRadius = Math.min((this.innerWidth / this.groups.length) * 0.7, 60);
-      } else {
-        maxRadius = isMobile()
-          ? (Math.min(this.width, this.height) * 0.3) / 2
-          : Math.min(this.width, this.height) * 0.1;
-      }
+      //scale for circle radius
+      const maxRadius = Math.min((this.innerWidth / this.groups.length) * 0.7, 60);
       console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()
@@ -101,7 +94,7 @@ export default {
         .attr("class", (d) => {
           const classes = ["tick-label"];
 
-          const key = winnerKey(self.attr, self.singleKeyword);
+          const key = customKey(self.attr, self.singleKeyword);
           if (self.$store.getters["winners"][key] === d.toLowerCase()) {
             classes.push("winner");
           }
@@ -208,8 +201,6 @@ export default {
     },
     defTitle(d) {
       return (
-        this.attr +
-        "-" +
         d.title
           .split(" ")
           .join("-")

@@ -1,6 +1,5 @@
 const d3 = require("d3");
-import { isMobile } from "@/assets/js/helpers.js";
-import { sanitizedId } from "../assets/js/helpers";
+import { isMobile, sanitizedId, isTablet } from "../assets/js/helpers";
 
 export default {
   data() {
@@ -37,7 +36,7 @@ export default {
       //if is hidden and we are in a mobile view
       //then we force dimensions to be the same as its container
       if (!this.width || !this.height) {
-        if (isMobile() && this.$parent.$refs.inner) {
+        if ((isMobile()||isTablet()) && this.$parent.$refs.inner) {
           const container = this.$parent.$refs.inner.getBoundingClientRect();
           this.width = container.width;
           this.height = container.height;

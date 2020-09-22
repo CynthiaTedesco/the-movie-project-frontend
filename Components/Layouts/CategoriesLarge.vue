@@ -6,18 +6,13 @@
 import dimensionable from "@/mixins/dimensionable.js";
 import bubbleChartContainer from "@/mixins/bubbleChartContainer.js";
 import bubbleChart from "@/mixins/bubbleChart.js";
-import { winnerKey } from "@/assets/js/helpers.js";
+import { customKey } from "@/assets/js/helpers.js";
 const d3 = require("d3");
 
 export default {
   mixins: [dimensionable, bubbleChartContainer, bubbleChart],
   mounted() {
-    this.$nextTick(() => {
-      this.setDimensions();
-      d3.select(`#${this.attr} svg`).remove();
-
-      this.draw();
-    });
+    this.init();
   },
   computed: {
     yScale() {
@@ -61,25 +56,45 @@ export default {
       }
 
       return xScale;
-    }
+    },
   },
   methods: {
+    restartSimulation() {
+      this.prepareBubbleChartContainerData(); //loads category attribute!
+      if (this.simulation) {
+        this.simulation.force("x", d3.forceX(this.xForce).strength(0.1));
+        this.simulation.force("y", d3.forceY(this.yForce).strength(0.1));
+        this.simulation.alpha(0.75).restart();
+        this.resetLabels();
+      }
+    },
+    init() {
+      this.$nextTick(() => {
+        this.setDimensions();
+        d3.select(`#${this.attr} svg`).remove();
+
+        this.draw();
+      });
+    },
     draw() {
       const props = {
         xForce: this.xForce,
         yForce: this.yForce,
-        onTickFn: this.ticked
+        onTickFn: this.ticked,
       };
       this.createSimulation("category", props);
       this.appendSvg();
       this.appendDefinitions();
       this.appendCircles();
+
+      this.simulation.alpha(1);
+      this.simulation.restart();
     },
     xForce(d) {
       if (!this.coordinates[d.category[this.attr].name]) {
         this.coordinates[d.category[this.attr].name] = {
           revenue: d.revenue,
-          movieId: d.id
+          movieId: d.id,
         };
       }
 
@@ -105,7 +120,7 @@ export default {
       if (!this.coordinates[d.category[this.attr].name]) {
         this.coordinates[d.category[this.attr].name] = {
           revenue: d.revenue,
-          movieId: d.id
+          movieId: d.id,
         };
       }
 
@@ -129,8 +144,8 @@ export default {
     },
     ticked() {
       const self = this;
-      this.nodes.attr("cx", d => d.x);
-      this.nodes.attr("cy", d => {
+      this.nodes.attr("cx", (d) => d.x);
+      this.nodes.attr("cy", (d) => {
         if (d.y > self.coordinates[d.category[this.attr].name].y) {
           self.coordinates[d.category[this.attr].name].y = d.y;
           self.coordinates[d.category[this.attr].name].revenue = d.revenue;
@@ -143,13 +158,21 @@ export default {
         return d.y;
       });
     },
+    resetLabels() {
+      if (this.labels) {
+        this.labels.remove();
+      }
+      this.$nextTick(() => {
+        setTimeout(this.setLabels, 700);
+      });
+    },
     setLabels() {
       this.categoriesNames = [
         ...new Set(
           this.groups.map((group, index) => {
             return index > 4 ? "others" : group[0].toLowerCase();
           })
-        )
+        ),
       ];
 
       this.labels = this.svg.append("g").attr("class", "labels");
@@ -175,7 +198,7 @@ export default {
           .attr("font-size", "14")
           .text(label);
 
-        const key = winnerKey(this.attr, this.singleKeyword);
+        const key = customKey(this.attr, this.singleKeyword);
         if (label === this.$store.getters["winners"][key]) {
           this.labels
             .append("image")
@@ -200,9 +223,7 @@ export default {
             : this.coordinates[this.groups[index][0]];
         xx = coordinates.x;
         yy = coordinates.y + this.scale(coordinates.revenue) + spacing;
-        d3.select(texts[index])
-          .attr("x", xx)
-          .attr("y", yy);
+        d3.select(texts[index]).attr("x", xx).attr("y", yy);
 
         if (index === 0) {
           this.labels
@@ -211,8 +232,8 @@ export default {
             .attr("y", yy - 22);
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

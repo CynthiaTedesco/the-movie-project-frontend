@@ -1,29 +1,43 @@
 <template>
-  <div class="results page" id="results">
+  <div class="results page" id="results" @wheel.stop>
     <TheHeader
       class="negative"
       @menuToggle="displayMenu =!displayMenu"
       :hide-logo="true"
-      :hide-menu-toggle="true"
       title="The Results"
     />
+    <TheMenu :show="displayMenu" @close="displayMenu=false" active="results" />
     <div v-if="loadedWinners" class="presentation">
       <div class="results">
         <div class="section story">
           <div class="title">Story</div>
           <div>
             <Winner :winner="winners['universe']" title="Universe" />
-            <Winner :winner="winners['languages-language_name']" title="Language" />
+            <Winner
+              :winner="winners['languages-language_name']"
+              title="Language"
+              :icon="true"
+            >
+              <img class="flag right" src="~/assets/images/results/flag_left.png" alt="language flag" />
+            </Winner>
           </div>
           <div>
             <Winner :winner="winners['genres-genre_name']" title="Genre" />
-            <Winner :winner="winners['characters-gender']" title="Lead actor gender" />
+            <Winner
+              :winner="winners['characters-gender']"
+              title="Lead actor gender"
+              :icon=true
+            >
+              <img class="left" v-if="characterGenderImage" :src="characterGenderImage" alt="character sex icon" />
+            </Winner>
           </div>
           <div>
             <Winner :winner="winners['story_origin']" title="Origin" />
             <Winner :winner="winners['characters-age']" title="Lead actor age" />
           </div>
-          <Winner :winner="winners['serie']" title="Series" />
+          <div>
+            <Winner :winner="winners['serie']" title="Series" />
+          </div>
         </div>
         <div class="section production">
           <div class="title">Production</div>
@@ -32,14 +46,28 @@
             <Winner :winner="winners['cinematography']" title="Cinematography" />
           </div>
           <div>
-            <Winner :winner="winners['directors-gender']" title="Director gender" />
+            <Winner
+              :winner="winners['directors-gender']"
+              title="Director gender"
+              :icon=true
+            >
+              <img class="left" v-if="directorGenderImage" :src="directorGenderImage" alt="director sex icon" />
+            </Winner>
             <Winner :winner="winners['length']" title="Length" />
           </div>
           <div>
             <Winner :winner="winners['directors-age']" title="Director age" />
             <Winner :winner="winners['word_count']" title="Word Count" />
           </div>
-          <Winner :winner="winners['producers-country'].toUpperCase()" title="Country" />
+          <div>
+            <Winner
+              :winner="winners['producers-country'].toUpperCase()"
+              title="Country"
+              :icon="true"
+            >
+              <img class="left" src="~/assets/images/results/flag_right.png" alt="country flag" />
+            </Winner>
+          </div>
         </div>
         <div class="section release">
           <div class="title">Release</div>
@@ -58,11 +86,12 @@
 
 <script>
 import TheHeader from "@/Components/Navigation/TheHeader";
+import TheMenu from "@/Components/Navigation/TheMenu";
 import Winner from "@/Components/Winner";
 import MENUITEMS from "@/constants/menuItems.js";
 import {
   slices,
-  winnerKey,
+  customKey,
   getAgesGroups,
   getMonthsGroups,
   getBudgetsGroups,
@@ -73,21 +102,38 @@ import {
   groupByPlain,
   groupByManyWithInnerKey,
   groupByKeywordFn,
-  groupByObject
+  groupByObject,
 } from "@/assets/js/helpers.js";
 import { mapGetters } from "vuex";
 
 export default {
   name: "ResultsPage",
-  components: { TheHeader, Winner },
+  components: { TheHeader, TheMenu, Winner },
   data() {
     return {
       loadedWinners: false,
-      movies: []
+      displayMenu: false,
+      movies: [],
     };
   },
   computed: {
-    ...mapGetters(["winners"])
+    ...mapGetters(["winners"]),
+    characterGenderImage() {
+      switch (this.winners["characters-gender"]) {
+        case "male":
+          return require(`@/assets/images/results/male.png`);
+        default:
+          return null;
+      }
+    },
+    directorGenderImage() {
+      switch (this.winners["directors-gender"]) {
+        case "male":
+          return require(`@/assets/images/results/male.png`);
+        default:
+          return null;
+      }
+    },
   },
   async beforeMount() {
     if (Object.keys(this.winners).length < MENUITEMS.length - 1) {
@@ -111,7 +157,7 @@ export default {
   methods: {
     setWinner(groups, keyword, singleKeyword) {
       const winner = calculateWinner(groups);
-      const key = winnerKey(keyword, singleKeyword);
+      const key = customKey(keyword, singleKeyword);
       return this.$store.dispatch("addWinner", [key, winner.toLowerCase()]);
     },
     setSimpleWinner(key) {
@@ -127,14 +173,14 @@ export default {
     setPeopleWinners(key, primaryKey = "primary") {
       const temp1 = groupByManyWithInnerKey(this.movies, key, {
         singleKeyword: "age",
-        primaryKey
+        primaryKey,
       });
       const ages_groups = getAgesGroups(temp1);
       this.setWinner(ages_groups, key, "age");
 
       const temp2 = groupByManyWithInnerKey(this.movies, key, {
         singleKeyword: "gender",
-        primaryKey
+        primaryKey,
       });
       const groups = simpleGroups(temp2);
       this.setWinner(groups, key, "gender");
@@ -146,7 +192,7 @@ export default {
     },
     setPosterWinner() {
       const key = "poster";
-      const temp = groupByKeywordFn(this.movies, movie =>
+      const temp = groupByKeywordFn(this.movies, (movie) =>
         movie.poster.poster_type ? movie.poster.poster_type.name : ""
       );
       const groups = simpleGroups(temp);
@@ -156,14 +202,14 @@ export default {
       const key = "release_date";
       const temp = groupByKeywordFn(
         this.movies,
-        movie => movie.release_date.split("-")[1]
+        (movie) => movie.release_date.split("-")[1]
       );
       const groups = getMonthsGroups(temp);
       this.setWinner(groups, key);
     },
     setWordCountWinner() {
       const key = "word_count";
-      const temp = groupByKeywordFn(this.movies, movie =>
+      const temp = groupByKeywordFn(this.movies, (movie) =>
         Math.round(movie.word_count / movie.length)
       );
       const groups = getWordCountsGroups(temp);
@@ -190,41 +236,86 @@ export default {
 
         this.setPosterWinner(),
         this.setReleaseMonthWinner(),
-        this.setWordCountWinner()
+        this.setWordCountWinner(),
       ]);
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+@import "~/assets/styles/common.scss";
+
 #results {
+  overflow: auto;
+
   position: relative;
   .presentation {
     padding: 130px 60px 50px;
+    height: auto;
+    min-height: 100vh;
 
     .results {
-      display: grid;
-      grid-template-rows: 2fr 2fr 1fr;
-      max-height: 75vh;
+      width: 100%;
+      max-width: 600px;
+      @include media-breakpoint-up(lg) {
+        display: grid;
+        grid-template-rows: 2fr 2fr 1fr;
+        max-height: 75vh;
+        max-width: 80vw;
+      }
 
       .section {
-        display: grid;
-        grid-template-columns: 150px repeat(4, 1fr);
+        display: flex;
+        flex-direction: column;
 
-        &.story,
-        &.production {
-          > div:not(:last-child):not(.title) {
-            display: grid;
-            grid-template-rows: repeat(2 1fr);
-          }
-        }
         > div {
+          display: flex;
+          margin-bottom: 1rem;
+
+          @include media-breakpoint-up(lg) {
+            display: block;
+            margin: none;
+          }
+
           &.title {
             font-weight: bolder;
             font-size: 18px;
+            margin-top: 2rem;
+
+            @include media-breakpoint-up(lg) {
+              margin-top: 0;
+            }
           }
         }
+
+        &.story,
+        &.production {
+          > div:last-child {
+            width: 50%;
+            margin-left: 0;
+            margin-right: auto;
+          }
+        }
+
+        &.release {
+          > div {
+            display: block;
+          }
+        }
+        @include media-breakpoint-up(lg) {
+          display: grid;
+          grid-template-columns: 150px repeat(4, 1fr);
+
+          &.story,
+          &.production {
+            > div:not(:last-child):not(.title) {
+              display: grid;
+              grid-template-rows: repeat(2 1fr);
+            }
+          }
+        }
+
       }
     }
   }

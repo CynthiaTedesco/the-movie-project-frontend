@@ -176,5 +176,11 @@ export default {
       }
     }
   }
+  @include media-breakpoint-down(l) {
+    /deep/ .location {
+      position: relative;
+      margin-top: 0.8em;
+    }
+  }
 }
 </style>

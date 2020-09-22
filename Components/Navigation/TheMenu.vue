@@ -8,7 +8,7 @@
             <div>{{$t('howToMake')}}</div>
             <div>{{$t('aBlockbuster')}}</div>
           </div>
-          <CloseBtn @close="$emit('close')"/>
+          <CloseBtn @close="$emit('close')" />
         </div>
         <div class="menu-list" @wheel.stop>
           <MenuGroup
@@ -48,7 +48,10 @@ export default {
         {
           route: "",
           title: "Movies",
-          subItems: [{ title: "menu.top-movies", target: "top-movies" }],
+          subItems: [
+            { title: "menu.top-movies", target: "top-movies" },
+            { title: "menu.results", target: "results" },
+          ],
         },
         {
           route: "",
@@ -82,7 +85,9 @@ export default {
             {
               title: "menu.story.leadGender",
               target: "inner-page",
-              innerTarget: MENUITEMS.find((a) => a.key === "LeadActorGenderPage"),
+              innerTarget: MENUITEMS.find(
+                (a) => a.key === "LeadActorGenderPage"
+              ),
             },
             {
               title: "menu.story.leadAge",
@@ -103,7 +108,9 @@ export default {
             {
               title: "menu.production.directorGender",
               target: "inner-page",
-              innerTarget: MENUITEMS.find((a) => a.key === "DirectorGenderPage"),
+              innerTarget: MENUITEMS.find(
+                (a) => a.key === "DirectorGenderPage"
+              ),
             },
             {
               title: "menu.production.directorAge",
@@ -118,7 +125,9 @@ export default {
             {
               title: "menu.production.cinematography",
               target: "inner-page",
-              innerTarget: MENUITEMS.find((a) => a.key === "CinematographyPage"),
+              innerTarget: MENUITEMS.find(
+                (a) => a.key === "CinematographyPage"
+              ),
             },
             {
               title: "menu.script.length",
@@ -144,7 +153,9 @@ export default {
             {
               title: "menu.release.distribution",
               target: "inner-page",
-              innerTarget: MENUITEMS.find((a) => a.key === "DistributionCompaniesPage"),
+              innerTarget: MENUITEMS.find(
+                (a) => a.key === "DistributionCompaniesPage"
+              ),
             },
             {
               title: "menu.release.restrictions",
@@ -157,11 +168,6 @@ export default {
               innerTarget: MENUITEMS.find((a) => a.key === "PosterPage"),
             },
           ],
-        },
-        {
-          route: "",
-          title: "Results",
-          subItems: [{ title: "menu.results", target: "results" }],
         },
       ],
     };
@@ -195,8 +201,9 @@ export default {
     padding: 30px;
     right: 0;
     border: 1px solid gray;
+    left: 0;
     height: 100%;
-    width: 100%;
+    width: 100vw;
     max-width: 100vw;
     margin: 0;
 
@@ -212,7 +219,7 @@ export default {
       height: calc(100vh - 100px);
       margin-right: -30px;
       overflow: auto;
-      width: 100%;
+      width: auto;
 
       @include media-breakpoint-up(lg) {
         font-size: 1rem;
@@ -246,8 +253,13 @@ export default {
 
     .menu-footer {
       position: fixed;
-      bottom: 5%;
-      right: 5%;
+      bottom: 0;
+      right: 0;
+      padding: 30px;
+      width: 100%;
+      background: transparent;
+      text-align: right;
+      max-width: 100vw;
 
       img {
         width: 100px;
@@ -259,16 +271,20 @@ export default {
     }
     @media (min-width: 768px) {
       width: 60vw;
+
+      .menu-list {
+        max-width: calc(60vw - 30px);
+      }
     }
     @media (min-width: 1026px) {
       width: 49vw;
       left: 0;
       right: unset;
-    }
+      // }
 
-    @media (min-width: 1024px) {
-      height: auto;
-      width: 90vw;
+      // @media (min-width: 1024px) {
+      //   height: auto;
+      //   width: 90vw;
       max-width: 684px;
       margin-top: 5rem;
       margin-left: 10rem;

@@ -38,28 +38,9 @@ import Vue from "vue";
 import Intro from "@/Components/Pages/Intro.vue";
 import WeGetYou from "@/pages/we-get-you.vue";
 import TopMovies from "@/pages/movies/top-movies.vue";
-import Genres from "@/Components/Pages/Genres.vue";
-import Universes from "@/Components/Pages/Universes.vue";
-import Origins from "@/Components/Pages/Origins.vue";
-
-import Series from "@/Components/Pages/Series.vue";
-import Languages from "@/Components/Pages/Languages.vue";
-import LeadActorGenders from "@/Components/Pages/LeadActorGenders.vue";
-import Budgets from "@/Components/Pages/Budgets.vue";
-import LeadActorAges from "@/Components/Pages/LeadActorAges.vue";
-import DirectorGenders from "@/Components/Pages/DirectorGenders.vue";
-import DirectorAges from "@/Components/Pages/DirectorAges.vue";
-import DistributionCompanies from "@/Components/Pages/DistributionCompanies.vue";
-import Restrictions from "@/Components/Pages/Restrictions.vue";
-import Posters from "@/Components/Pages/Posters.vue";
-import Lengths from "@/Components/Pages/Lengths.vue";
-import Words from "@/Components/Pages/Words.vue";
-import Months from "@/Components/Pages/Months.vue";
-import Countries from "@/Components/Pages/Countries.vue";
-import Cinematographies from "@/Components/Pages/Cinematographies.vue";
 
 import { customKey, clientHeight, scrollY } from "@/assets/js/helpers.js";
-import PageComponent from "@/Components/Pages/PageComponent2";
+import PageComponent from "@/Components/Pages/PageComponent";
 import InnerPageDescription from "@/Components/InnerPageDescription";
 import Bubbles from "@/Components/Charts/Bubbles";
 import bubblePage from "@/mixins/bubblePage.js";
@@ -78,24 +59,6 @@ export default {
     Intro,
     WeGetYou,
     TopMovies,
-    Genres,
-    LeadActorAges,
-    Universes,
-    Origins,
-    Budgets,
-    Series,
-    Languages,
-    LeadActorGenders,
-    DirectorGenders,
-    DirectorAges,
-    Countries,
-    Words,
-    Months,
-    DistributionCompanies,
-    Restrictions,
-    Posters,
-    Lengths,
-    Cinematographies,
     Results,
   },
   watch: {},

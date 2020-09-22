@@ -1,43 +1,107 @@
 <template>
-  <div class="inner-page">
+  <div class="inner-page page">
+    <NavigationArrow class="blue-ferdio" @loadPrevious="loadPrevious" />
     <TheHeader @menuToggle="displayMenu =!displayMenu">
-      <slot name="menu"></slot>
+      <span v-html="current.header"></span>
     </TheHeader>
-    <TheMenu :show="displayMenu" @close="displayMenu=false" />
-    <slot></slot>
-    <NextPageArrow class="blue-ferdio" :target="next" :navigate="navigate" />
+    <TheMenu :show="displayMenu" @close="displayMenu=false" :active="current.key" />
+    <section :id="sectionID" class="page-container">
+      <InnerPageDescription
+        :question="current.question || '-'"
+        :page-key="current.key || '-'"
+        :text="theAnswer"
+      />
+      <slot></slot>
+    </section>
+    <NavigationArrow class="blue-ferdio" :to-next-page="true" @loadNext="loadNext" />
   </div>
 </template>
 
 <script>
 import TheHeader from "@/Components/Navigation/TheHeader";
 import TheMenu from "@/Components/Navigation/TheMenu";
-import NextPageArrow from "@/Components/Arrows/NextPageArrow.vue";
+import NavigationArrow from "@/Components/Arrows/NavigationArrow.vue";
+import InnerPageDescription from "@/Components/InnerPageDescription";
+import MENUITEMS from "@/constants/menuItems.js";
+import EventBus from "@/assets/js/eventBus.js";
+import { customKey } from "@/assets/js/helpers.js";
+import { mapGetters } from "vuex";
 
 export default {
-  components: { TheHeader, TheMenu, NextPageArrow },
+  components: { TheHeader, TheMenu, NavigationArrow, InnerPageDescription },
   data() {
     return {
-      displayMenu: false
+      displayMenu: false,
+      current: {},
     };
   },
   props: {
-    next: {
-      type: String,
-      required: true
-    },
     navigate: {
       type: String,
-    }
-  }
+    },
+    params: {
+      type: Object,
+      required: true,
+    },
+  },
+  mounted() {
+    this.current = this.params;
+  },
+  computed: {
+    ...mapGetters(["simulation"]), //TODO check if I still need this
+    ...mapGetters(["winners"]),
+    sectionID(){
+      return this.current.keyword;
+    },
+    nextPage() {
+      return MENUITEMS.find((mi) => mi.order === this.current.order + 1);
+    },
+    previousPage() {
+      return MENUITEMS.find((mi) => mi.order === this.current.order - 1);
+    },
+    theAnswer() {
+      if (this.current.answer) {
+        const winnerKey = customKey(
+          this.current.keyword,
+          this.current.singleKeyword
+        );
+        const winner = this.winners[winnerKey].toLowerCase();
+        return this.current.answer.replace("{winner}", winner);
+      }
+
+      return "...";
+    },
+  },
+  methods: {
+    loadPrevious() {
+      if (this.previousPage) {
+        const target = Object.assign({}, this.previousPage);
+        this.current = this.previousPage;
+        this.$emit("reload", target);
+      } else {
+        EventBus.$emit("scrollToTarget", "top-movies");
+      }
+    },
+    loadNext() {
+      if (this.nextPage && this.nextPage.key !== "ResultsPage") {
+        const target = Object.assign({}, this.nextPage);
+        this.current = this.nextPage;
+        this.$emit("reload", target);
+      } else {
+        EventBus.$emit("scrollToTarget", "results");
+      }
+    },
+    loadSpecificPage(innerTarget) {
+      this.current = innerTarget;
+      this.$emit("reload", innerTarget);
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~/assets/styles/common.scss";
 .inner-page {
-  min-height: 100vh;
-  max-height: 100vh;
   background-image: radial-gradient(#2b4ab7 0%, #ffffff 5%);
   background-position: 0 0;
   background-size: 40px 40px;

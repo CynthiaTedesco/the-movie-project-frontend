@@ -16,9 +16,9 @@
             <Winner
               :winner="winners['languages-language_name']"
               title="Language"
-              class="with-flag right"
+              :icon="true"
             >
-              <img src="~/assets/images/results/flag_left.png" alt="language flag" />
+              <img class="flag right" src="~/assets/images/results/flag_left.png" alt="language flag" />
             </Winner>
           </div>
           <div>
@@ -26,9 +26,9 @@
             <Winner
               :winner="winners['characters-gender']"
               title="Lead actor gender"
-              class="with-gender"
+              :icon=true
             >
-              <img v-if="characterGenderImage" :src="characterGenderImage" alt="character sex icon" />
+              <img class="left" v-if="characterGenderImage" :src="characterGenderImage" alt="character sex icon" />
             </Winner>
           </div>
           <div>
@@ -49,9 +49,9 @@
             <Winner
               :winner="winners['directors-gender']"
               title="Director gender"
-              class="with-gender"
+              :icon=true
             >
-              <img v-if="directorGenderImage" :src="directorGenderImage" alt="director sex icon" />
+              <img class="left" v-if="directorGenderImage" :src="directorGenderImage" alt="director sex icon" />
             </Winner>
             <Winner :winner="winners['length']" title="Length" />
           </div>
@@ -63,9 +63,9 @@
             <Winner
               :winner="winners['producers-country'].toUpperCase()"
               title="Country"
-              class="with-flag left"
+              :icon="true"
             >
-              <img src="~/assets/images/results/flag_right.png" alt="language flag" />
+              <img class="left" src="~/assets/images/results/flag_right.png" alt="country flag" />
             </Winner>
           </div>
         </div>
@@ -253,12 +253,16 @@ export default {
   .presentation {
     padding: 130px 60px 50px;
     height: auto;
+    min-height: 100vh;
 
     .results {
+      width: 100%;
+      max-width: 600px;
       @include media-breakpoint-up(lg) {
         display: grid;
         grid-template-rows: 2fr 2fr 1fr;
         max-height: 75vh;
+        max-width: 80vw;
       }
 
       .section {
@@ -273,6 +277,7 @@ export default {
             display: block;
             margin: none;
           }
+
           &.title {
             font-weight: bolder;
             font-size: 18px;
@@ -311,50 +316,6 @@ export default {
           }
         }
 
-        .with-gender {
-          img {
-            position: absolute;
-            left: -10px;
-            width: 50px;
-            top: 25px;
-            @include media-breakpoint-up(lg) {
-              width: 70px;
-              top: 15px;
-              left: 20%;
-            }
-          }
-        }
-
-        .with-flag {
-          img {
-            position: absolute;
-            width: 35%;
-            max-width: 60px;
-            top: 15px;
-
-            @include media-breakpoint-up(lg) {
-              max-width: 80px;
-              top: 10px;
-            }
-          }
-
-          &.left {
-            img {
-              left: 5%;
-              @include media-breakpoint-up(lg) {
-                left: 15%;
-              }
-            }
-          }
-          &.right {
-            img {
-              right: 0;
-              @include media-breakpoint-up(lg) {
-                right: 20%;
-              }
-            }
-          }
-        }
       }
     }
   }

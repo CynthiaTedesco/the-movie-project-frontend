@@ -1,8 +1,15 @@
 <template>
   <div class="result">
-    <slot></slot>
     <div class="title">{{title}}</div>
-    <div class="winner">{{winner}}</div>
+    <div class="winner">
+      <template v-if="icon">
+        <span class="img-wrapper">
+          <slot></slot>
+          {{winner}}
+        </span>
+      </template>
+      <template v-else>{{winner}}</template>
+    </div>
   </div>
 </template>
 
@@ -10,8 +17,9 @@
 export default {
   props: {
     title: String,
-    winner: String
-  }
+    winner: String,
+    icon: Boolean,
+  },
 };
 </script>
 
@@ -31,6 +39,29 @@ export default {
     text-transform: capitalize;
     font-family: "jeff-script-regular";
     font-size: 30px;
+
+    .img-wrapper {
+      position: relative;
+
+      /deep/ img {
+        position: absolute;
+
+        &.left {
+          left: -2em;
+          top: -1em;
+          width: 2em;
+        }
+
+        &.flag {
+          max-width: 70px;
+        }
+
+        &.right {
+          right: -2em;
+          top: -1em;
+        }
+      }
+    }
   }
 }
 </style>

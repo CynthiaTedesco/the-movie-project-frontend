@@ -27,7 +27,7 @@
       </template>
     </PageComponent>
 
-    <Results :class="{'current': current === 'results'}" />
+    <Results name="results" :class="{'current': current === 'results'}" />
   </div>
 </template>
 

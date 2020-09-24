@@ -5,8 +5,8 @@
       <div v-if="show" class="menu-content menu">
         <div class="menu-header">
           <div class="title">
-            <div>{{$t('howToMake')}}</div>
-            <div>{{$t('aBlockbuster')}}</div>
+            <div>{{ $t("howToMake") }}</div>
+            <div>{{ $t("aBlockbuster") }}</div>
           </div>
           <CloseBtn @close="$emit('close')" />
         </div>
@@ -237,8 +237,7 @@ export default {
       padding: 30px;
       margin-left: -30px;
       margin-right: -30px;
-      margin-top: -30px;
-
+      position: relative;
       .title {
         font-family: "niveau-grotesk-bold";
         font-size: 20px;

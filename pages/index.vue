@@ -18,7 +18,7 @@
       ref="top-movies"
       :class="{ current: current === 'top-movies' }"
     />
-
+<!--
     <PageComponent
       ref="inner-page"
       name="inner-page"
@@ -37,9 +37,8 @@
           :singleKeyword="singleKeyword"
           :hasMany="hasMany"
         />
-        <!-- </section> -->
       </template>
-    </PageComponent>
+    </PageComponent> -->
 
     <Results name="results" :class="{ current: current === 'results' }" />
   </div>

@@ -23,7 +23,8 @@
     "d3": "latest",
     "date-fns": "^2.14.0",
     "nuxt": "latest",
-    "nuxt-i18n": "latest"
+    "nuxt-i18n": "latest",
+    "smoothscroll-polyfill": "^0.4.4",
   },
   "devDependencies": {
     "babel-loader": "latest",

@@ -1,16 +1,30 @@
 <template>
-  <div class="everything">
-    <Intro name="intro" :random-movie="randomMovie" :class="{'current': current === 'intro'}" />
-    <WeGetYou name="we-get-you" ref="we-get-you" :class="{'current': current === 'we-get-you'}" />
+  <div
+    class="everything"
+  >
+    <Intro
+      name="intro"
+      :random-movie="randomMovie"
+      :class="{ current: current === 'intro' }"
+    />
+    <WeGetYou
+      name="we-get-you"
+      ref="we-get-you"
+      :class="{ current: current === 'we-get-you' }"
+    />
 
-    <TopMovies name="top-movies" ref="top-movies" :class="{'current': current === 'top-movies'}" />
+    <TopMovies
+      name="top-movies"
+      ref="top-movies"
+      :class="{ current: current === 'top-movies' }"
+    />
 
     <PageComponent
       ref="inner-page"
       name="inner-page"
       :params="currentInnerPage"
       @reload="reload"
-      :class="{'current': current === 'inner-page'}"
+      :class="{ current: current === 'inner-page' }"
     >
       <template v-slot>
         <Bubbles
@@ -27,7 +41,7 @@
       </template>
     </PageComponent>
 
-    <Results name="results" :class="{'current': current === 'results'}" />
+    <Results name="results" :class="{ current: current === 'results' }" />
   </div>
 </template>
 
@@ -48,6 +62,8 @@ import bubblePage from "@/mixins/bubblePage.js";
 import Results from "@/Components/Pages/Results.vue";
 import EventBus from "@/assets/js/eventBus.js";
 import MENUITEMS from "@/constants/menuItems.js";
+
+import smoothscroll from 'smoothscroll-polyfill';
 
 export default {
   name: "index",
@@ -120,11 +136,12 @@ export default {
     EventBus.$on("scrollToTarget", this.scrollToTarget);
     EventBus.$on("menuClick", this.menuClick);
   },
-  destroyed(){
+  destroyed() {
     window.removeEventListener("wheel", this.onNavigate);
     window.removeEventListener("keyup", this.onNavigateByKeys);
   },
   mounted() {
+    smoothscroll.polyfill();
     window.addEventListener("wheel", this.onNavigate, { passive: false });
     window.addEventListener("keyup", this.onNavigateByKeys, { passive: false });
 
@@ -180,22 +197,24 @@ export default {
         }, 350);
       }
     },
-    onNavigateByKeys(e){
-      if (e.keyCode === 38){
+    onNavigateByKeys(e) {
+      if (e.keyCode === 38) {
         this.onNavigate(e, -1);
       }
-      if (e.keyCode === 40){
+      if (e.keyCode === 40) {
         this.onNavigate(e, 1);
       }
     },
     onNavigate(e, direction) {
-      e.preventDefault();
+      if (e) {
+        e.preventDefault();
+      }
 
       //if menu is open then ignore
       const menuIsDisplayed = document.querySelector(".menu-content");
       if (menuIsDisplayed) return;
 
-      direction = direction || (e.deltaY > 0 ? 1 : -1);
+      direction = direction || (e && e.deltaY > 0 ? 1 : -1);
 
       if (!this.doing) {
         this.doing = true;

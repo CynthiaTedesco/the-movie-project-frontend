@@ -1,5 +1,5 @@
 <template>
-  <div class="inner-page page">
+  <div id="inner-page" class="inner-page page">
     <NavigationArrow class="blue-ferdio" @loadPrevious="loadPrevious" />
     <TheHeader @menuToggle="displayMenu =!displayMenu">
       <span v-html="current.header"></span>

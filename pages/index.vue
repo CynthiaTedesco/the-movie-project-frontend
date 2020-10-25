@@ -1,6 +1,7 @@
 <template>
   <div class="everything">
     <Intro
+      id="intro"
       name="intro"
       :random-movie="randomMovie"
       :class="{ current: current === 'intro' }"
@@ -188,10 +189,7 @@ export default {
         if (target) {
           this.current = target.getAttribute("name");
         }
-
-        setTimeout(() => {
-          this.doing = false;
-        }, 350);
+        this.setDoing(false, this.curent, target.key || target.id);
       }
     },
     onNavigateByKeys(e) {
@@ -210,7 +208,6 @@ export default {
       //if menu is open then ignore
       const menuIsDisplayed = document.querySelector(".menu-content");
       if (menuIsDisplayed) return;
-
       if (!this.doing) {
         direction = direction || (e && e.deltaY > 0 ? 1 : -1);
         if (window.scrollY === 0 && direction === -1) return;
@@ -237,8 +234,20 @@ export default {
               top: self.getNewTop(direction),
               behavior: "smooth",
             });
+            const from = self.current;
 
-            self.setNewCurrent(direction);
+            if (from === "results") {
+              if (self.$refs["inner-page"]) {
+                const posterPage = MENUITEMS.find(
+                  (mi) => mi.key === "PosterPage"
+                );
+
+                self.$refs["inner-page"].loadSpecificPage(posterPage);
+              }
+              self.setNewCurrent(direction);
+            } else {
+              self.setNewCurrent(direction);
+            }
           });
         }
       }
@@ -256,10 +265,10 @@ export default {
         const self = this;
         this.$store.dispatch("setSpecificResults", key).then((groups) => {
           self.groups = groups;
-          self.doing = false;
+          this.setDoing(false, this.current, target.key);
         });
       } else {
-        this.doing = false;
+        this.setDoing(false, this.current, target.key);
       }
     },
     scrollToTarget(targetKey) {
@@ -268,7 +277,7 @@ export default {
         this.current = targetElement.getAttribute("name");
         targetElement.scrollIntoView();
       }
-      this.doing = false;
+      this.setDoing(false, this.current, targetKey);
     },
     getTargetElement(targetKey) {
       if (this.$refs[targetKey]) {
@@ -276,6 +285,31 @@ export default {
       }
 
       return document.getElementsByName(targetKey)[0];
+    },
+    setDoing(isDoing, from, to) {
+      if (isDoing) {
+        this.doing = isDoing;
+      } else {
+        let timeout = 800;
+        if (from === "results" && to === "PosterPage") {
+          timeout = 1000;
+        }
+        if (from === "inner-page") {
+          const targetIsInner =
+            to !== "top-movies" &&
+            to !== "we-get-you" &&
+            to !== "intro" &&
+            to !== "results";
+            if(targetIsInner){
+              timeout = 400;
+            }
+        }
+
+        const self = this;
+        setTimeout(function () {
+          self.doing = isDoing;
+        }, timeout);
+      }
     },
   },
 };

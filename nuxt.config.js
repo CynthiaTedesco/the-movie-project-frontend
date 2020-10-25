@@ -1,7 +1,6 @@
 const { locales } = require("./i18n/_config");
 
 module.exports = {
-  mode: "universal",
   /*
    ** Headers of the page
    */

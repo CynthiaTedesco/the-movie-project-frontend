@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="everything"
-  >
+  <div class="everything">
     <Intro
       name="intro"
       :random-movie="randomMovie"
@@ -62,7 +60,7 @@ import Results from "@/Components/Pages/Results.vue";
 import EventBus from "@/assets/js/eventBus.js";
 import MENUITEMS from "@/constants/menuItems.js";
 
-import smoothscroll from 'smoothscroll-polyfill';
+import smoothscroll from "smoothscroll-polyfill";
 
 export default {
   name: "index",
@@ -213,9 +211,10 @@ export default {
       const menuIsDisplayed = document.querySelector(".menu-content");
       if (menuIsDisplayed) return;
 
-      direction = direction || (e && e.deltaY > 0 ? 1 : -1);
-
       if (!this.doing) {
+        direction = direction || (e && e.deltaY > 0 ? 1 : -1);
+        if (window.scrollY === 0 && direction === -1) return;
+
         this.doing = true;
         const self = this;
 

@@ -2,14 +2,18 @@
   <div class="the-header header-container">
     <div class="row px-0 py-2 py-md-3">
       <div class="col-xs-12 the-header__left">
-        <div class="how-to-make">
+        <div class="how-to-make" @click="scrollToTop">
           How to make
           <br />a blockbuster
         </div>
-        <TheMenuToggle class="location" v-if="!hideMenuToggle" @toggle="$emit('menuToggle')">
-          <slot>{{title}}</slot>
+        <TheMenuToggle
+          class="location"
+          v-if="!hideMenuToggle"
+          @toggle="$emit('menuToggle')"
+        >
+          <slot>{{ title }}</slot>
         </TheMenuToggle>
-        <span class="location" v-else-if="title">{{title}}</span>
+        <span class="location" v-else-if="title">{{ title }}</span>
       </div>
       <div class="col-sm-3 d-none" v-if="!hideLogo">
         <app-logo class="header-logo" />
@@ -41,6 +45,13 @@ export default {
     title: {
       type: String,
       default: null,
+    },
+  },
+  methods: {
+    scrollToTop() {
+      if (window) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     },
   },
 };

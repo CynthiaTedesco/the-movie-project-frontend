@@ -1,12 +1,16 @@
 <template>
-  <div class="results page" id="results" @wheel.stop>
+  <div class="results page" id="results" @wheel="analyzeScrollAllowance">
     <TheHeader
       class="negative"
-      @menuToggle="displayMenu =!displayMenu"
+      @menuToggle="displayMenu = !displayMenu"
       :hide-logo="true"
       title="The Results"
     />
-    <TheMenu :show="displayMenu" @close="displayMenu=false" active="results" />
+    <TheMenu
+      :show="displayMenu"
+      @close="displayMenu = false"
+      active="results"
+    />
     <div v-if="loadedWinners" class="presentation">
       <div class="results">
         <div class="section story">
@@ -18,7 +22,11 @@
               title="Language"
               :icon="true"
             >
-              <img class="flag right" src="~/assets/images/results/flag_left.png" alt="language flag" />
+              <img
+                class="flag right"
+                src="~/assets/images/results/flag_left.png"
+                alt="language flag"
+              />
             </Winner>
           </div>
           <div>
@@ -26,14 +34,22 @@
             <Winner
               :winner="winners['characters-gender']"
               title="Lead actor gender"
-              :icon=true
+              :icon="true"
             >
-              <img class="left" v-if="characterGenderImage" :src="characterGenderImage" alt="character sex icon" />
+              <img
+                class="left"
+                v-if="characterGenderImage"
+                :src="characterGenderImage"
+                alt="character sex icon"
+              />
             </Winner>
           </div>
           <div>
             <Winner :winner="winners['story_origin']" title="Origin" />
-            <Winner :winner="winners['characters-age']" title="Lead actor age" />
+            <Winner
+              :winner="winners['characters-age']"
+              title="Lead actor age"
+            />
           </div>
           <div>
             <Winner :winner="winners['serie']" title="Series" />
@@ -43,15 +59,23 @@
           <div class="title">Production</div>
           <div>
             <Winner :winner="winners['budget']" title="Budget" />
-            <Winner :winner="winners['cinematography']" title="Cinematography" />
+            <Winner
+              :winner="winners['cinematography']"
+              title="Cinematography"
+            />
           </div>
           <div>
             <Winner
               :winner="winners['directors-gender']"
               title="Director gender"
-              :icon=true
+              :icon="true"
             >
-              <img class="left" v-if="directorGenderImage" :src="directorGenderImage" alt="director sex icon" />
+              <img
+                class="left"
+                v-if="directorGenderImage"
+                :src="directorGenderImage"
+                alt="director sex icon"
+              />
             </Winner>
             <Winner :winner="winners['length']" title="Length" />
           </div>
@@ -65,14 +89,21 @@
               title="Country"
               :icon="true"
             >
-              <img class="left" src="~/assets/images/results/flag_right.png" alt="country flag" />
+              <img
+                class="left"
+                src="~/assets/images/results/flag_right.png"
+                alt="country flag"
+              />
             </Winner>
           </div>
         </div>
         <div class="section release">
           <div class="title">Release</div>
           <Winner :winner="winners['release_date']" title="Release month" />
-          <Winner :winner="winners['distribution_company']" title="Distribution Comp." />
+          <Winner
+            :winner="winners['distribution_company']"
+            title="Distribution Comp."
+          />
           <Winner
             :winner="winners['restrictions-restriction_name'].toUpperCase()"
             title="Age restriction"
@@ -155,6 +186,33 @@ export default {
     }
   },
   methods: {
+    analyzeScrollAllowance(e) {
+      if (window && e) {
+        const effectiveHeight = this.$el
+          .getElementsByClassName("presentation")[0]
+          .getBoundingClientRect().height;
+
+        const direction = e && e.deltaY > 0 ? 1 : -1;
+        const tallerThanViewport = window.outerHeight < effectiveHeight;
+
+        if (tallerThanViewport) {
+          if (direction > 0) {
+            e.stopPropagation();
+          }
+
+          if (direction < 0) {
+            const headerOutOfViewport =
+              this.$el
+                .getElementsByClassName("the-header")[0]
+                .getBoundingClientRect().top < 0;
+
+            if (headerOutOfViewport) {
+              e.stopPropagation();
+            }
+          }
+        }
+      }
+    },
     setWinner(groups, keyword, singleKeyword) {
       const winner = calculateWinner(groups);
       const key = customKey(keyword, singleKeyword);
@@ -315,7 +373,6 @@ export default {
             }
           }
         }
-
       }
     }
   }

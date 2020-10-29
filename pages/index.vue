@@ -189,7 +189,7 @@ export default {
         if (target) {
           this.current = target.getAttribute("name");
         }
-        this.setDoing(false, this.curent, target.key || target.id);
+        this.setDoing(false, this.current, target.key || target.id);
       }
     },
     onNavigateByKeys(e) {

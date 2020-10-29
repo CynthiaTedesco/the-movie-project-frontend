@@ -226,7 +226,7 @@ export default {
               } else {
                 self.$refs[self.current].loadPrevious();
               }
-            }, 200);
+            }, 600);
           }
         } else {
           window.requestAnimationFrame(function () {
@@ -273,11 +273,19 @@ export default {
     },
     scrollToTarget(targetKey) {
       const targetElement = this.getTargetElement(targetKey);
+      const from = this.current;
       if (targetElement) {
         this.current = targetElement.getAttribute("name");
-        targetElement.scrollIntoView();
+        if (from === "inner-page" && targetKey === "results") {
+          const offset = window.innerHeight - window.outerHeight;
+          window.scrollTo({
+            top: window.scrollY + window.innerHeight - offset,
+          });
+        } else {
+          targetElement.scrollIntoView();
+        }
       }
-      this.setDoing(false, this.current, targetKey);
+      this.setDoing(false, from, targetKey);
     },
     getTargetElement(targetKey) {
       if (this.$refs[targetKey]) {
@@ -300,9 +308,9 @@ export default {
             to !== "we-get-you" &&
             to !== "intro" &&
             to !== "results";
-            if(targetIsInner){
-              timeout = 400;
-            }
+          if (targetIsInner) {
+            timeout = 800;
+          }
         }
 
         const self = this;

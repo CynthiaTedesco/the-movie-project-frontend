@@ -38,54 +38,53 @@ export default {
 
       return estimatedWidth;
     },
-    showTooltip(d, index, circles) {
-      const origin = circles[index];
-
+    showTooltip(event, origin) {
       let subTooltip = "";
       if (this.axis) {
-        if (d.axisGroups[this.attr].tooltip) {
-          subTooltip = d.axisGroups[this.attr].tooltip;
+        if (origin.axisGroups[this.attr].tooltip) {
+          subTooltip = origin.axisGroups[this.attr].tooltip;
         }
       } else {
         subTooltip =
-          d.category[this.attr].tooltip || d.category[this.attr].name;
+          origin.category[this.attr].tooltip || origin.category[this.attr].name;
       }
-      const html = `<strong>${d.title}</strong><br/>${subTooltip}`;
+      const html = `<strong>${origin.title}</strong><br/>${subTooltip}`;
 
       this.tooltip.transition().duration(200);
+      const top = event.target.cy.animVal.value + 20;
       this.tooltip
         .style("opacity", 1)
-        .style("top", d3.mouse(origin)[1] + 20 + "px")
+        .style("top", top + "px")
         .html(html);
 
       if (this.width < 400) {
         this.tooltip.style("max-width", "250px");
       } else {
-        this.tooltip.style("min-width", this.estimatedWidth(d) + 30 + "px");
+        this.tooltip.style("min-width", this.estimatedWidth(origin) + 30 + "px");
       }
-      const left = d3.mouse(origin)[0] + 30;
+      const left = event.target.cx.animVal.value + 30;
       const separation = this.width < 400 ? 20 : 100;
-      if (left + this.estimatedWidth(d) > this.width) {
+      if (left + this.estimatedWidth(origin) > this.width) {
         this.tooltip.style("right", separation + "px").style("left", "unset");
       } else {
         this.tooltip.style("left", left + "px").style("right", "unset");
       }
     },
-    moveTooltip(d, index, circles) {
-      const origin = circles[index];
-      const left = d3.mouse(origin)[0] + 30;
-      const separation = this.width < 400 ? 20 : 100;
+    moveTooltip(event, origin) {
+      // console.log('moveTooltip. TOP____', event.clientY + 20);
+      // const left = event.clientX + 30;
+      // const separation = this.width < 400 ? 20 : 100;
 
-      this.tooltip.style("top", d3.mouse(origin)[1] + 20 + "px");
+      // this.tooltip.style("top", event.clientY + 20 + "px");
 
-      if (left + this.estimatedWidth(d) + 40 > this.width) {
-        this.tooltip.style("right", separation + "px").style("left", "unset");
-        // this.tooltip.style('left', 'unset').style('right', separation+'px')
-      } else {
-        this.tooltip.style("left", left + "px").style("right", "unset");
-      }
+      // if (left + this.estimatedWidth(origin) + 40 > this.width) {
+      //   this.tooltip.style("right", separation + "px").style("left", "unset");
+      //   // this.tooltip.style('left', 'unset').style('right', separation+'px')
+      // } else {
+      //   this.tooltip.style("left", left + "px").style("right", "unset");
+      // }
     },
-    hideTooltip(d) {
+    hideTooltip() {
       this.tooltip
         .transition()
         .duration(200)

@@ -34,7 +34,7 @@ export default {
       const maxRadius = isMobile()
         ? (Math.min(this.width, this.height) * 0.3) / 2
         : Math.min(this.width, this.height) * 0.085;
-      console.log("maxRadius", maxRadius);
+      // console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()
         .domain([0, this.max])
@@ -79,9 +79,6 @@ export default {
         .attr("fill", (d) => `url(#${this.defTitle(d)})`)
         .on("mouseover", this.showTooltip)
         .on("mouseleave", this.hideTooltip);
-      if (this.width > 500) {
-        this.nodes.on("mousemove", this.moveTooltip);
-      }
 
       this.nodes
         .transition()

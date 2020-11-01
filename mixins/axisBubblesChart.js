@@ -37,7 +37,7 @@ export default {
     scale() {
       //scale for circle radius
       const maxRadius = Math.min((this.innerWidth / this.groups.length) * 0.7, 60);
-      console.log("maxRadius", maxRadius);
+      // console.log("maxRadius", maxRadius);
       return d3
         .scaleLinear()
         .domain([0, this.max])
@@ -84,7 +84,7 @@ export default {
         .append("g")
         .attr("class", "x-axis")
         .merge(xAxisG)
-        .attr("transform", `translate(0, ${this.innerHeight})`);
+        .attr("transform", `translate(0, ${this.innerHeight - 60})`);
 
       const self = this;
 
@@ -161,7 +161,7 @@ export default {
         this.nodes
           .on("mouseover", this.showTooltip)
           .on("mouseleave", this.hideTooltip)
-          .on("mousemove", this.moveTooltip);
+          // .on("mousemove", this.moveTooltip);
       }
 
       this.nodes

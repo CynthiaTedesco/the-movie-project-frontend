@@ -21,7 +21,7 @@
     :attr="attr"
   />
 
-  <!-- <AxisChartComponent
+  <AxisChartComponent
     ref="chart"
     v-else-if="axis"
     :movies="movies"
@@ -29,7 +29,7 @@
     :hasMany="hasMany"
     :singleKeyword="singleKeyword"
     :attr="attr"
-  /> -->
+  />
 </template>
 
 <script>

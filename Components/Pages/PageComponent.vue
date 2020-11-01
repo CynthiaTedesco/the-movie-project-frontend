@@ -115,7 +115,7 @@ export default {
   /deep/ .arrow-container {
     @include media-breakpoint-down(l) {
       text-align: left;
-      margin-left: 1rem;
+      padding-left: 1rem;
       .arrow {
         width: 10px;
         height: 10px;

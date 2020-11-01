@@ -259,6 +259,7 @@ export default {
       background: transparent;
       text-align: right;
       max-width: 100vw;
+      z-index: -1;
 
       img {
         width: 100px;

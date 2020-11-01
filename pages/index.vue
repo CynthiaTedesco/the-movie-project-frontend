@@ -141,14 +141,14 @@ export default {
     EventBus.$on("menuClick", this.menuClick);
   },
   destroyed() {
-    window.removeEventListener("wheel", this.onNavigate);
-
-    window.removeEventListener("touchmove", this.onNavigate);
+    window.removeEventListener("wheel", this.onNavigateByWheel);
     window.removeEventListener("keyup", this.onNavigateByKeys);
   },
   mounted() {
     smoothscroll.polyfill();
-    window.addEventListener("wheel", this.onNavigate, { passive: false });
+    window.addEventListener("wheel", this.onNavigateByWheel, {
+      passive: false,
+    });
     window.addEventListener("keyup", this.onNavigateByKeys, { passive: false });
 
     this.checkCurrent();
@@ -223,6 +223,36 @@ export default {
         }
       }
     },
+    onNavigateByWheel(e) {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      console.log(
+        ">>> (wheel)",
+        this.current,
+        this.doing,
+        `down=${e.deltaY > 0}`
+      );
+      this.onNavigate1(e.deltaY > 0);
+    },
+    onNavigateByKeys(e) {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      console.log(
+        ">>> (keys)",
+        this.current,
+        this.doing,
+        `down=${e.keyCode === 40}`
+      );
+      if (e.keyCode === 38) {
+        this.onNavigate1(false);
+      }
+      if (e.keyCode === 40) {
+        this.onNavigate1(true);
+      }
+    },
+
     onNavigate1(down) {
       //if menu is open then ignore
       const menuIsDisplayed = document.querySelector(".menu-content");
@@ -290,96 +320,16 @@ export default {
     menuClick({ target, innerTarget }) {
       switch (target) {
         case "top-movies":
-          this.scrollToTarget("top-movies");
+          this.runWithDelay(() => this.scrollToTarget("top-movies"));
           break;
         case "results":
-          this.scrollToTarget("results");
+          this.runWithDelay(() => this.scrollToTarget("results"));
           break;
         case "inner-page":
-          this.scrollToTarget("inner-page");
+          this.runWithDelay(() => this.scrollToTarget("inner-page"));
           if (this.$refs["inner-page"]) {
             this.$refs["inner-page"].loadSpecificPage(innerTarget);
           }
-      }
-    },
-    getNewTop(direction) {
-      return scrollY() + clientHeight() * direction;
-    },
-    setNewCurrent(direction) {
-      const current = document.getElementsByClassName("current")[0];
-      if (current) {
-        const target =
-          direction > 0
-            ? current.nextElementSibling
-            : current.previousElementSibling;
-        if (target) {
-          this.current = target.getAttribute("name");
-        }
-        this.setDoing(
-          false,
-          this.current,
-          target ? target.key || target.id : null
-        );
-      }
-    },
-    onNavigateByKeys(e) {
-      if (e.keyCode === 38) {
-        this.onNavigate(e, -1);
-      }
-      if (e.keyCode === 40) {
-        this.onNavigate(e, 1);
-      }
-    },
-    onNavigate(e, direction) {
-      if (e && e.cancelable) {
-        e.preventDefault();
-      }
-
-      //if menu is open then ignore
-      const menuIsDisplayed = document.querySelector(".menu-content");
-      if (menuIsDisplayed) return;
-      if (!this.doing) {
-        direction = direction || (e && e.deltaY > 0 ? 1 : -1);
-        if (window.scrollY === 0 && direction === -1) return;
-
-        this.doing = true;
-        const self = this;
-
-        if (self.current === "inner-page") {
-          if (self.$refs[self.current]) {
-            if (self.timer) {
-              clearTimeout(self.timer);
-            }
-            this.timer = setTimeout(function () {
-              if (direction > 0) {
-                self.$refs[self.current].loadNext();
-              } else {
-                self.$refs[self.current].loadPrevious();
-              }
-            }, 600);
-          }
-        } else {
-          window.requestAnimationFrame(function () {
-            window.scrollTo({
-              top: self.getNewTop(direction),
-              behavior: "smooth",
-            });
-            const from = self.current;
-
-            if (from === "results") {
-              if (self.$refs["inner-page"]) {
-                const posterPage = MENUITEMS.find(
-                  (mi) => mi.key === "PosterPage"
-                );
-
-                self.$refs["inner-page"].loadSpecificPage(posterPage);
-              }
-              self.setNewCurrent(direction);
-            } else {
-              self.setNewCurrent(direction);
-            }
-          });
-        }
       }
     },
     reload(target) {

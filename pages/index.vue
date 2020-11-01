@@ -1,5 +1,5 @@
 <template>
-  <div class="everything">
+  <div class="everything" v-touch:swipe.stop="onNavigateBySwipe">
     <Intro
       id="intro"
       name="intro"
@@ -62,6 +62,10 @@ import EventBus from "@/assets/js/eventBus.js";
 import MENUITEMS from "@/constants/menuItems.js";
 
 import smoothscroll from "smoothscroll-polyfill";
+
+import Vue2TouchEvents from "vue2-touch-events";
+
+Vue.use(Vue2TouchEvents);
 
 export default {
   name: "index",
@@ -145,42 +149,54 @@ export default {
   mounted() {
     smoothscroll.polyfill();
     window.addEventListener("wheel", this.onNavigate, { passive: false });
-    window.addEventListener("touchstart", this.onNavigateByTouchStart, {
-      passive: false,
-    });
-    window.addEventListener("touchend", this.onNavigateByTouchEnd, {
-      passive: false,
-    });
     window.addEventListener("keyup", this.onNavigateByKeys, { passive: false });
 
-    const withinViewport = Array.from(
-      document.getElementsByClassName("page")
-    ).filter((page) => page.getBoundingClientRect().top >= 0)[0];
-    if (withinViewport) {
-      const name = withinViewport.getAttribute("name");
-      if (name !== this.current) {
+    this.checkCurrent();
+  },
+  methods: {
+    checkCurrent() {
+      const withinViewport = this.calculateWithinViewport();
+      if (withinViewport) {
+        const name = withinViewport.getAttribute("name");
         const rect = withinViewport.getBoundingClientRect();
-        this.current = name;
-        if (rect.y !== 0) {
+
+        if (name !== this.current) {
+          this.current = name;
+        }
+
+        if (rect.y !== 0 && Math.abs(rect.y)>50) {
           window.scrollTo({
             top: rect.y,
             behavior: "smooth",
           });
         }
       }
-    }
-  },
-  methods: {
-    onNavigateByTouchEnd(e) {
-      this.touchEndY = e.changedTouches[0].clientY;
-      if (this.touchStartY > this.touchEndY + 5) {
-        this.onNavigate1(e, true);
-      } else if (this.touchStartY < this.touchEndY - 5) {
-        this.onNavigate1(e, false);
-      }
     },
-    onNavigateByTouchStart(e) {
-      this.touchStartY = e.touches[0].clientY;
+    calculateWithinViewport() {
+      if (process.client) {
+        const pages = Array.from(
+          document.getElementsByClassName("page")
+        ).filter((page) => {
+          const rect = page.getBoundingClientRect();
+          return rect.top <= window.outerHeight / 2;
+        });
+        if (pages.length === 1) {
+          return pages[0];
+        } else {
+          const pages1 = pages.filter((page) => {
+            const rect = page.getBoundingClientRect();
+            return Math.abs(rect.top) <= window.outerHeight/2;
+          });
+          if (pages1.length === 1) {
+            return pages1[0];
+          } else {
+            return pages1.reduce((min, p) => {
+              const top = Math.abs(p.getBoundingClientRect().top);
+              return top === 0 || top < min ? p : min;
+            });
+          }
+        }
+      }
     },
     runWithDelay(fn) {
       if (!this.doing) {
@@ -193,37 +209,56 @@ export default {
         }, 600);
       }
     },
-    onNavigate1(e, down) {
-      if (down) {
-        switch (this.current) {
-          case "intro":
-            this.runWithDelay(() => this.scrollToTarget("we-get-you"));
-            break;
-          case "we-get-you":
-            this.runWithDelay(() => this.scrollToTarget("top-movies"));
-            break;
-          case "top-movies":
-            this.runWithDelay(() => this.scrollToTarget("inner-page"));
-            break;
-          case "inner-page":
-            if (this.$refs["inner-page"]) {
-              this.runWithDelay(() => this.$refs["inner-page"].loadNext());
-            }
+    onNavigateBySwipe(direction) {
+      switch (direction) {
+        case "top": {
+          console.log(">>> NEXT!", this.current, this.doing, direction);
+          this.onNavigate1(true);
+          break;
         }
-      } else {
-        switch (this.current) {
-          case "we-get-you":
-            this.runWithDelay(() => this.scrollToTarget("intro"));
-            break;
-          case "top-movies":
-            this.runWithDelay(() => this.scrollToTarget("we-get-you"));
-            break;
-          case "inner-page":
-            if (this.$refs["inner-page"]) {
-              this.runWithDelay(() => this.$refs["inner-page"].loadPrevious());
-            }
-          case "results":
-            this.runWithDelay(() => this.scrollToTarget("inner-page"));
+        case "bottom": {
+          console.log(">>> PREV!", this.current, this.doing, direction);
+          this.onNavigate1(false);
+          break;
+        }
+      }
+    },
+    onNavigate1(down) {
+      if (!this.doing) {
+        this.checkCurrent();
+        if (down) {
+          switch (this.current) {
+            case "intro":
+              this.runWithDelay(() => this.scrollToTarget("we-get-you"));
+              break;
+            case "we-get-you":
+              this.runWithDelay(() => this.scrollToTarget("top-movies"));
+              break;
+            case "top-movies":
+              this.runWithDelay(() => this.scrollToTarget("inner-page"));
+              break;
+            case "inner-page":
+              if (this.$refs["inner-page"]) {
+                this.runWithDelay(() => this.$refs["inner-page"].loadNext());
+              }
+          }
+        } else {
+          switch (this.current) {
+            case "we-get-you":
+              this.runWithDelay(() => this.scrollToTarget("intro"));
+              break;
+            case "top-movies":
+              this.runWithDelay(() => this.scrollToTarget("we-get-you"));
+              break;
+            case "inner-page":
+              if (this.$refs["inner-page"]) {
+                this.runWithDelay(() =>
+                  this.$refs["inner-page"].loadPrevious()
+                );
+              }
+            case "results":
+              this.runWithDelay(() => this.scrollToTarget("inner-page"));
+          }
         }
       }
     },
@@ -349,7 +384,7 @@ export default {
         //   });
         // } else {
         //   debugger;
-          targetElement.scrollIntoView();
+        targetElement.scrollIntoView();
         // }
       }
       this.setDoing(false, from, targetKey);
@@ -359,13 +394,13 @@ export default {
         return this.$refs[targetKey].$el;
       }
 
-      return document.getElementsByName(targetKey)[0];
+      return process.client ? document.getElementsByName(targetKey)[0] : null;
     },
     setDoing(isDoing, from, to) {
       if (isDoing) {
         this.doing = isDoing;
       } else {
-        let timeout = 800;
+        let timeout = 400;
         if (from === "results" && to === "PosterPage") {
           timeout = 1000;
         }
@@ -376,7 +411,7 @@ export default {
             to !== "intro" &&
             to !== "results";
           if (targetIsInner) {
-            timeout = 800;
+            timeout = 600;
           }
         }
 

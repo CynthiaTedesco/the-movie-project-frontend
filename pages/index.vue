@@ -164,7 +164,7 @@ export default {
           this.current = name;
         }
 
-        if (rect.y !== 0 && Math.abs(rect.y)>50) {
+        if (rect.y !== 0 && Math.abs(rect.y) > 50) {
           window.scrollTo({
             top: rect.y,
             behavior: "smooth",
@@ -185,7 +185,7 @@ export default {
         } else {
           const pages1 = pages.filter((page) => {
             const rect = page.getBoundingClientRect();
-            return Math.abs(rect.top) <= window.outerHeight/2;
+            return Math.abs(rect.top) <= window.outerHeight / 2;
           });
           if (pages1.length === 1) {
             return pages1[0];
@@ -224,6 +224,13 @@ export default {
       }
     },
     onNavigate1(down) {
+      //if menu is open then ignore
+      const menuIsDisplayed = document.querySelector(".menu-content");
+      if (menuIsDisplayed) return;
+
+      //if top === 0 then ignore
+      if (window.scrollY === 0 && !down) return;
+
       if (!this.doing) {
         this.checkCurrent();
         if (down) {
@@ -236,11 +243,19 @@ export default {
               break;
             case "top-movies":
               this.runWithDelay(() => this.scrollToTarget("inner-page"));
+              if (this.$refs["inner-page"]) {
+                const UniversePage = MENUITEMS.find(
+                  (mi) => mi.key === "UniversePage"
+                );
+
+                this.$refs["inner-page"].loadSpecificPage(UniversePage);
+              }
               break;
             case "inner-page":
               if (this.$refs["inner-page"]) {
                 this.runWithDelay(() => this.$refs["inner-page"].loadNext());
               }
+              break;
           }
         } else {
           switch (this.current) {
@@ -256,8 +271,18 @@ export default {
                   this.$refs["inner-page"].loadPrevious()
                 );
               }
+              break;
             case "results":
-              this.runWithDelay(() => this.scrollToTarget("inner-page"));
+              this.runWithDelay(() => {
+                this.scrollToTarget("inner-page");
+                if (this.$refs["inner-page"]) {
+                  const posterPage = MENUITEMS.find(
+                    (mi) => mi.key === "PosterPage"
+                  );
+
+                  this.$refs["inner-page"].loadSpecificPage(posterPage);
+                }
+              });
           }
         }
       }
@@ -290,7 +315,11 @@ export default {
         if (target) {
           this.current = target.getAttribute("name");
         }
-        this.setDoing(false, this.current, target.key || target.id);
+        this.setDoing(
+          false,
+          this.current,
+          target ? target.key || target.id : null
+        );
       }
     },
     onNavigateByKeys(e) {
@@ -384,7 +413,7 @@ export default {
         //   });
         // } else {
         //   debugger;
-        targetElement.scrollIntoView();
+        targetElement.scrollIntoView({ behavior: "smooth" });
         // }
       }
       this.setDoing(false, from, targetKey);

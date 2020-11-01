@@ -256,7 +256,7 @@ export default {
       if (window.scrollY === 0 && !down) return;
 
       if (!this.doing) {
-        this.checkCurrent(true);
+        this.checkCurrent(this.current !== 'inner-page');
         if (down) {
           switch (this.current) {
             case "intro":

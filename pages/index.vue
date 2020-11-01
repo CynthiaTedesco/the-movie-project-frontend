@@ -92,6 +92,8 @@ export default {
       pages: [],
       pendingPages: [...MENUITEMS],
       timer: null,
+      touchStartY: 0,
+      touchEndY: 0,
     };
   },
   computed: {
@@ -136,11 +138,19 @@ export default {
   },
   destroyed() {
     window.removeEventListener("wheel", this.onNavigate);
+
+    window.removeEventListener("touchmove", this.onNavigate);
     window.removeEventListener("keyup", this.onNavigateByKeys);
   },
   mounted() {
     smoothscroll.polyfill();
     window.addEventListener("wheel", this.onNavigate, { passive: false });
+    window.addEventListener("touchstart", this.onNavigateByTouchStart, {
+      passive: false,
+    });
+    window.addEventListener("touchend", this.onNavigateByTouchEnd, {
+      passive: false,
+    });
     window.addEventListener("keyup", this.onNavigateByKeys, { passive: false });
 
     const withinViewport = Array.from(
@@ -161,6 +171,62 @@ export default {
     }
   },
   methods: {
+    onNavigateByTouchEnd(e) {
+      this.touchEndY = e.changedTouches[0].clientY;
+      if (this.touchStartY > this.touchEndY + 5) {
+        this.onNavigate1(e, true);
+      } else if (this.touchStartY < this.touchEndY - 5) {
+        this.onNavigate1(e, false);
+      }
+    },
+    onNavigateByTouchStart(e) {
+      this.touchStartY = e.touches[0].clientY;
+    },
+    runWithDelay(fn) {
+      if (!this.doing) {
+        console.log("running with delay from", this.current);
+        this.doing = true;
+        const self = this;
+        setTimeout(function () {
+          fn();
+          // self.doing = false;
+        }, 600);
+      }
+    },
+    onNavigate1(e, down) {
+      if (down) {
+        switch (this.current) {
+          case "intro":
+            this.runWithDelay(() => this.scrollToTarget("we-get-you"));
+            break;
+          case "we-get-you":
+            this.runWithDelay(() => this.scrollToTarget("top-movies"));
+            break;
+          case "top-movies":
+            this.runWithDelay(() => this.scrollToTarget("inner-page"));
+            break;
+          case "inner-page":
+            if (this.$refs["inner-page"]) {
+              this.runWithDelay(() => this.$refs["inner-page"].loadNext());
+            }
+        }
+      } else {
+        switch (this.current) {
+          case "we-get-you":
+            this.runWithDelay(() => this.scrollToTarget("intro"));
+            break;
+          case "top-movies":
+            this.runWithDelay(() => this.scrollToTarget("we-get-you"));
+            break;
+          case "inner-page":
+            if (this.$refs["inner-page"]) {
+              this.runWithDelay(() => this.$refs["inner-page"].loadPrevious());
+            }
+          case "results":
+            this.runWithDelay(() => this.scrollToTarget("inner-page"));
+        }
+      }
+    },
     menuClick({ target, innerTarget }) {
       switch (target) {
         case "top-movies":
@@ -201,7 +267,7 @@ export default {
       }
     },
     onNavigate(e, direction) {
-      if (e) {
+      if (e && e.cancelable) {
         e.preventDefault();
       }
 
@@ -276,14 +342,15 @@ export default {
       const from = this.current;
       if (targetElement) {
         this.current = targetElement.getAttribute("name");
-        if (from === "inner-page" && targetKey === "results") {
-          const offset = window.innerHeight - window.outerHeight;
-          window.scrollTo({
-            top: window.scrollY + window.innerHeight - offset,
-          });
-        } else {
+        // if (from === "inner-page" && targetKey === "results") {
+        //   const offset = window.innerHeight - window.outerHeight;
+        //   window.scrollTo({
+        //     top: window.scrollY + window.innerHeight - offset,
+        //   });
+        // } else {
+        //   debugger;
           targetElement.scrollIntoView();
-        }
+        // }
       }
       this.setDoing(false, from, targetKey);
     },

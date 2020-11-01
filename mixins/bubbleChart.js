@@ -78,7 +78,9 @@ export default {
         .attr("r", 0)
         .attr("fill", (d) => `url(#${this.defTitle(d)})`)
         .on("mouseover", this.showTooltip)
-        .on("mouseleave", this.hideTooltip);
+        .on('touchstart', this.showTooltip)
+        .on("mouseleave", this.hideTooltip)
+        .on('touchend', this.hideTooltip);
 
       this.nodes
         .transition()

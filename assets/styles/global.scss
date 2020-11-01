@@ -17,11 +17,11 @@
   font-style: normal;
 }
 @font-face {
-  font-family: 'VI-Lam-Anh';
-  src:url('~assets/fonts/VI-Lam-Anh.ttf.woff') format('woff'),
-      url('~assets/fonts/VI-Lam-Anh.ttf.svg#VI-Lam-Anh') format('svg'),
-      url('~assets/fonts/VI-Lam-Anh.ttf.eot'),
-      url('~assets/fonts/VI-Lam-Anh.ttf.eot?#iefix') format('embedded-opentype');
+  font-family: "VI-Lam-Anh";
+  src: url("~assets/fonts/VI-Lam-Anh.ttf.woff") format("woff"),
+    url("~assets/fonts/VI-Lam-Anh.ttf.svg#VI-Lam-Anh") format("svg"),
+    url("~assets/fonts/VI-Lam-Anh.ttf.eot"),
+    url("~assets/fonts/VI-Lam-Anh.ttf.eot?#iefix") format("embedded-opentype");
   font-weight: normal;
   font-style: normal;
 }
@@ -30,6 +30,10 @@ body {
   overflow-x: hidden;
   overflow: hidden;
   scroll-behavior: smooth;
+
+  @media screen and (max-width: 1024px) {
+    overflow-x: auto;
+  }
 }
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",

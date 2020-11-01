@@ -92,12 +92,6 @@ export default {
       hasMany: false,
 
       randomMovie: null,
-      observer: null,
-      pages: [],
-      pendingPages: [...MENUITEMS],
-      timer: null,
-      touchStartY: 0,
-      touchEndY: 0,
     };
   },
   computed: {
@@ -154,7 +148,7 @@ export default {
     this.checkCurrent();
   },
   methods: {
-    checkCurrent() {
+    checkCurrent(avoidMending) {
       const withinViewport = this.calculateWithinViewport();
       if (withinViewport) {
         const name = withinViewport.getAttribute("name");
@@ -164,7 +158,7 @@ export default {
           this.current = name;
         }
 
-        if (rect.y !== 0 && Math.abs(rect.y) > 50) {
+        if (!avoidMending && rect.y !== 0 && Math.abs(rect.y) > 50) {
           window.scrollTo({
             top: rect.y,
             behavior: "smooth",
@@ -213,12 +207,12 @@ export default {
       switch (direction) {
         case "top": {
           console.log(">>> NEXT!", this.current, this.doing, direction);
-          this.onNavigate1(true);
+          this.onNavigate(true);
           break;
         }
         case "bottom": {
           console.log(">>> PREV!", this.current, this.doing, direction);
-          this.onNavigate1(false);
+          this.onNavigate(false);
           break;
         }
       }
@@ -233,7 +227,7 @@ export default {
         this.doing,
         `down=${e.deltaY > 0}`
       );
-      this.onNavigate1(e.deltaY > 0);
+      this.onNavigate(e.deltaY > 0);
     },
     onNavigateByKeys(e) {
       if (e.cancelable) {
@@ -246,14 +240,14 @@ export default {
         `down=${e.keyCode === 40}`
       );
       if (e.keyCode === 38) {
-        this.onNavigate1(false);
+        this.onNavigate(false);
       }
       if (e.keyCode === 40) {
-        this.onNavigate1(true);
+        this.onNavigate(true);
       }
     },
 
-    onNavigate1(down) {
+    onNavigate(down) {
       //if menu is open then ignore
       const menuIsDisplayed = document.querySelector(".menu-content");
       if (menuIsDisplayed) return;
@@ -262,7 +256,7 @@ export default {
       if (window.scrollY === 0 && !down) return;
 
       if (!this.doing) {
-        this.checkCurrent();
+        this.checkCurrent(true);
         if (down) {
           switch (this.current) {
             case "intro":

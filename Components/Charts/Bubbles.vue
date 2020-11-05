@@ -1,7 +1,7 @@
 <template>
   <CategoriesSmall
     ref="chart"
-    v-if="!axis && display==='small'"
+    v-if="!axis && display === 'small'"
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
@@ -12,7 +12,7 @@
 
   <CategoriesLarge
     ref="chart"
-    v-else-if="!axis && display!=='small'"
+    v-else-if="!axis && display !== 'small'"
     :movies="movies"
     :groups="groups"
     :hasMany="hasMany"
@@ -99,9 +99,16 @@ export default {
       return "large";
     },
     async resized() {
+      if (this.$parent.current.keyword !== this.attr) {
+        //ignore
+        return;
+      }
+
       if (this.axis) {
         this.$nextTick(() => {
-          this.$refs.chart.setDimensions();
+          if (this.$refs.chart) {
+            this.$refs.chart.setDimensions();
+          }
         });
       } else {
         //TODO decide if we need a different visualizacion for axis on mobile
@@ -124,5 +131,6 @@ export default {
 @import "@/assets/styles/common.scss";
 svg {
   overflow: visible;
+  max-height: calc(100vh - 100px);
 }
 </style>

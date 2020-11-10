@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     prepareBubbleChartContainerData() {
-      console.log('--------- prepareBubbleChartContainerData');
       if (this.movies) {
         const updatedMovies = this.movies.map((m) => {
           m.category = m.category || {};

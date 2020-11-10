@@ -194,24 +194,20 @@ export default {
     },
     runWithDelay(fn) {
       if (!this.doing) {
-        console.log("running with delay from", this.current);
         this.doing = true;
         const self = this;
         setTimeout(function () {
           fn();
-          // self.doing = false;
         }, 600);
       }
     },
     onNavigateBySwipe(direction) {
       switch (direction) {
         case "top": {
-          console.log(">>> NEXT!", this.current, this.doing, direction);
           this.onNavigate(true);
           break;
         }
         case "bottom": {
-          console.log(">>> PREV!", this.current, this.doing, direction);
           this.onNavigate(false);
           break;
         }
@@ -221,24 +217,12 @@ export default {
       if (e.cancelable) {
         e.preventDefault();
       }
-      console.log(
-        ">>> (wheel)",
-        this.current,
-        this.doing,
-        `down=${e.deltaY > 0}`
-      );
       this.onNavigate(e.deltaY > 0);
     },
     onNavigateByKeys(e) {
       if (e.cancelable) {
         e.preventDefault();
       }
-      console.log(
-        ">>> (keys)",
-        this.current,
-        this.doing,
-        `down=${e.keyCode === 40}`
-      );
       if (e.keyCode === 38) {
         this.onNavigate(false);
       }

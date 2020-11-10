@@ -159,14 +159,14 @@ export default {
       });
     },
     resetLabels() {
-      if (this.labels) {
-        this.labels.remove();
-      }
       this.$nextTick(() => {
         setTimeout(this.setLabels, 700);
       });
     },
     setLabels() {
+      if (this.labels) {
+        this.labels.remove();
+      }
       this.categoriesNames = [
         ...new Set(
           this.groups.map((group, index) => {

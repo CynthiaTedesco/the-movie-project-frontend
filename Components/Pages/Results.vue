@@ -220,12 +220,12 @@ export default {
     },
     setSimpleWinner(key) {
       const temp = groupByObject(this.movies, key);
-      const groups = simpleGroups(temp);
+      const groups = simpleGroups(temp, this.movies.length);
       this.setWinner(groups, key);
     },
     setListWinner(key, singleKeyword) {
       const temp = groupByManyWithInnerKey(this.movies, key, { singleKeyword });
-      const groups = simpleGroups(temp);
+      const groups = simpleGroups(temp, this.movies.length);
       this.setWinner(groups, key, singleKeyword);
     },
     setPeopleWinners(key, primaryKey = "primary") {
@@ -233,19 +233,19 @@ export default {
         singleKeyword: "age",
         primaryKey,
       });
-      const ages_groups = getAgesGroups(temp1);
+      const ages_groups = getAgesGroups(temp1, this.movies.length);
       this.setWinner(ages_groups, key, "age");
 
       const temp2 = groupByManyWithInnerKey(this.movies, key, {
         singleKeyword: "gender",
         primaryKey,
       });
-      const groups = simpleGroups(temp2);
+      const groups = simpleGroups(temp2, this.movies.length);
       this.setWinner(groups, key, "gender");
     },
     setSpecialPlainWinner(key, fn) {
       const temp = groupByPlain(this.movies, key);
-      const groups = fn(temp);
+      const groups = fn(temp, this.movies.length);
       this.setWinner(groups, key);
     },
     setPosterWinner() {
@@ -253,7 +253,7 @@ export default {
       const temp = groupByKeywordFn(this.movies, (movie) =>
         movie.poster.poster_type ? movie.poster.poster_type.name : ""
       );
-      const groups = simpleGroups(temp);
+      const groups = simpleGroups(temp, this.movies.length);
       this.setWinner(groups, key);
     },
     setReleaseMonthWinner() {
@@ -262,7 +262,7 @@ export default {
         this.movies,
         (movie) => movie.release_date.split("-")[1]
       );
-      const groups = getMonthsGroups(temp);
+      const groups = getMonthsGroups(temp, this.movies.length);
       this.setWinner(groups, key);
     },
     setWordCountWinner() {
@@ -270,7 +270,7 @@ export default {
       const temp = groupByKeywordFn(this.movies, (movie) =>
         Math.round(movie.word_count / movie.length)
       );
-      const groups = getWordCountsGroups(temp);
+      const groups = getWordCountsGroups(temp, this.movies.length);
       this.setWinner(groups, key);
     },
     setWinners() {

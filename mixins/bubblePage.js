@@ -42,35 +42,30 @@ export default {
 
         if (this.axis) {
           if (this.singleKeyword && this.singleKeyword === "age") {
-            this.groups = getAgesGroups(temp);
+            this.groups = getAgesGroups(temp, this.movies.length);
           } else {
             switch (this.keyword) {
               case "release_date": {
-                this.groups = getMonthsGroups(temp);
+                this.groups = getMonthsGroups(temp, this.movies.length);
                 break;
               }
               case "budget": {
-                this.groups = getBudgetsGroups(temp);
+                this.groups = getBudgetsGroups(temp, this.movies.length);
                 break;
               }
               case "length": {
-                this.groups = getLengthsGroups(temp);
+                this.groups = getLengthsGroups(temp, this.movies.length);
                 break;
               }
               case "word_count": {
-                this.groups = getWordCountsGroups(temp);
+                this.groups = getWordCountsGroups(temp, this.movies.length);
                 break;
               }
             }
           }
         } else {
-          this.groups = simpleGroups(temp);
+          this.groups = simpleGroups(temp, this.movies.length);
         }
-      // } else {
-        // this.groups = this.$store.getters["allGroups"][
-        //     this.keyword
-        //   ];;
-      // }
 
       this.setWinner();
     },

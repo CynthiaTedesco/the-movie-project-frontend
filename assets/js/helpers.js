@@ -69,7 +69,7 @@ export function sanitizedId(attr, category) {
   return `#${attr} ${sanitizedCategory}`;
 }
 
-export function getAgesGroups(base) {
+export function getAgesGroups(base, total) {
   const temp = AGES.map((ageLabel) => {
     return [ageLabel, []];
   });
@@ -102,9 +102,13 @@ export function getAgesGroups(base) {
     }
   });
 
-  return temp;
+  return temp.map((sg) => {
+    //calculates density
+    sg.push((sg[1].length * 100) / total);
+    return sg;
+  });
 }
-export function getWordCountsGroups(base) {
+export function getWordCountsGroups(base, total) {
   const temp = WORD_COUNTS.map((wordCountLabel) => {
     return [wordCountLabel, []];
   });
@@ -128,9 +132,13 @@ export function getWordCountsGroups(base) {
     }
   });
 
-  return temp;
+  return temp.map((sg) => {
+    //calculates density
+    sg.push((sg[1].length * 100) / total);
+    return sg;
+  });
 }
-export function getLengthsGroups(base) {
+export function getLengthsGroups(base, total) {
   const temp = LENGTHS.map((lengthLabel) => {
     return [lengthLabel, []];
   });
@@ -158,9 +166,13 @@ export function getLengthsGroups(base) {
     }
   });
 
-  return temp;
+  return temp.map((sg) => {
+    //calculates density
+    sg.push((sg[1].length * 100) / total);
+    return sg;
+  });
 }
-export function getBudgetsGroups(base) {
+export function getBudgetsGroups(base, total) {
   const temp = BUDGETS.map((budgetLabel) => {
     return [budgetLabel, []];
   });
@@ -184,9 +196,13 @@ export function getBudgetsGroups(base) {
     }
   });
 
-  return temp;
+  return temp.map((sg) => {
+    //calculates density
+    sg.push((sg[1].length * 100) / total);
+    return sg;
+  });
 }
-export function getMonthsGroups(base) {
+export function getMonthsGroups(base, total) {
   const temp = MONTHS.map((monthLabel) => {
     return [monthLabel, []];
   });
@@ -221,10 +237,20 @@ export function getMonthsGroups(base) {
     }
   });
 
-  return temp;
+  return temp.map((sg) => {
+    //calculates density
+    sg.push((sg[1].length * 100) / total);
+    return sg;
+  });
 }
-export function simpleGroups(base) {
-  return Object.entries(base).sort((a, b) => b[1].length - a[1].length);
+export function simpleGroups(base, total) {
+  return Object.entries(base)
+    .sort((a, b) => b[1].length - a[1].length)
+    .map((sg) => {
+      //calculates density
+      sg.push((sg[1].length * 100) / total);
+      return sg;
+    });
 }
 export function calculateWinner(groups) {
   return [...groups].sort((group1, group2) => {
@@ -318,7 +344,7 @@ export function groupBy(movies, key, keyword, hasMany, singleKeyword) {
 
 export function getSimpleResults(movies, keyword) {
   const temp = groupByObject(movies, keyword);
-  const groups = simpleGroups(temp);
+  const groups = simpleGroups(temp, movies.length);
   const winner = calculateWinner(groups);
   const key = customKey(keyword, "");
 
@@ -329,7 +355,11 @@ export function getSimpleResults(movies, keyword) {
 }
 export function getSpecialPlainResults(movies, keyword, fn) {
   const temp = groupByPlain(movies, keyword, fn);
-  const groups = fn(temp);
+  const groups = fn(temp).map((sg) => {
+    //calculates density
+    sg.push((sg[1].length * 100) / movies.length);
+    return sg;
+  });
   const winner = calculateWinner(groups);
   const key = customKey(keyword, "");
 
@@ -343,7 +373,7 @@ export function getPeopleResults(movies, keyword, primaryKey = "primary") {
     singleKeyword: "age",
     primaryKey,
   });
-  const ages_groups = getAgesGroups(temp1);
+  const ages_groups = getAgesGroups(temp1, movies.length);
   const winner1 = calculateWinner(ages_groups);
   const key1 = customKey(keyword, "age");
 
@@ -356,7 +386,7 @@ export function getPeopleResults(movies, keyword, primaryKey = "primary") {
     singleKeyword: "gender",
     primaryKey,
   });
-  const groups = simpleGroups(temp2);
+  const groups = simpleGroups(temp2, movies.length);
   const winner2 = calculateWinner(groups);
   const key2 = customKey(keyword, "gender");
 
@@ -369,7 +399,7 @@ export function getPeopleResults(movies, keyword, primaryKey = "primary") {
 }
 export function getListResults(movies, keyword, singleKeyword) {
   const temp = groupByManyWithInnerKey(movies, keyword, { singleKeyword });
-  const groups = simpleGroups(temp);
+  const groups = simpleGroups(temp, movies.length);
   const winner = calculateWinner(groups);
   const key = customKey(keyword, singleKeyword);
 
@@ -384,7 +414,7 @@ export function getPosterResults(movies) {
     movie.poster.poster_type ? movie.poster.poster_type.name : ""
   );
   const key = "poster";
-  const groups = simpleGroups(temp);
+  const groups = simpleGroups(temp, movies.length);
   const winner = calculateWinner(groups);
 
   return {
@@ -398,7 +428,7 @@ export function getReleaseMonthResults(movies) {
     (movie) => movie.release_date.split("-")[1]
   );
   const key = "release_date";
-  const groups = getMonthsGroups(temp);
+  const groups = getMonthsGroups(temp, movies.length);
   const winner = calculateWinner(groups);
 
   return {
@@ -412,7 +442,7 @@ export function getWordCountResults(movies) {
     return roundNumber > 0 ? roundNumber : 1;
   });
   const key = "word_count";
-  const groups = getWordCountsGroups(temp);
+  const groups = getWordCountsGroups(temp, movies.length);
   const winner = calculateWinner(groups);
 
   return {

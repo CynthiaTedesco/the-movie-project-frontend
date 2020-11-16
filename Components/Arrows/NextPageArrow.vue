@@ -1,5 +1,5 @@
 <template>
-  <div @click.stop.prevent="onClick" class="arrow-container">
+  <div class="arrow-container" @click.stop.prevent="onClick">
     <span class="arrow"></span>
   </div>
 </template>

@@ -351,7 +351,7 @@ export default {
         &.production {
           > div:last-child {
             width: 50%;
-            margin-left: 0;
+            margin-left: auto;
             margin-right: auto;
           }
         }
@@ -360,7 +360,7 @@ export default {
           > div {
             display: block;
           }
-        }
+       }
         @include media-breakpoint-up(lg) {
           display: grid;
           grid-template-columns: 150px repeat(4, 1fr);

@@ -112,6 +112,10 @@ export default {
 
     /deep/ .the-menu-toggle {
       color: $white;
+
+      .arrow{
+        border-color: $white;
+      }
     }
 
     .how-to-make {

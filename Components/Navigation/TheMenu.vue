@@ -206,6 +206,7 @@ export default {
     width: 100vw;
     max-width: 100vw;
     margin: 0;
+    height: auto;
 
     .menu-list {
       font-family: "VI-Lam-Anh";

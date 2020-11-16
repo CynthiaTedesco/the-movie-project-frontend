@@ -3,11 +3,17 @@
     <slot>
       <span>Menu</span>
     </slot>
+    <ArrowDown/>
   </div>
 </template>
 
 <script>
+import ArrowDown from '@/Components/Arrows/ArrowDown';
+
 export default {
+  components: {
+    ArrowDown
+  },
   computed: {
     category () {
       return this.$nuxt.$route.path.split('/')[1];
@@ -23,8 +29,9 @@ export default {
 @import '~/assets/styles/common.scss';
 
 .the-menu-toggle {
-  color: #9f9c9c;
+  color: $gray;
   cursor: pointer;
+  display: flex;
   text-transform: capitalize;
 
   @include media-breakpoint-up(md) {

@@ -2,7 +2,7 @@
   <div class="top-movies page" id="top-movies">
     <TheHeader
       class="negative"
-      @menuToggle="displayMenu =!displayMenu"
+      @menuToggle="displayMenu = !displayMenu"
       :hide-logo="true"
       :hide-menu-toggle="true"
       :title="title"
@@ -18,8 +18,8 @@
               :style="bubbleStyle(movie)"
             />
           </div>
-          <div class="title" :title="movie.title">{{movie.title}}</div>
-          <div class="revenue">{{revenue(movie)}}</div>
+          <div class="title" :title="movie.title">{{ movie.title }}</div>
+          <div class="revenue">{{ revenue(movie) }}</div>
         </div>
       </div>
       <NextPageArrow class="white" target="inner-page" />
@@ -104,6 +104,25 @@ export default {
         margin-bottom: 0;
       }
 
+      &.top-30-movies {
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+
+        // @include media-breakpoint-down(l) {
+        //   grid-template-columns: repeat(5, 1fr);
+        //   grid-template-rows: repeat(4, 1fr);
+        // }
+      }
+
+      &.top-40-movies {
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+
+        // @include media-breakpoint-down(l) {
+        //   grid-template-columns: repeat(5, 1fr);
+        //   grid-template-rows: repeat(4, 1fr);
+        // }
+      }
       &.top-50-movies {
         grid-template-columns: repeat(10, 1fr);
         grid-template-rows: repeat(5, 1fr);

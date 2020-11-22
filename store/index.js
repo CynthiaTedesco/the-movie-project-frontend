@@ -12,7 +12,7 @@ import {
 } from "@/assets/js/helpers.js";
 import Vue from "vue";
 
-const QUANTITY = 20;
+const QUANTITY = 30;
 
 export const state = () => ({
   movies: [],

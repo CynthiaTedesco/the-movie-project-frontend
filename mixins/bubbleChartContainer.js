@@ -20,7 +20,7 @@ export default {
       this.prepareBubbleChartContainerData();
     },
   },
-  mounted() {
+  created() {
     this.prepareBubbleChartContainerData();
   },
   computed: {

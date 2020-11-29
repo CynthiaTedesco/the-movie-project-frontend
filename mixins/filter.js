@@ -11,7 +11,7 @@ export default {
       }
     },
   },
-  beforeDestroy() {
+  destroyed() {
     window.removeEventListener('resize', this.checkMovieSlices)
   },
 }

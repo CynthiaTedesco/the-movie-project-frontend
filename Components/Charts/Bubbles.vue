@@ -82,7 +82,7 @@ export default {
     window.addEventListener("resize", this.eventListenerFn);
     EventBus.$on("restartSimulation", this.restartSimulation);
   },
-  beforeDestroy() {
+  destroyed() {
     window.removeEventListener("resize", this.resized);
   },
   methods: {

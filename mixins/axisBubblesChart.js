@@ -28,12 +28,6 @@ export default {
   },
   computed: {
     ...mapGetters(["max"]),
-    container() {
-      const chartContainerSelector = this.selector || ".chart-container";
-      const parentSelector = this.attr;
-
-      return d3.selectAll(`#${parentSelector} ${chartContainerSelector}`);
-    },
     scale() {
       //scale for circle radius
       const maxRadius = Math.min((this.innerWidth / this.groups.length) * 0.7, 60);

@@ -1,5 +1,5 @@
 <template>
-  <div ref="chartContainer" class="chart-container"></div>
+  <div ref="chartContainer" class="chart-container bubbles"></div>
 </template>
 
 <script>
@@ -99,7 +99,7 @@ export default {
       }
 
       let x;
-      const container = this.$refs.chartContainer.getBoundingClientRect();
+      const container = this.$el.getBoundingClientRect();
       const percentage = this.xScale(
         d.category[this.attr].position <= 6 ? d.category[this.attr].position : 6
       );
@@ -127,7 +127,7 @@ export default {
       const percentage = this.yScale(
         d.category[this.attr].position <= 6 ? d.category[this.attr].position : 6
       );
-      const container = this.$refs.chartContainer.getBoundingClientRect();
+      const container = this.$el.getBoundingClientRect();
       let y;
       if (this.isMultiline) {
         if (percentage === 0) {
@@ -144,16 +144,27 @@ export default {
     },
     ticked() {
       const self = this;
-      this.nodes.attr("cx", (d) => d.x);
+
+      this.nodes.attr("cx", (d) => {
+        const category = d.category[self.attr].name;
+        const coordinates = self.coordinates[category];
+        // if (d.id === 8) {
+        // console.log("TICK x=", Math.max(d.x, coordinates.x));
+        // if (Math.abs(d.x - coordinates.x)> 200){
+        //   return Math.max(d.x, coordinates.x)
+        // }
+        // }
+        return d.x;
+      });
       this.nodes.attr("cy", (d) => {
-        if (d.y > self.coordinates[d.category[this.attr].name].y) {
-          self.coordinates[d.category[this.attr].name].y = d.y;
-          self.coordinates[d.category[this.attr].name].revenue = d.revenue;
-          self.coordinates[d.category[this.attr].name].movieId = d.id;
-        } else if (
-          d.id === self.coordinates[d.category[this.attr].name].movieId
-        ) {
-          self.coordinates[d.category[this.attr].name].y = d.y;
+        const category = d.category[self.attr].name;
+        const coordinates = self.coordinates[category];
+        if (d.y > coordinates.y) {
+          coordinates.y = d.y;
+          coordinates.revenue = d.revenue;
+          coordinates.movieId = d.id;
+        } else if (d.id === coordinates.movieId) {
+          coordinates.y = d.y;
         }
         return d.y;
       });

@@ -51,13 +51,16 @@ export default {
       });
 
       return othersMaxCoordinates;
-    },
+    }
   },
   methods: {
     appendSvg() {
-      this.svg = d3
-        .select(sanitizedId(this.attr, this.selector || ".chart-container"))
+      this.svg = this.container.selectAll("svg").data([null]);
+
+      this.svg = this.svg
+        .enter()
         .append("svg")
+        .merge(this.svg)
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("viewBox", "0 0 " + this.width + " " + this.height)
@@ -67,6 +70,7 @@ export default {
       let g = this.svg.selectAll("g").data([null]);
       g = g.enter().append("g");
       this.svg = g;
+
     },
     appendCircles(data = this.data) {
       this.nodes = this.svg
@@ -143,6 +147,7 @@ export default {
               "collide",
               d3.forceCollide((d) => this.scale(d.revenue) + 2)
             )
+            // .stop()
             .on("tick", onTickFn)
             .on("end", onEndFn || this.onEndSimulation);
           break;

@@ -11,6 +11,11 @@ export default {
       minimimAxisWidth: 768
     };
   },
+  computed: {
+    container() {
+      return d3.select(this.$el);
+    }
+  },
   methods: {
     setDimensions() {
       if (this.$refs.chartContainer || this.selector) {

@@ -75,7 +75,7 @@ export default {
           }
           return m;
         });
-        //small display --> draw separate chart for each category
+        //small display --> draw separate svg for each category
         if (this.small) {
           //create 'others' group if necessary
           if (this.isMultiline && this.groups.length > 6) {
@@ -89,17 +89,8 @@ export default {
             this.data = this.groups;
           }
         } else {
-          //large display --> draw one svg with different groups for each category
-          // this.data = updatedMovies;
-          if(this.data.length){
-            this.data.map(d=>{
-              const updated = updatedMovies.find(um=>um.id===d.id);
-              d.category[Object.entries(updated.category)[0][0]] = Object.entries(updated.category)[0][1]
-              return d;
-            })
-          } else {
-            this.data = updatedMovies;
-          }
+          //large display --> draw one svg with different svg groups for each category
+          this.data = updatedMovies;
         }
       }
     },

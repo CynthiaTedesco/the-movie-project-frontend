@@ -26,11 +26,9 @@ export const state = () => ({
 });
 export const mutations = {
   setAxisGroup(state, { groups, attr_name, singleKeyword }) {
-    groups.map((group) => {
-      const group_name = group[0];
-      const movies = group[1];
+    groups.map(([name, movies]) => {
 
-      group[1] = movies.map((m) => {
+      movies.map((m) => {
         m.axisGroups = m.axisGroups || {};
 
         let tooltip = "";
@@ -55,7 +53,7 @@ export const mutations = {
         }
 
         m.axisGroups[attr_name] = {
-          name: group_name,
+          name,
           tooltip,
         };
 
@@ -70,10 +68,10 @@ export const mutations = {
     if (state.movies.length) {
       state.movies.map((d) => {
         const updated = newMovies.find((um) => um.id === d.id);
-        const attr_name = Object.entries(updated.axisGroups)[0][0];
+        const [attribute, group] = Object.entries(updated.axisGroups)[0];
 
         d.axisGroups = d.axisGroups || {};
-        d.axisGroups[attr_name] = Object.entries(updated.axisGroups)[0][1];
+        d.axisGroups[attribute] = group;
         return d;
       });
     } else {
@@ -84,8 +82,8 @@ export const mutations = {
     //TODO decide if its needed
     state.simulation = simulation;
   },
-  addGroups(state, groups) {
-    Vue.set(state.allGroups, groups[0], groups[1]);
+  addGroups(state, [attribute, groups]) {
+    Vue.set(state.allGroups, attribute, groups);
   },
   setMovies(state, movies) {
     state.movies = movies;
@@ -94,8 +92,8 @@ export const mutations = {
       movies.map((d) => d.revenue)
     );
   },
-  addWinner(state, winner) {
-    state.winners[winner[0]] = winner[1];
+  addWinner(state, [attribute, winner]) {
+    state.winners[attribute] = winner;
   },
   setRandomMovies(state, movies) {
     state.randomMovies = movies;
@@ -172,8 +170,8 @@ export const actions = {
     vuexContext.commit("addWinner", posterResults.winner);
   },
   updateAxisGroups(vuexContext, { groupsArr, singleKeyword }) {
-    const attr_name = groupsArr[0].replace('-age', '');
-    const groups = groupsArr[1];
+    const [attribute, groups] = groupsArr;
+    const attr_name = attribute.replace('-age', '');
     vuexContext.commit("setAxisGroup", { groups, attr_name, singleKeyword });
   },
   setSpecificResults: async (vuexContext, key) => {
@@ -402,9 +400,9 @@ export const actions = {
       return vuexContext.dispatch("updateMoviesWithCharacters", results);
     });
   },
-  updateMoviesWithLanguages(vuexContext, params) {
-    const languages = params[1].data;
-    const associations = params[0].data;
+  updateMoviesWithLanguages(vuexContext, [movies, languages]) {
+    languages = languages.data;
+    const associations = movies.data;
 
     const updatedMovies = vuexContext.getters.movies().map((movie) => {
       movie.languages = associations
@@ -420,9 +418,9 @@ export const actions = {
     });
     vuexContext.commit("setMovies", updatedMovies);
   },
-  updateMoviesWithDirectors(vuexContext, params) {
-    const directors = params[1].data;
-    const associations = params[0].data;
+  updateMoviesWithDirectors(vuexContext, [movies, directors]) {
+    directors = directors.data;
+    const associations = movies.data;
 
     const updatedMovies = vuexContext.getters.movies().map((movie) => {
       movie.directors = associations
@@ -449,9 +447,9 @@ export const actions = {
     });
     vuexContext.commit("setMovies", updatedMovies);
   },
-  updateMoviesWithCharacters(vuexContext, params) {
-    const characters = params[1].data;
-    const associations = params[0].data;
+  updateMoviesWithCharacters(vuexContext, [movies, characters]) {
+    characters = characters.data;
+    const associations = movies.data;
 
     const updatedMovies = vuexContext.getters.movies().map((movie) => {
       movie.characters = associations
@@ -478,9 +476,9 @@ export const actions = {
     });
     vuexContext.commit("setMovies", updatedMovies);
   },
-  updateMoviesWithGenres(vuexContext, params) {
-    const genres = params[1].data;
-    const associations = params[0].data;
+  updateMoviesWithGenres(vuexContext, [movies, genres]) {
+    genres = genres.data;
+    const associations = movies.data;
 
     const updatedMovies = vuexContext.getters.movies().map((movie) => {
       movie.genres = associations
@@ -496,9 +494,9 @@ export const actions = {
     });
     vuexContext.commit("setMovies", updatedMovies);
   },
-  updateMoviesWithRestrictions(vuexContext, params) {
-    const restrictions = params[1].data;
-    const associations = params[0].data;
+  updateMoviesWithRestrictions(vuexContext, [movies, restrictions]) {
+    restrictions = restrictions.data;
+    const associations = movies.data;
 
     const updatedMovies = vuexContext.getters.movies().map((movie) => {
       movie.restrictions = associations
@@ -516,9 +514,9 @@ export const actions = {
     });
     vuexContext.commit("setMovies", updatedMovies);
   },
-  updateMoviesWithProducers(vuexContext, params) {
-    const producers = params[1].data;
-    const associations = params[0].data;
+  updateMoviesWithProducers(vuexContext, [movies, producers]) {
+    producers = producers.data;
+    const associations = movies.data;
 
     const updatedMovies = vuexContext.getters.movies().map((movie) => {
       movie.producers = associations

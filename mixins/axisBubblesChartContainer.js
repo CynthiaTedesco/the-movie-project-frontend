@@ -27,8 +27,8 @@ export default {
       if (this.movies && this.groups) {
         const alreadyCalculated = this.movies[0].axisGroups[this.attr];
         if (!alreadyCalculated) {
-          this.groups.map((group) => {
-            group[1] = group[1].map((m) => {
+          this.groups.map(([name, moviesArr]) => {
+            moviesArr = moviesArr.map((m) => {
               m.axisGroups = m.axisGroups || {};
 
               let tooltip = "";
@@ -53,7 +53,7 @@ export default {
               }
 
               m.axisGroups[this.attr] = {
-                name: group[0],
+                name,
                 tooltip,
               };
 

@@ -74,9 +74,7 @@ export function getAgesGroups(base, total) {
     return [ageLabel, []];
   });
 
-  Object.entries(base).map((entry) => {
-    const age = entry[0];
-    const movies = entry[1];
+  Object.entries(base).map(([age, movies]) => {
     if (age <= 15) {
       temp[0][1] = temp[0][1].concat(movies);
     } else if (age <= 20) {
@@ -103,7 +101,7 @@ export function getAgesGroups(base, total) {
   });
 
   return temp.map((sg) => {
-    //calculates density
+    //calculates density (sg example: ['10-15', movies[]])
     sg.push((sg[1].length * 100) / total);
     return sg;
   });
@@ -112,9 +110,7 @@ export function getWordCountsGroups(base, total) {
   const temp = WORD_COUNTS.map((wordCountLabel) => {
     return [wordCountLabel, []];
   });
-  Object.entries(base).map((entry) => {
-    const count = entry[0];
-    const movies = entry[1];
+  Object.entries(base).map(([count, movies]) => {
     if (count <= 40) {
       temp[0][1] = temp[0][1].concat(movies);
     } else if (count <= 50) {
@@ -142,9 +138,7 @@ export function getLengthsGroups(base, total) {
   const temp = LENGTHS.map((lengthLabel) => {
     return [lengthLabel, []];
   });
-  Object.entries(base).map((entry) => {
-    const length = entry[0];
-    const movies = entry[1];
+  Object.entries(base).map(([length, movies]) => {
     if (length <= 100) {
       temp[0][1] = temp[0][1].concat(movies);
     } else if (length <= 110) {
@@ -176,9 +170,8 @@ export function getBudgetsGroups(base, total) {
   const temp = BUDGETS.map((budgetLabel) => {
     return [budgetLabel, []];
   });
-  Object.entries(base).map((entry) => {
-    const budget = entry[0] / 10e5;
-    const movies = entry[1];
+  Object.entries(base).map(([rawBudget, movies]) => {
+    const budget = rawBudget / 10e5;
     if (budget < 100) {
       temp[0][1] = temp[0][1].concat(movies);
     } else if (budget < 150) {
@@ -207,9 +200,7 @@ export function getMonthsGroups(base, total) {
     return [monthLabel, []];
   });
 
-  Object.entries(base).map((entry) => {
-    const month = entry[0];
-    const movies = entry[1];
+  Object.entries(base).map(([month, movies]) => {
     if (month === "01") {
       temp[0][1] = temp[0][1].concat(movies);
     } else if (month === "02") {

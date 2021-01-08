@@ -97,6 +97,7 @@ export default {
         .attr("fill", "gray")
         .style("font-size", "14px");
 
+      //it calculates the distance between the first two ticks and applies it to all of them
       const distance =
         this.xScale(this.groups[1][0]) - this.xScale(this.groups[0][0]);
 
